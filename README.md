@@ -1,2 +1,2 @@
-# TypingTutorial
-Recreating Typing Tutorial Game in DHTML
+# TypingTutor
+Recreating Typing Tutor Game
