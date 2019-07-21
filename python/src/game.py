@@ -41,6 +41,11 @@ class TypingTutor:
         self.bigfont = None
         self.keyhit = None
         self.state = START
+        self.level = 1
+        self.score = 0
+        self.high_score = 0
+        self.falling = None # active gameplay words 
+        self.cityline = None # cityline sprite objects
 
     def on_init(self):
         pygame.init()
@@ -66,10 +71,11 @@ class TypingTutor:
         if self.keyhit == None:
             return
         # start game
-        self.run_game()
+        score = self.run_game()
         self.keyhit = None
+        return score
     
-    def on_render(self):
+    def on_render(self, score=0):
         # start screen / score screen
         self._display_surf.fill(BLACK)
         if self.state == START:
@@ -96,6 +102,7 @@ class TypingTutor:
         self._display_surf.blit(pressKeySurf, pressKeyRect)
         
         pygame.display.flip()
+        self.fpsclock.tick()
         return
         
     def on_cleanup(self):
@@ -108,9 +115,8 @@ class TypingTutor:
         while( self._running ):
             for event in pygame.event.get():
                 self.on_event(event)
-            self.on_render()
-            self.on_loop()
-            self.on_render()
+            score = self.on_loop()
+            self.on_render(score)
         self.on_cleanup()
     
     def init_words(self):
@@ -130,13 +136,25 @@ class TypingTutor:
         return surf, surf.get_rect()
     
     def run_game(self):
-        level = 1
-        levelwords = self.get_level_words(level)
-        self.state = PLAYING
-        # game play logic
-        self.state = GAMEOVER
-        self.fpsclock.tick()
-        return
+        self.level = 1
+        self.score = 0
+        while(self.state != GAMEOVER):
+            levelwords = self.get_level_words(level)
+            words = random.sample(levelwords,k=20+(10*level))
+            self.falling = None
+            self.cityline = None # cityline sprite objects
+            self.state = PLAYING
+            while (self.state == PLAYING):
+                self.game_loop()
+                self.game_render()
+            self.state = GAMEOVER
+        return score
+    
+    def game_loop(self):
+        pass
+    
+    def game_render(self):
+        pass
 
 
 if __name__ == "__main__":
