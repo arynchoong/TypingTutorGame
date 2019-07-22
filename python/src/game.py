@@ -9,6 +9,7 @@ Created on Mon Jul 15 22:29:17 2019
 import pygame, sys
 from pygame.locals import *
 import math
+import words
 
 #               R    G    B
 WHITE       = (255, 255, 255)
@@ -37,6 +38,7 @@ class TypingTutor:
         self.fpsclock = pygame.time.Clock()
         self.levels = 30 # number of levels in the game
         self.wordlist, self.levelwordcount = self.init_words()
+        self.levelwords = None
         self.font = None
         self.bigfont = None
         self.keyhit = None
@@ -115,8 +117,8 @@ class TypingTutor:
         while( self._running ):
             for event in pygame.event.get():
                 self.on_event(event)
-            score = self.on_loop()
-            self.on_render(score)
+            self.on_loop()
+            self.on_render()
         self.on_cleanup()
     
     def init_words(self):
@@ -128,32 +130,40 @@ class TypingTutor:
         levelwordcount = math.floor(blocksize/multiplier)*multiplier
         return words_list, levelwordcount
     
-    def get_level_words(self, level):
-        return self.wordlist[(self.levelwordcount * level):]
+    def set_level_words(self, level):
+        words = self.wordlist[(self.levelwordcount * level):]
+        self.levelwords = random.sample(words,k=20+(10*level))
+        return
     
     def text_objs(self, text, font, color):
         surf = font.render(text, True, color)
         return surf, surf.get_rect()
-    
+        
     def run_game(self):
         self.level = 1
         self.score = 0
         while(self.state != GAMEOVER):
-            levelwords = self.get_level_words(level)
-            words = random.sample(levelwords,k=20+(10*level))
-            self.falling = None
+            self.set_level_words(level)
+            self.words = Words(self.levelwords)
             self.cityline = None # cityline sprite objects
-            self.state = PLAYING
             while (self.state == PLAYING):
                 self.game_loop()
                 self.game_render()
             self.state = GAMEOVER
-        return score
+        return
     
     def game_loop(self):
-        pass
+        if (self.words):
+            # game play
+            pass
+        else:
+            self.level += 1
+            self.state = SCORE
     
     def game_render(self):
+        pass
+    
+    def game_render_words(text):
         pass
 
 
