@@ -40,11 +40,12 @@ class TypingTutor:
         self.add_timeout = 2000 # start with 2 seconds
         self.levels = 30 # number of levels in the game
         self.wordlist = self.init_words()
-        self.levelwordcount = 100
+        self.levelwordcount = 200
         self.levelwords = None
         self.font = None
         self.bigfont = None
         self.keyhit = None
+        self.typingflag = False
         self.state = START
         self.level = 1
         self.score = 0
@@ -63,9 +64,6 @@ class TypingTutor:
     def on_event(self, event):
         if event.type == QUIT:
             self._running = False
-        elif event.type == KEYDOWN:
-            if event.key >= K_HASH and event.key <= K_z:
-                self.keyhit = event.key
         elif event.type == KEYUP:
             if event.key == K_ESCAPE:
                 self._running = False
@@ -85,8 +83,11 @@ class TypingTutor:
             text = 'Typing Tutorial Game'
         elif self.state == GAMEOVER:
             text = 'Game Over'
-        else:
+        elif self.state == SCORE:
+            self.draw_status()
             text = 'Score'
+        else:
+            text = 'Playing'
         # This function displays large text in the
         # centerof the screen until a key is pressed.
         # Draw the text drop shadow
@@ -135,7 +136,8 @@ class TypingTutor:
         if(20+(10*level) >= len(self.wordlist)):
             self.levelwords = self.wordlist.copy()
         else:
-            words = self.wordlist[:(self.levelwordcount * level)]
+            if len(self.wordlist) > (self.levelwordcount * level):
+                words = self.wordlist[:(self.levelwordcount * level)]
             self.levelwords = random.sample(words,k=20+(10*level))
         return
     
@@ -158,7 +160,10 @@ class TypingTutor:
                 self.game_loop()
                 self.game_render()
                 self.fpsclock.tick(self.fps)
-            self.state = GAMEOVER
+            for event in pygame.event.get():
+                self.on_event(event)
+            self.on_render()
+            self.fpsclock.tick()
         return
     
     def game_loop(self):
@@ -182,15 +187,24 @@ class TypingTutor:
         # RENDER WORDS
         del_list = []
         for word in self.words.game_words:
-            if word.y >= BOUNDY:
-                del_list.append(word)
+            if(word.typedidx > -1):
+                # typed
+                wordSurf, wordRect = self.text_objs(
+                                        word.text[:word.typedidx+1],
+                                        self.font, RED)
+                wordRect.topleft = (word.x, word.y)
+                self._display_surf.blit(wordSurf, wordRect)
+                # untyped
+                text = ' '*(word.typedidx+1) + word.text[word.typedidx+1:]
+                wordSurf, wordRect = self.text_objs(text, self.font, 
+                                                    GREEN)
+                wordRect.topleft = (word.x, word.y)
+                self._display_surf.blit(wordSurf, wordRect)
             else:
                 wordSurf, wordRect = self.text_objs(word.text, self.font, 
                                                     GREEN)
                 wordRect.topleft = (word.x, word.y)
                 self._display_surf.blit(wordSurf, wordRect)
-        if self.words.game_words and (self.words.game_words[0].y > BOUNDY):
-            self.words.game_words.pop(0)
         
         # remove cityline for del_list
         
@@ -217,9 +231,8 @@ class TypingTutor:
     def game_event(self, event):
         if event.type == QUIT:
             self._running = False
-        elif event.type == KEYDOWN:
-            if event.key >= K_HASH and event.key <= K_z:
-                self.keyhit = event.key
+        elif event.type == TEXTINPUT:
+            self.keyhit = event.text
         elif event.type == KEYUP:
             if event.key == K_ESCAPE:
                 self.state = GAMEOVER
@@ -227,7 +240,26 @@ class TypingTutor:
     def check_keyhit(self):
         if not self.keyhit:
             return
-        print(self.keyhit)
+        if(self.typingflag):
+            for word in self.words.game_words:
+                if word.typedidx != -1:
+                    if word.text[word.typedidx+1] == self.keyhit:
+                        if (word.typed() == False):
+                            self.typingflag = False
+                            self.score += word.get_len()
+                    else:
+                        word.typed_reset()
+                        self.typingflag = False
+        else:
+            for word in self.words.game_words:
+                if word.text[0] == self.keyhit:
+                    if(word.typed() != False):
+                        self.typingflag = True
+                    else:
+                        self.score += 1
+                    break
+        self.words.cleanup()
+        self.keyhit = None
         return
 
 

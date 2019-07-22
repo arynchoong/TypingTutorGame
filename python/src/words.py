@@ -29,15 +29,24 @@ class Word:
         return
     def get_y(self):
         return self.y
+    def get_len(self):
+        return self.len
     def move(self, delta):
         self.y += delta
         return self.y
     def typed(self):
-        if (self.typedidx >= self.len):
+        self.typedidx += 1
+        if (self.typedidx >= (self.len-1)):
+            # completed typing word
+            self.typedidx = -2
             return False
-        else:
-            self.typedidx += 1
-            return True
+        return True
+    def typed_reset(self):
+        self.typedidx = -1
+        return
+    def set_remove(self):
+        self.typedidx = -2
+        return
     def set_display(self, surf, rect):
         self.surf = surf
         self.rect = rect
@@ -76,6 +85,9 @@ class Words:
             return
         for word in self.game_words:
             word.move(1)
+            if word.y >= BOUNDY:
+                word.set_remove()
+        self.cleanup()
         return
     
     def isEmpty(self):
@@ -84,3 +96,9 @@ class Words:
         if self.game_words:
             return False
         return True
+    
+    def cleanup(self):
+        if not self.game_words:
+            return
+        # remove words from game_words with word.typedidx == -2
+        self.game_words = [w for w in self.game_words if w.typedidx != -2]
