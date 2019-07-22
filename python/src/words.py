@@ -8,10 +8,13 @@ Game objects
 """
 import random
 
+STARTY = 20
+MARGINX = 6
+BOUNDY = 600
 
 class Word:
     def __init__(self, word):
-        self.text = text
+        self.text = word
         self.len = len(self.text)
         self.x = 0
         self.y = 6
@@ -44,10 +47,6 @@ class Word:
     def get_rect(self):
         return self.rect
 
-STARTY = 6
-MARGINX = 6
-BOUNDY = 600
-
 class Words:
     def __init__(self, wordlist=None, max_x=1000, font_size=16):
         if wordlist == None:
@@ -62,10 +61,10 @@ class Words:
         self.game_words = []
     
     def add_word(self):
-        if wordlist.empty():
+        if not self.wordlist:
             return False
         else:
-            word = Word(wordlist.pop(0))
+            word = Word(self.wordlist.pop(0))
             # randomize start x of word
             bound_x = self.max_x - (self.font_size * word.len)
             word.set_x(random.randint(MARGINX,bound_x))

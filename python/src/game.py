@@ -9,7 +9,8 @@ Created on Mon Jul 15 22:29:17 2019
 import pygame, sys
 from pygame.locals import *
 import math
-import words
+import random
+from words import *
 
 #               R    G    B
 WHITE       = (255, 255, 255)
@@ -36,8 +37,10 @@ class TypingTutor:
         self.size = self.width, self.height = 1024, 640
         self.fps = 25
         self.fpsclock = pygame.time.Clock()
+        self.add_timeout = 2000 # start with 2 seconds
         self.levels = 30 # number of levels in the game
-        self.wordlist, self.levelwordcount = self.init_words()
+        self.wordlist = self.init_words()
+        self.levelwordcount = 100
         self.levelwords = None
         self.font = None
         self.bigfont = None
@@ -47,7 +50,7 @@ class TypingTutor:
         self.score = 0
         self.high_score = 0
         self.falling = None # active gameplay words 
-        self.cityline = None # cityline sprite objects
+        self.cityline = [1]* int((self.width - MARGINX*2)/2)
 
     def on_init(self):
         pygame.init()
@@ -70,12 +73,10 @@ class TypingTutor:
                 self.state = PLAYING
     
     def on_loop(self):
-        if self.keyhit == None:
-            return
-        # start game
-        score = self.run_game()
-        self.keyhit = None
-        return score
+        if (self.state == PLAYING):
+            # start game
+            self.run_game()
+        return
     
     def on_render(self, score=0):
         # start screen / score screen
@@ -125,14 +126,17 @@ class TypingTutor:
         with open(RESFOLDER + "brown.txt", "r", newline='') as file:
             words_list = [line.strip() for line in file.readlines()]
         size = len(words_list)
-        blocksize = math.ceil(size/self.levels)
-        multiplier = 10**(len(str(blocksize)) -1)
-        levelwordcount = math.floor(blocksize/multiplier)*multiplier
-        return words_list, levelwordcount
+        #blocksize = math.ceil(size/self.levels)
+        #multiplier = 10**(len(str(blocksize)) -1)
+        #levelwordcount = math.floor(blocksize/multiplier)*multiplier
+        return words_list
     
     def set_level_words(self, level):
-        words = self.wordlist[(self.levelwordcount * level):]
-        self.levelwords = random.sample(words,k=20+(10*level))
+        if(20+(10*level) >= len(self.wordlist)):
+            self.levelwords = self.wordlist.copy()
+        else:
+            words = self.wordlist[:(self.levelwordcount * level)]
+            self.levelwords = random.sample(words,k=20+(10*level))
         return
     
     def text_objs(self, text, font, color):
@@ -143,28 +147,88 @@ class TypingTutor:
         self.level = 1
         self.score = 0
         while(self.state != GAMEOVER):
-            self.set_level_words(level)
+            self.set_level_words(self.level)
             self.words = Words(self.levelwords)
             self.cityline = None # cityline sprite objects
+            self.keyhit = None
             while (self.state == PLAYING):
+                for event in pygame.event.get():
+                    self.game_event(event)
+                    self.check_keyhit()
                 self.game_loop()
                 self.game_render()
+                self.fpsclock.tick(self.fps)
             self.state = GAMEOVER
         return
     
     def game_loop(self):
-        if (self.words):
-            # game play
-            pass
-        else:
+        self.words.move()
+        if self.words.isEmpty():
             self.level += 1
             self.state = SCORE
+        elif not self.words.game_words:
+            self.words.add_word()
+            self.last_add = pygame.time.get_ticks()
+        else:
+            if ((pygame.time.get_ticks() - self.last_add) 
+                  > self.add_timeout):
+                self.words.add_word()
+                self.last_add = pygame.time.get_ticks()
     
     def game_render(self):
-        pass
+        self._display_surf.fill(BLUE)
+        self.draw_status()
+        
+        # RENDER WORDS
+        del_list = []
+        for word in self.words.game_words:
+            if word.y >= BOUNDY:
+                del_list.append(word)
+            else:
+                wordSurf, wordRect = self.text_objs(word.text, self.font, 
+                                                    GREEN)
+                wordRect.topleft = (word.x, word.y)
+                self._display_surf.blit(wordSurf, wordRect)
+        if self.words.game_words and (self.words.game_words[0].y > BOUNDY):
+            self.words.game_words.pop(0)
+        
+        # remove cityline for del_list
+        
+        # RENDER CITYLINE
+        pygame.display.flip()
+        return
     
-    def game_render_words(text):
-        pass
+    def draw_status(self):
+        # draw the score text
+        scoreSurf = self.font.render('Score: %s' % self.score, True,
+                                     WHITE, BLACK)
+        scoreRect = scoreSurf.get_rect()
+        scoreRect.topleft = (self.width -150, 2)
+        self._display_surf.blit(scoreSurf, scoreRect)
+    
+        # draw the level text
+        levelSurf = self.font.render('Level: %s' % self.level, True, 
+                                     WHITE, BLACK)
+        levelRect = levelSurf.get_rect()
+        levelRect.topleft = (MARGINX, 2)
+        self._display_surf.blit(levelSurf, levelRect)
+        return
+    
+    def game_event(self, event):
+        if event.type == QUIT:
+            self._running = False
+        elif event.type == KEYDOWN:
+            if event.key >= K_HASH and event.key <= K_z:
+                self.keyhit = event.key
+        elif event.type == KEYUP:
+            if event.key == K_ESCAPE:
+                self.state = GAMEOVER
+
+    def check_keyhit(self):
+        if not self.keyhit:
+            return
+        print(self.keyhit)
+        return
 
 
 if __name__ == "__main__":
