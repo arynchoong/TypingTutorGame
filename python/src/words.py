@@ -11,6 +11,7 @@ import random
 STARTY = 20
 MARGINX = 6
 BOUNDY = 600
+FONTWIDTH = 9 # based on Consolas Bold 16 pt font size
 
 class Word:
     def __init__(self, word):
@@ -69,14 +70,23 @@ class Words:
         self.font_size = font_size
         self.game_words = []
     
-    def add_word(self):
+    def add_word(self, avail_block = None):
         if not self.wordlist:
             return False
         else:
             word = Word(self.wordlist.pop(0))
-            # randomize start x of word
-            bound_x = self.max_x - (self.font_size * word.len)
-            word.set_x(random.randint(MARGINX,bound_x))
+            # calculate max x of word
+            bound_x = self.max_x - (FONTWIDTH * word.get_len())
+            if not avail_block:
+                word.set_x(random.randint(MARGINX*2,bound_x))
+            else:
+                # randomly select block
+                idx = random.choice(avail_block)
+                # calculate start x of word
+                if (idx*10) > bound_x:
+                    word.set_x(bound_x)
+                else:
+                    word.set_x((idx*10)+(MARGINX*2))
             self.game_words.append(word)
             return True
     
@@ -87,7 +97,6 @@ class Words:
             word.move(delta)
             if word.y >= BOUNDY:
                 word.set_remove()
-        self.cleanup()
         return
     
     def isEmpty(self):

@@ -30,6 +30,9 @@ PLAYING = 2
 SCORE = 3
 GAMEOVER = 4
 
+FONTSIZE = 16
+FONTWIDTH = 9 # based on Consolas Bold 16 pt font size
+
 class TypingTutor:
     def __init__(self):
         self._running = True
@@ -41,7 +44,7 @@ class TypingTutor:
         self.ydelta = 1
         self.levels = 30 # number of levels in the game
         self.wordlist = self.init_words()
-        self.levelwordcount = 200
+        self.levelwordcount = 1000
         self.levelwords = None
         self.font = None
         self.bigfont = None
@@ -52,7 +55,7 @@ class TypingTutor:
         self.score = 0
         self.high_score = 0
         self.falling = None # active gameplay words 
-        self.cityline = [1]* int((self.width - MARGINX*2)/2)
+        self.cityline = None
 
     def on_init(self):
         pygame.init()
@@ -144,7 +147,17 @@ class TypingTutor:
         else:
             if len(self.wordlist) > (self.levelwordcount * level):
                 words = self.wordlist[:(self.levelwordcount * level)]
-            self.levelwords = random.sample(words,k=20+(10*level))
+            # Randomly select, makesure there is no duplicate first char
+            self.levelwords = []
+            firstchar = []
+            i = 0
+            num_words = (20+(5*level))
+            while (i < num_words):
+                word = random.choice(words)
+                if not (word[0] in firstchar):
+                    firstchar.append(word[0])
+                    self.levelwords.append(word)
+                    i+=1
         return
     
     def text_objs(self, text, font, color):
@@ -160,7 +173,7 @@ class TypingTutor:
         while(self.state != GAMEOVER):
             self.set_level_words(self.level)
             self.words = Words(self.levelwords)
-            self.cityline = None # cityline sprite objects
+            self.init_cityline()
             self.keyhit = None
             while (self.state == PLAYING):
                 for event in pygame.event.get():
@@ -177,25 +190,69 @@ class TypingTutor:
         return
     
     def game_loop(self):
+        # cityline
+        if all(flag == 0 for (flag, y) in self.cityline):
+            self.state = GAMEOVER
+            return
+        
+        # words
         self.words.move(self.ydelta)
+        # check for cityline collision and remove
+        collision = [w for w in self.words.game_words if w.get_y() >= BOUNDY]
+        for w in collision:
+            startidx = int((w.get_x()-MARGINX) / 10)
+            endidx = (startidx + int((FONTWIDTH * w.get_len()) / 10))
+            for i in range(startidx, endidx+1):
+                self.cityline[i][0] = 0
+        self.words.cleanup()
+        
         if self.words.isEmpty():
             # level up
             self.level += 1
             self.state = SCORE
             if self.fps < 60:
                 self.fps += 25
-            else:
+            elif self.ydelta < 3:
                 self.ydelta +=1
             if self.add_timeout > 900:
-                self.add_timeout -= 100
-        elif not self.words.game_words:
-            self.words.add_word()
+                self.add_timeout -= 150
+        else:
+            self.game_add_word()
+        return
+    
+    def game_add_word(self):
+        # calculate list of 10 city blocks available
+        avail_block = []
+        for idx, block in enumerate(self.cityline):
+            if block[0] == 1:
+                avail_block.append(idx)
+        
+        if not self.words.game_words:
+            self.words.add_word(avail_block)
             self.last_add = pygame.time.get_ticks()
         else:
             if ((pygame.time.get_ticks() - self.last_add) 
                   > self.add_timeout):
-                self.words.add_word()
+                avail_block = self.check_words_city(avail_block)
+                self.words.add_word(avail_block)
                 self.last_add = pygame.time.get_ticks()
+            if self.typingflag:
+                if all(w.typedidx < 0 for w in self.words.game_words):
+                    self.typingflag = False
+        return
+        
+    def check_words_city(self, avail_block):
+        new_avail = avail_block.copy()
+        # remove blocks with words above them
+        for word in self.words.game_words:
+            startidx = int((word.get_x()-(MARGINX))/10)
+            endidx = startidx + int(word.get_len()/10)
+            for idx in range(startidx,endidx+1):
+                if idx in new_avail:
+                    new_avail.remove(idx)
+        if new_avail:
+            return new_avail
+        return avail_block
     
     def game_render(self):
         self._display_surf.fill(BLUE)
@@ -223,9 +280,19 @@ class TypingTutor:
                 wordRect.topleft = (word.x, word.y)
                 self._display_surf.blit(wordSurf, wordRect)
         
-        # remove cityline for del_list
-        
         # RENDER CITYLINE
+        for i in range(1,len(self.cityline)):
+            if (self.cityline[i][0]==0):
+                continue
+            startx = ((i-1)*10) + MARGINX*2
+            starty = 612 + self.cityline[i-1][1]
+            endx = (i*10) + MARGINX*2
+            endy = 612 + self.cityline[i][1]
+            pygame.draw.lines(self._display_surf, GREEN, False,
+                             [(startx,starty), (startx,endy), (endx,endy)],
+                             2)
+        
+        # Update display
         pygame.display.flip()
         return
     
@@ -267,8 +334,6 @@ class TypingTutor:
                     else:
                         word.typed_reset()
                         self.typingflag = False
-            if all(w.typedidx < 0 for w in self.words.game_words):
-                self.typingflag = False
         else:
             for word in self.words.game_words:
                 if word.text[0] == self.keyhit:
@@ -279,6 +344,13 @@ class TypingTutor:
                     break
         self.words.cleanup()
         self.keyhit = None
+        return
+    
+    def init_cityline(self):
+        self.cityline = []
+        for i in range(int((self.width-MARGINX*2)/10)):
+            self.cityline.append([1, random.randint(1,20)])
+        self.cityline[-1][0] = 0
         return
 
 
