@@ -59,9 +59,9 @@ class Word:
 class Words:
     def __init__(self, wordlist=None, max_x=1000, font_size=16):
         if wordlist == None:
-            self.wordlist = ['a','b','c','d','e','f','g','h','i','j','k','l',
-                             'm','n','o','p','q','r','s','t','u','v','x','y',
-                             'z']
+            self.wordlist = ['a','b','c','d','e','f','g','h','i','j','k',
+                             'l','m','n','o','p','q','r','s','t','u','v',
+                             'x','y','z']
             random.shuffle(self.wordlist)
         else:
             self.wordlist = wordlist
@@ -80,11 +80,11 @@ class Words:
             self.game_words.append(word)
             return True
     
-    def move(self):
+    def move(self, delta):
         if not self.game_words:
             return
         for word in self.game_words:
-            word.move(1)
+            word.move(delta)
             if word.y >= BOUNDY:
                 word.set_remove()
         self.cleanup()

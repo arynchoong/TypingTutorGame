@@ -20,7 +20,7 @@ RED         = (255,   0,   0)
 LIGHTRED    = (175,  20,  20)
 GREEN       = (  0, 255,   0)
 SHADOWGREEN  = ( 20, 175,  20)
-BLUE        = (  0,   0, 155)
+BLUE        = (  0,   0, 128)
 
 RESFOLDER = '../../res/'
 
@@ -38,6 +38,7 @@ class TypingTutor:
         self.fps = 25
         self.fpsclock = pygame.time.Clock()
         self.add_timeout = 2000 # start with 2 seconds
+        self.ydelta = 1
         self.levels = 30 # number of levels in the game
         self.wordlist = self.init_words()
         self.levelwordcount = 200
@@ -61,14 +62,20 @@ class TypingTutor:
         pygame.display.set_caption('Typing Tutorial Game')
         self._running = True
  
-    def on_event(self, event):
-        if event.type == QUIT:
-            self._running = False
-        elif event.type == KEYUP:
-            if event.key == K_ESCAPE:
+    def check_events(self):
+        # returns last event key
+        ret = None
+        for event in pygame.event.get():
+            if event.type == QUIT:
                 self._running = False
-            else:
-                self.state = PLAYING
+            if event.type == KEYUP:
+                if event.key == K_ESCAPE:
+                    self._running = False
+                    self.state = GAMEOVER
+                else:
+                    self.state = PLAYING
+                ret = event.key
+        return ret
     
     def on_loop(self):
         if (self.state == PLAYING):
@@ -76,7 +83,7 @@ class TypingTutor:
             self.run_game()
         return
     
-    def on_render(self, score=0):
+    def render_screen(self, score=0):
         # start screen / score screen
         self._display_surf.fill(BLACK)
         if self.state == START:
@@ -105,8 +112,9 @@ class TypingTutor:
         pressKeyRect.center = (int(self.width / 2), int(self.height / 2) + 100)
         self._display_surf.blit(pressKeySurf, pressKeyRect)
         
-        pygame.display.flip()
-        self.fpsclock.tick()
+        while self.check_events() == None:
+            pygame.display.flip()
+            self.fpsclock.tick()
         return
         
     def on_cleanup(self):
@@ -117,10 +125,8 @@ class TypingTutor:
             self._running = False
  
         while( self._running ):
-            for event in pygame.event.get():
-                self.on_event(event)
             self.on_loop()
-            self.on_render()
+            self.render_screen()
         self.on_cleanup()
     
     def init_words(self):
@@ -148,6 +154,9 @@ class TypingTutor:
     def run_game(self):
         self.level = 1
         self.score = 0
+        self.fps = 25
+        self.ydelta = 1
+        self.add_timeout = 2000
         while(self.state != GAMEOVER):
             self.set_level_words(self.level)
             self.words = Words(self.levelwords)
@@ -160,17 +169,25 @@ class TypingTutor:
                 self.game_loop()
                 self.game_render()
                 self.fpsclock.tick(self.fps)
-            for event in pygame.event.get():
-                self.on_event(event)
-            self.on_render()
-            self.fpsclock.tick()
+            # add delay and clear event queue from game
+            pygame.time.wait(100)
+            pygame.event.clear()
+            while (self.state == SCORE):
+                self.render_screen()
         return
     
     def game_loop(self):
-        self.words.move()
+        self.words.move(self.ydelta)
         if self.words.isEmpty():
+            # level up
             self.level += 1
             self.state = SCORE
+            if self.fps < 60:
+                self.fps += 25
+            else:
+                self.ydelta +=1
+            if self.add_timeout > 900:
+                self.add_timeout -= 100
         elif not self.words.game_words:
             self.words.add_word()
             self.last_add = pygame.time.get_ticks()
@@ -231,9 +248,9 @@ class TypingTutor:
     def game_event(self, event):
         if event.type == QUIT:
             self._running = False
-        elif event.type == TEXTINPUT:
+        if event.type == TEXTINPUT:
             self.keyhit = event.text
-        elif event.type == KEYUP:
+        if event.type == KEYUP:
             if event.key == K_ESCAPE:
                 self.state = GAMEOVER
 
@@ -250,6 +267,8 @@ class TypingTutor:
                     else:
                         word.typed_reset()
                         self.typingflag = False
+            if all(w.typedidx < 0 for w in self.words.game_words):
+                self.typingflag = False
         else:
             for word in self.words.game_words:
                 if word.text[0] == self.keyhit:
