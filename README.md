@@ -8,13 +8,16 @@ https://archive.org/details/Typing_Tutor_IV_DOS.
 ## Game breakdown
 * library of words and frequency
 * dropping of words and characters from top of screen
-* skyline
-* change word colour to green when typing
+* cityline
+* change word colour from green when typing
 * variable game time : 3 minutes
 * level up when complete
-* fast falling bolded red words?
 * process words
+
+## Python variant
+![alt text](/doc/images/Screenshot.png)
 
 ## Nice to have game components
 * typing tutorial style, first middle row keys, followed by each of index fingers, upper keys, lower keys, then numbers, special characters
+
 
