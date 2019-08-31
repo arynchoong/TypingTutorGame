@@ -290,6 +290,7 @@ class TypingTutor:
     def game_event(self, event):
         if event.type == QUIT:
             self._running = False
+            self.state = GAMEOVER
         elif event.type == TEXTINPUT:
             self.keyhit = event.text
         elif event.type == KEYUP:
