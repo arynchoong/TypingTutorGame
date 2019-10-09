@@ -1,0 +1,213 @@
+body {
+    font-family: Verdana, Geneva, sans-serif;
+    background-color: #F8FBE9;
+/*    background-image: linear-gradient(#F8FBE9, #E9f6FB); */
+    text-align: left;
+    margin:0;
+    padding:0;
+}
+.navbar {
+    overflow: hidden;
+    background-color: #C8E26A;
+    font-family: Verdana, Geneva, sans-serif;
+    border-bottom: 2px outset #f0f7d4;
+    width: 100%;
+}
+/* Links inside the navbar */
+.navbar-text {
+    float: left;
+    font-size: 16px;
+    color: #092834;
+    text-align: center;
+    padding: 14px 4px;
+    text-decoration: none;
+} 
+.navbar img {
+    float: left;
+    font-size: 16px;
+    height: 48px;
+    padding: None;
+    padding-left: 14px;
+    padding-right: 14px;
+}
+/* The dropdown container */
+.dropdown {
+    float: left;
+    overflow: hidden;
+}
+/* Dropdown button */
+.dropdown .dropbtn {
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: #092834;
+    padding: 14px 4px;
+    background-color: inherit;
+    font-family: inherit; /* Important for vertical align on mobile phones */
+    margin: 0; /* Important for vertical align on mobile phones */
+}
+/* Add a red background color to navbar links on hover */
+.dropdown:hover .dropbtn:hover {
+    background-color: #C3DF53;
+}
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #DAEB93;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(09,28,34,0.2);
+    z-index: 1;
+}
+/* Links inside the dropdown */
+.dropdown-content a {
+    float: none;
+    color: #092834;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+/* Add a grey background color to dropdown links on hover */
+.dropdown-content a:hover {
+    background-color: #C3DF53;
+}
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.page{
+    text-align: center;
+    max-width: 620px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 15px;
+    background-color: #F8FBE9;
+}
+article {
+    font-family: Tahoma, Geneva, sans-serif;
+    text-align: left;
+    padding: 15px;
+    font-size: 14px;
+    line-height: 20px;
+    background-color: #fff;
+    box-shadow: 0px 0px 12px 1px  rgba(09,28,34, 0.2);
+    box-sizing: border-box;
+}
+@media screen and (min-width: 1200px){
+    .page{
+        max-width: 90%;
+    }
+    .flex-container{
+        display: flex;
+        flex-wrap: nowrap;
+    }
+    .flex-container .box{
+        width: 45%;
+        vertical-align: text-top;
+        padding: 0 8px 2px 8px;
+        box-shadow: 0px 0px 2px  rgba(09,28,34, 0.2);
+    }
+    .flex-container .boxes{
+        width: 55%;
+        vertical-align: text-top;
+        padding: 0;
+        
+    }
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #092834;
+    font-family: "Georgia","Times New Roman",serif;
+}
+article img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 8px;
+    width: 480px;
+}
+@media screen and (max-width: 480px){
+    article img {
+        width: 95%;
+    }
+}
+.code {
+    font-family: "Lucida Console","Monaco",monospace;
+}
+.code-bg{
+    font-family: "Courier New", Courier, monospace;
+}
+
+.footer {
+    border-top: 1px outset #0B3241;
+    text-align: center;
+    opacity: 0.60;
+    padding-top: 8px;
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 12px;
+}
+
+/*Code formatting*/
+.code .nn {
+	color: #0000FF;
+	font-weight: bold;
+}
+.code .f {
+    color: #00f;
+}
+.code .o {
+	color: #666666;
+}
+.code .k {
+	color: #008000;
+	font-weight: bold;
+}
+.code .ow {
+	color: #AA22FF;
+	font-weight: bold;
+}
+.code .s2 { /* string */
+	color: #BA2121;
+}
+.code .si {
+	color: #BB6688;
+	font-weight: bold;
+}
+.code .se {
+	color: #BB6622;
+	font-weight: bold;
+}
+.code .nb { /* numeric */
+	color: #008000;
+}
+.code .c {/* comments */
+    color: #408080;
+    font-style: italic;
+}
+.code .cn {/* constants */
+    color: maroon;
+}
+.code {
+    background-color: #eee;
+    border: 1px solid lightgrey;
+    padding: 0 8px 0 8px;
+    line-height: 1.2;
+}
+.diff {
+    background-color: honeydew;
+    border: 1px solid lightgrey;
+    padding: 0;
+    line-height: 1.4;
+    box-shadow: 0 0 8px black;
+    padding: 0 8px 0 8px;
+    margin-right: -8px; 
+    margin-left: -8px;
+}
+.console {
+    background-color: black;
+    border: 1px solid greenyellow;
+    padding: 0 8px 0 8px;
+    color: lime;
+}
