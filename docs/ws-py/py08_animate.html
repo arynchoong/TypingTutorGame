@@ -22,9 +22,12 @@
             <a href="py09_user_typing.html">Typing</a>
             <a href="py10_cityline.html">Cityline</a>
             <a href="py11_level_up.html">Levels</a>
-            <a href="">Sound</a>
+            <a href="py12_sound.html">Sound</a>
             </div>
         </div>
+        <a href="py09_user_typing.html" class="navbar-right">&#x27A1;</a>
+        <span class="navbar-right">Animate</span>
+        <a href="py07_draw_playing.html" class="navbar-right">&#x2B05;</a>
     </div>
     <div class="page">
     <article>
@@ -146,8 +149,7 @@
         <span class="k">if</span> <span class="k">not</span> self.game_words:
             <span class="k">return</span>
         <span class="c"># remove words from game_words with word.typedidx == -2</span>
-        self.game_words <span class="ow">=</span> [w <span class="k">for</span> w <span class="k">in</span> self.game_words
-                            <span class="k">if</span> w.typedidx <span class="ow">!=</span> <span class="nb">-2</span>]</pre></div>
+        self.game_words <span class="ow">=</span> [w <span class="k">for</span> w <span class="k">in</span> self.game_words <span class="k">if</span> w.typedidx <span class="ow">!=</span> <span class="nb">-2</span>]</pre></div>
 </div></div>
 
 <br>

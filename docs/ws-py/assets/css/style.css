@@ -2,6 +2,10 @@ body {
     font-family: Verdana, Geneva, sans-serif;
     background-color: #F8FBE9;
 /*    background-image: linear-gradient(#F8FBE9, #E9f6FB); */
+    background-image: url(./../images/bg-bottom.png), url(./../images/bg.png);
+    background-position: bottom, top;
+    background-repeat: no-repeat, repeat;
+    background-attachment:fixed;
     text-align: left;
     margin:0;
     padding:0;
@@ -13,13 +17,22 @@ body {
     border-bottom: 2px outset #f0f7d4;
     width: 100%;
 }
-/* Links inside the navbar */
+/* Text inside the navbar */
 .navbar-text {
     float: left;
     font-size: 16px;
     color: #092834;
     text-align: center;
     padding: 14px 4px;
+    text-decoration: none;
+} 
+/* Prev and Next on the navbar */
+.navbar-right {
+    float: right;
+    font-size: 16px;
+    color: #092834;
+    text-align: center;
+    padding: 14px 14px;
     text-decoration: none;
 } 
 .navbar img {
@@ -29,6 +42,9 @@ body {
     padding: None;
     padding-left: 14px;
     padding-right: 14px;
+}
+footer{
+    color: #f0f7d4;
 }
 /* The dropdown container */
 .dropdown {
@@ -79,7 +95,7 @@ body {
 
 .page{
     text-align: center;
-    max-width: 620px;
+    max-width: 680px;
     margin-left: auto;
     margin-right: auto;
     padding: 15px;
@@ -104,13 +120,13 @@ article {
         flex-wrap: nowrap;
     }
     .flex-container .box{
-        width: 45%;
+        width: 38%;
         vertical-align: text-top;
         padding: 0 8px 2px 8px;
         box-shadow: 0px 0px 2px  rgba(09,28,34, 0.2);
     }
     .flex-container .boxes{
-        width: 55%;
+        width: 62%;
         vertical-align: text-top;
         padding: 0;
         
@@ -157,6 +173,9 @@ article img{
 .code .f {
     color: #00f;
 }
+.code .nf {
+    color: #00f;
+}
 .code .o {
 	color: #666666;
 }
@@ -183,6 +202,10 @@ article img{
 	color: #008000;
 }
 .code .c {/* comments */
+    color: #408080;
+    font-style: italic;
+}
+.code .c1 {/* comments */
     color: #408080;
     font-style: italic;
 }

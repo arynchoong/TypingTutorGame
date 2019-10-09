@@ -9,7 +9,7 @@
         <a href="https://arynchoong.github.io/aryn/"><img src="assets/images/aryn-straight.png"></a>
         <span class="navbar-text">Typing Tutor</span>
         <div class="dropdown">
-            <button class="dropbtn" onclick="window.location.href = 'main.html'">Game &#9662;</a></button>
+            <button class="dropbtn" onclick="window.location.href = '../index.html'">Game &#9662;</a></button>
             <div class="dropdown-content">
             <a href="py01_scrape_words.html">Scrape Words</a>
             <a href="py02_pygame.html">PyGame</a>
@@ -22,9 +22,12 @@
             <a href="py09_user_typing.html">Typing</a>
             <a href="py10_cityline.html">Cityline</a>
             <a href="py11_level_up.html">Levels</a>
-            <a href="">Sound</a>
+            <a href="py12_sound.html">Sound</a>
             </div>
         </div>
+        <a href="py04_display_text.html" class="navbar-right">&#x27A1;</a>
+        <span class="navbar-right">Game Loop</span>
+        <a href="py02_pygame.html" class="navbar-right">&#x2B05;</a>
     </div>
     <div class="page">
     <article>
@@ -56,7 +59,7 @@
         <span class="k">return</span> <span class="k">True</span> <span class="k">if</span> self._disp_surf <span class="k">else</span> <span class="k">False</span>
 
     <span class="k">def</span> <span class="f">on_execute</span>(self):
-        <span class="k">if</span> not self.on_init():
+        <span class="k">if</span> <span class="k">not</span> self.on_init():
             self._running <span class="ow">=</span> <span class="k">False</span>
         <span class="k">while</span > (self._running):</div>            <span class="k">for</span> event <span class="k">in</span> pygame.event.get():
                 <span class="k">if</span> event.type <span class="ow">==</span> <span class="cn">QUIT</span>:<div class="diff">                    self._running <span class="ow">=</span> <span class="k">False</span>
@@ -118,7 +121,7 @@
     <p>And don't forget to initialise our <code>state</code> flag.</p>
 </div><div class="boxes">
         <div class="code"><pre><span class="k">class</span> <span class="f">TypingTutor</span>():
-    <span class="k">def</span> <span class="f">__init__</span>(self):<div class="diff">        self.state = <span class="cn">START</span></div></pre></div>
+    <span class="k">def</span> <span class="f">__init__</span>(self):<div class="diff">        self.state <span class="ow">=</span> <span class="cn">START</span></div></pre></div>
         </div></div>
 
     </article>

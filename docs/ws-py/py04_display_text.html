@@ -22,9 +22,12 @@
             <a href="py09_user_typing.html">Typing</a>
             <a href="py10_cityline.html">Cityline</a>
             <a href="py11_level_up.html">Levels</a>
-            <a href="">Sound</a>
+            <a href="py12_sound.html">Sound</a>
             </div>
         </div>
+        <a href="py05_keypress.html" class="navbar-right">&#x27A1;</a>
+        <span class="navbar-right">Text</span>
+        <a href="py03_game_loop.html" class="navbar-right">&#x2B05;</a>
     </div>
     <div class="page">
     <article>
@@ -102,7 +105,7 @@
 </div><div class="boxes">
         <div class="code">
             <pre>        surf <span class="ow">=</span> self.bigfont.render(<span class="s2">"Typing Tutor Game"</span>, <span class="k">True</span>, <span class="cn">GREEN</span>)
-        rect <span class="ow">=</span> surf.get_rect()<div class="diff">        rect.center <span class="ow">=</span> (<span class="nb">int</span>(self.width / <span class="nb">2</span>), <span class="nb">int</span>(self.height / <span class="nb">2</span>))</div></pre></div>
+        rect <span class="ow">=</span> surf.get_rect()<div class="diff">        rect.center <span class="ow">=</span> (<span class="nb">int</span>(self.width <span class="ow">/</span> <span class="nb">2</span>), <span class="nb">int</span>(self.height <span class="ow">/</span> <span class="nb">2</span>))</div></pre></div>
         </div></div>
 <br>
 <div class="flex-container"><div class="box">
@@ -111,7 +114,7 @@
         <div class="code">
             <pre>        surf <span class="ow">=</span> self.bigfont.render(<span class="s2">"Typing Tutor Game"</span>, <span class="k">True</span>, <span class="cn">GREEN</span>)
         rect <span class="ow">=</span> surf.get_rect()
-        rect.center <span class="ow">=</span> (<span class="nb">int</span>(self.width / <span class="nb">2</span>), <span class="nb">int</span>(self.height / <span class="nb">2</span>))<div class="diff">        self._display_surf.blit(surf, rect)</div></pre></div>
+        rect.center <span class="ow">=</span> (<span class="nb">int</span>(self.width <span class="ow">/</span> <span class="nb">2</span>), <span class="nb">int</span>(self.height <span class="ow">/</span> <span class="nb">2</span>))<div class="diff">        self._display_surf.blit(surf, rect)</div></pre></div>
         </div></div>
 <br>
 <div class="flex-container"><div class="box">
@@ -121,7 +124,7 @@
         <div class="code">
             <pre>        surf <span class="ow">=</span> self.bigfont.render(<span class="s2">"Typing Tutor Game"</span>, <span class="k">True</span>, <span class="cn">GREEN</span>)
         rect <span class="ow">=</span> surf.get_rect()
-        rect.center <span class="ow">=</span> (<span class="nb">int</span>(self.width / <span class="nb">2</span>), <span class="nb">int</span>(self.height / <span class="nb">2</span>))
+        rect.center <span class="ow">=</span> (<span class="nb">int</span>(self.width <span class="ow">/</span> <span class="nb">2</span>), <span class="nb">int</span>(self.height <span class="ow">/</span> <span class="nb">2</span>))
         self._display_surf.blit(surf, rect)<div class="diff">
         pygame.display.flip()</div></pre></div>
         </div></div>
@@ -145,7 +148,7 @@
         <div class="code">
             <pre>   <span class="k">def</span> <span class="f">on_render</span>(self):
         self._display_surf.fill(<span class="cn">BLACK</span>)<div class="diff">        self.draw_big_text(<span class="s2">"Typing Tutor Game"</span>, <span class="k">True</span>, <span class="cn">GREEN</span>, 
-                      (<span class="nb">int</span>(self.width/<span class="nb">2</span>), <span class="nb">int</span>(self.height/<span class="nb">2</span>)))</div>        pygame.display.flip()</pre></div>
+                      (<span class="nb">int</span>(self.width <span class="ow">/</span> <span class="nb">2</span>), <span class="nb">int</span>(self.height <span class="ow">/</span> <span class="nb">2</span>)))</div>        pygame.display.flip()</pre></div>
         </div></div>
 
 
