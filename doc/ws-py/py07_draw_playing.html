@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" />
+    <title>Typing Tutor Game</title>
+        <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="navbar">
+        <a href="https://arynchoong.github.io/aryn/"><img src="assets/images/aryn-straight.png"></a>
+        <span class="navbar-text">Typing Tutor</span>
+        <div class="dropdown">
+            <button class="dropbtn" onclick="window.location.href='main.html'">Game &#9662;</a></button>
+            <div class="dropdown-content">
+            <a href="py01_scrape_words.html">Scrape Words</a>
+            <a href="py02_pygame.html">PyGame</a>
+            <a href="py03_game_loop.html">Game Loop</a>
+            <a href="py04_display_text.html">Text</a>
+            <a href="py05_keypress.html">Keypress</a>
+            <a href="py06_game_object.html">Objects</a>
+            <a >Play</a>
+            <a href="py08_animate.html">Animate</a>
+            <a href="py09_user_typing.html">Typing</a>
+            <a href="py10_cityline.html">Cityline</a>
+            <a href="py11_level_up.html">Levels</a>
+            <a href="">Sound</a>
+            </div>
+        </div>
+    </div>
+    <div class="page">
+    <article>
+        <h1>Typing Tutor Game</h1>
+<h2>Draw Game Play</h2>
+
+<p>We want have a blue background, with light blue city line, white words, with characters that turns green when typed. Animate a red arrow destroying the word when typed. 
+</p>
+<div class="flex-container"><div class="box">
+<p>Let's prepare our colours for the screen:
+</p>
+</div><div class="boxes">
+    <div class="code">
+<pre><span class="c"># play.py</span>
+
+<span class="c">#               R    G    B</span>
+<span class="cn">BLUE</span>        <span class="ow">=</span> (  <span class="nb">0</span>,   <span class="nb">0</span>, <span class="nb">128</span>)
+<span class="cn">LIGHTBLUE</span>   <span class="ow">=</span> (<span class="nb">135</span>, <span class="nb">206</span>, <span class="nb">235</span>)
+<span class="cn">WHITE</span>       <span class="ow">=</span> (<span class="nb">255</span>, <span class="nb">255</span>, <span class="nb">255</span>)
+<span class="cn">GREEN</span>       <span class="ow">=</span> (  <span class="nb">0</span>, <span class="nb">200</span>,   <span class="nb">0</span>)</pre></div>
+</div></div>
+
+<br>
+
+<div class="flex-container"><div class="box">
+<p>Draw our playing screen by filling it in with blue colour as background:
+</p>
+</div><div class="boxes">
+    <div class="code">
+<pre>    <span class="k">def</span> <span class="f">on_render</span>(self):
+        self._display_surf.fill(<span class="cn">BLUE</span>)</pre></div>
+</div></div>
+
+<h2>Draw words</h2>
+
+<div class="flex-container"><div class="box">
+<p>To draw the words, we need to draw the text for each word in game play.</p>
+<p>Let's prepare the font for the game play:
+</p>
+</div><div class="boxes">
+    <div class="code">
+<pre><span class="k">class</span> <span class="f">GamePlay</span>():
+    <span class="k">def</span> <span class="f">__init__</span>(self, display_surf):
+<div class="diff">        self.font <span class="ow">=</span> pygame.font.Font(<span class="s2">'Consolas Bold.ttf'</span>, <span class="nb">16</span>)</div></pre></div>
+</div></div>
+
+<br>
+
+<div class="flex-container"><div class="box">
+<p>Similarly to how we draw our main texts, let's draw our words in our game play.py:
+</p>
+</div><div class="boxes">
+    <div class="code">
+<pre>    <span class="k">def</span> <span class="f">draw_word</span>(self, text, colour, coord):
+        surf <span class="ow">=</span> self.font.render(text, <span class="k">True</span>, colour)
+        rect <span class="ow">=</span> surf.get_rect()
+        rect.topleft <span class="ow">=</span> (x, y)
+        self._display_surf.blit(surf, rect)
+        <span class="k">return</span></pre></div>
+</div></div>
+
+<br>
+
+<div class="flex-container"><div class="box">
+<p>Now we can easily call the method to draw our words onto the display screen and then update:
+</p>
+</div><div class="boxes">
+    <div class="code">
+<pre>    <span class="k">def</span> <span class="f">on_render</span>(self):
+        self._display_surf.fill(<span class="cn">BLUE</span>)
+<div class="diff">        <span class="c"># words</span>
+        <span class="k">for</span> word <span class="k">in</span> self.game_objects.game_words:
+            self.draw_word(word.text, <span class="cn">GREEN</span>, word.coord())
+        pygame.display.flip()</div></pre></div>
+</div></div>
+
+    </article>
+    </div>
+</body>
+<footer>
+    <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
+</footer>
+</html>

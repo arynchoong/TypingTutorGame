@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" />
+    <title>Typing Tutor Game</title>
+        <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="navbar">
+        <a href="https://arynchoong.github.io/aryn/"><img src="assets/images/aryn-straight.png"></a>
+        <span class="navbar-text">Typing Tutor</span>
+        <div class="dropdown">
+            <button class="dropbtn" onclick="window.location.href='main.html'">Game &#9662;</a></button>
+            <div class="dropdown-content">
+            <a href="py01_scrape_words.html">Scrape Words</a>
+            <a href="py02_pygame.html">PyGame</a>
+            <a href="py03_game_loop.html">Game Loop</a>
+            <a >Text</a>
+            <a href="py05_keypress.html">Keypress</a>
+            <a href="py06_game_object.html">Objects</a>
+            <a href="py07_draw_playing.html">Play</a>
+            <a href="py08_animate.html">Animate</a>
+            <a href="py09_user_typing.html">Typing</a>
+            <a href="py10_cityline.html">Cityline</a>
+            <a href="py11_level_up.html">Levels</a>
+            <a href="">Sound</a>
+            </div>
+        </div>
+    </div>
+    <div class="page">
+    <article>
+        <h1>Typing Tutor Game</h1>
+<h2>Display text on screen</h2>
+
+<p>To display some words on screen, we create some text objects and add them to the screen. Then upate the screen to show the changes by using either <code>disp_surf.blit()</code> and <code>pygame.display.flip()</code> or <code>update()</code>.</p>
+
+<p><code>blit()</code>, stands for block transfer, will prepare image for 'transfer' onto the display surface. Or in other words, draw in buffer for transfer to surface. 
+</p>
+<p><code>flip()</code>, will flip and update the whole display and show the changes to the game display.
+</p>
+<p><code>update()</code>, will only update a portion of the screen, that is the drawn rect or area without updating the whole display.
+</p>
+<h2>Background</h2>
+<div class="flex-container"><div class="box">
+<p>Let first set our background colour. Set constant for black:</p>
+</div><div class="boxes">
+        <div class="code">
+            <pre><span class="cn">GAMEOVER</span> <span class="ow">=</span> <span class="nb">3</span><div class="diff"><span class="c">#            R    G    B</span>
+<span class="cn">BLACK</span>   <span class="ow">=</span> (  <span class="nb">0</span>,   <span class="nb">0</span>,   <span class="nb">0</span>)</div></pre></div>
+        </div></div>
+<br>
+<div class="flex-container"><div class="box">
+<p>Fill the surface with black:</p>
+</div><div class="boxes">
+    <div class="code">
+        <pre>   <span class="k">def</span> <span class="f">on_render</span>(self):<div class="diff">        self._display_surf.fill(<span class="cn">BLACK</span>)</div>        <span class="k">for</span> event <span class="k">in</span> pygame.event.get():</pre></div>
+        </div></div>
+
+<h2>Draw text</h2>
+<h3>font</h3>
+
+<p>To draw text on screen, we need to create the font object. </p>
+<p>As our game will depend on typing text, we should use a font that has fixed width for each character. We will use <b>Consolas Bold</b> font for our game.
+</p>
+<p>Download the font "Consolas Bold.ttf". </p>
+<p>Or get from <a href ="https://github.com/arynchoong/TypingTutorGame/blob/master/res/Consolas%20Bold.ttf" target="_blank">https://github.com/arynchoong/TypingTutorGame/blob/master/res/Consolas%20Bold.ttf</a></p>
+<div class="flex-container"><div class="box">
+<p>With the font, we can now set our font object:</p>
+</div><div class="boxes">
+    <div class="code">
+        <pre>    <span class="k">def</span> <span class="f">on_init</span>(self):
+        pygame.init()
+        pygame.display.set_caption(<span class="s2">'Typing Tutor Game'</span>)
+        self._disp_surf <span class="ow">=</span> pygame.display.set_mode(self.size)<div class="diff">        self.bigfont <span class="ow">=</span> pygame.font.Font(<span class="s2">'Consolas Bold.ttf'</span>, <span class="nb">32</span>)</div>        <span class="k">return</span> <span class="k">True</span> <span class="k">if</span> self._disp_surf <span class="k">else</span> <span class="k">False</span></pre></div>
+    </div></div>
+
+<h3>font colour</h3>
+<div class="flex-container"><div class="box">
+<p>Let's set our colours for our welcome screen font:</p>
+
+</div><div class="boxes">
+        <div class="code">
+            <pre><span class="c">#            R    G    B</span>
+<span class="cn">BLACK</span>   <span class="ow">=</span> (  <span class="nb">0</span>,   <span class="nb">0</span>,   <span class="nb">0</span>)<div class="diff"><span class="cn">GREEN</span>   <span class="ow">=</span> (  <span class="nb">0</span>, <span class="nb">255</span>,   <span class="nb">0</span>)</div></pre></div>
+        </div></div>
+<br>
+<div class="flex-container"><div class="box">
+<p>We can now render our text's surface, or in other words generate our image/sprite object:
+</p>
+</div><div class="boxes">
+        <div class="code"><pre>   <span class="k">def</span> <span class="f">on_render</span>(self):
+        self._display_surf.fill(<span class="cn">BLACK</span>)<div class="diff">        surf <span class="ow">=</span> self.bigfont.render(<span class="s2">"Typing Tutor Game"</span>, <span class="k">True</span>, <span class="cn">GREEN</span>)</div></pre></div></div></div>
+<br>
+<div class="flex-container"><div class="box">
+<p>And retrieve the rectangle object for our surface:</p>
+</div><div class="boxes">
+        <div class="code">
+            <pre>        surf <span class="ow">=</span> self.bigfont.render(<span class="s2">"Typing Tutor Game"</span>, <span class="k">True</span>, <span class="cn">GREEN</span>)<div class="diff">        rect <span class="ow">=</span> surf.get_rect()</div></pre></div>
+        </div></div>
+<br>
+<div class="flex-container"><div class="box">
+<p>To set the position of our object, let us put it at center of out display surface:</p>
+</div><div class="boxes">
+        <div class="code">
+            <pre>        surf <span class="ow">=</span> self.bigfont.render(<span class="s2">"Typing Tutor Game"</span>, <span class="k">True</span>, <span class="cn">GREEN</span>)
+        rect <span class="ow">=</span> surf.get_rect()<div class="diff">        rect.center <span class="ow">=</span> (<span class="nb">int</span>(self.width / <span class="nb">2</span>), <span class="nb">int</span>(self.height / <span class="nb">2</span>))</div></pre></div>
+        </div></div>
+<br>
+<div class="flex-container"><div class="box">
+<p>We then have to place it into our draw buffer:</p>
+</div><div class="boxes">
+        <div class="code">
+            <pre>        surf <span class="ow">=</span> self.bigfont.render(<span class="s2">"Typing Tutor Game"</span>, <span class="k">True</span>, <span class="cn">GREEN</span>)
+        rect <span class="ow">=</span> surf.get_rect()
+        rect.center <span class="ow">=</span> (<span class="nb">int</span>(self.width / <span class="nb">2</span>), <span class="nb">int</span>(self.height / <span class="nb">2</span>))<div class="diff">        self._display_surf.blit(surf, rect)</div></pre></div>
+        </div></div>
+<br>
+<div class="flex-container"><div class="box">
+<p>To check our work, we have to update the screen:</p>
+
+</div><div class="boxes">
+        <div class="code">
+            <pre>        surf <span class="ow">=</span> self.bigfont.render(<span class="s2">"Typing Tutor Game"</span>, <span class="k">True</span>, <span class="cn">GREEN</span>)
+        rect <span class="ow">=</span> surf.get_rect()
+        rect.center <span class="ow">=</span> (<span class="nb">int</span>(self.width / <span class="nb">2</span>), <span class="nb">int</span>(self.height / <span class="nb">2</span>))
+        self._display_surf.blit(surf, rect)<div class="diff">
+        pygame.display.flip()</div></pre></div>
+        </div></div>
+
+<h3>Refactor</h3>
+<div class="flex-container"><div class="box">
+<p>Now lets put them neatly into a function:</p>
+
+</div><div class="boxes">
+        <div class="code">
+            <pre><div class="diff">    <span class="k">def</span> <span class="f">draw_big_text</span>(self, text, colour, center):
+        surf <span class="ow">=</span> self.bigfont.render(text, <span class="k">True</span>, colour)</div>        rect <span class="ow">=</span> surf.get_rect()
+        rect.center <span class="ow">=</span> center
+        self._display_surf.blit(surf, rect)<div class="diff">        <span class="k">return</span></div></pre></div>
+        </div></div>
+<br>
+<div class="flex-container"><div class="box">
+<p>Then we just can just call the function:</p>
+
+</div><div class="boxes">
+        <div class="code">
+            <pre>   <span class="k">def</span> <span class="f">on_render</span>(self):
+        self._display_surf.fill(<span class="cn">BLACK</span>)<div class="diff">        self.draw_big_text(<span class="s2">"Typing Tutor Game"</span>, <span class="k">True</span>, <span class="cn">GREEN</span>, 
+                      (<span class="nb">int</span>(self.width/<span class="nb">2</span>), <span class="nb">int</span>(self.height/<span class="nb">2</span>)))</div>        pygame.display.flip()</pre></div>
+        </div></div>
+
+
+    </article>
+    </div>
+</body>
+<footer>
+    <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
+</footer>
+</html>

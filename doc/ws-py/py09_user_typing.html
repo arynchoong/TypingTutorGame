@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" />
+    <title>Typing Tutor Game</title>
+        <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="navbar">
+        <a href="https://arynchoong.github.io/aryn/"><img src="assets/images/aryn-straight.png"></a>
+        <span class="navbar-text">Typing Tutor</span>
+        <div class="dropdown">
+            <button class="dropbtn" onclick="window.location.href='main.html'">Game &#9662;</a></button>
+            <div class="dropdown-content">
+            <a href="py01_scrape_words.html">Scrape Words</a>
+            <a href="py02_pygame.html">PyGame</a>
+            <a href="py03_game_loop.html">Game Loop</a>
+            <a href="py04_display_text.html">Text</a>
+            <a href="py05_keypress.html">Keypress</a>
+            <a href="py06_game_object.html">Objects</a>
+            <a href="py07_draw_playing.html">Play</a>
+            <a href="py08_animate.html">Animate</a>
+            <a >Typing</a>
+            <a href="py10_cityline.html">Cityline</a>
+            <a href="py11_level_up.html">Levels</a>
+            <a href="">Sound</a>
+            </div>
+        </div>
+    </div>
+    <div class="page">
+    <article>
+        <h1>Typing Tutor Game</h1>
+<h2>Typing ...</h2>
+
+<p>Now that we have our words dropping from screen, let's add the capability to read user inputs.</p>
+
+
+<div class="flex-container"><div class="box">
+<p>Just need to adjust our check event method from <b>game.py</b> into <b>play.py</b> to read <code>TEXTINPUT</code>:</p>
+</div><div class="boxes">
+    <div class="code">
+<pre><span class="c"># play.py</span>
+    <span class="k">def</span> <span class="f">on_check_event</span>(self):
+        <span class="k">for</span> event <span class="k">in</span> pygame.event.get():
+            <span class="k">if</span> event.type <span class="ow">==</span> <span class="cn">QUIT</span>:
+                self.state <span class="ow">=</span> <span class="k">False</span>
+<div class="diff">            <span class="k">elif</span> event.type <span class="ow">==</span>  <span class="cn">TEXTINPUT</span>:
+                self.keyhit <span class="ow">=</span> event.text
+</div>            <span class="k">elif</span> event.type <span class="ow">==</span>  <span class="cn">KEYUP</span>:
+<div class="diff">                <span class="k">if</span> event.key <span class="ow">==</span>  <span class="cn">K_ESCAPE</span>:
+                    self.state <span class="ow">=</span> <span class="cn">GAMEOVER</span>
+</div>        <span class="k">return</span></pre></div>
+</div></div>
+
+<h2>Check words</h2>
+
+<div class="flex-container"><div class="box">
+<p>We also need a flag to indicate that we need to check for either all 
+first characters of game words, for just check for the next character in the word we are typing:</p>
+</div><div class="boxes">
+    <div class="code">
+<pre><span class="k">class</span> <span class="f">GamePlay</span>():
+    <span class="k">def</span> <span class="f">__init__</span>(self, display_surf):
+<div class="diff">        self.typingflag <span class="ow">=</span> <span class="k">False</span></div></pre></div>
+</div></div>
+
+<br>
+
+<div class="flex-container"><div class="box">
+<p>We use the typedidx flag to indicate the word we are typing. Let's create a method to check our keyhit:</p>
+</div><div class="boxes">
+    <div class="code">
+<pre>    <span class="k">def</span> <span class="f">check_keyhit</span>(self):
+        <span class="k">if</span> <span class="k">not</span> self.keyhit:
+            <span class="k">return</span>
+        <span class="k">if</span>(self.typingflag):
+            <span class="k">for</span> word <span class="k">in</span> self.game_objects.game_words:
+                <span class="k">if</span> word.typedidx <span class="ow">!=</span> <span class="nb">-1</span>:
+                    <span class="k">if</span> word.text[word.typedidx<span class="ow">+</span><span class="nb">1</span>] <span class="ow">==</span> self.keyhit:
+                        <span class="k">if</span> (word.typed() <span class="ow">==</span> <span class="k">False</span>):
+                            self.typingflag <span class="ow">=</span> <span class="k">False</span>
+                            self.score <span class="ow">+=</span> <span class="nb">len</span>(word)
+                    <span class="k">else</span>:
+                        word.typed_reset()
+                        self.typingflag <span class="ow">=</span> <span class="k">False</span>
+        <span class="k">else</span>:
+            <span class="k">for</span> word <span class="k">in</span> self.game_objects.game_words:
+                <span class="k">if</span> word.text[<span class="nb">0</span>] <span class="ow">==</span> self.keyhit:
+                    <span class="k">if</span>(word.typed() <span class="ow">!=</span> <span class="k">False</span>):
+                        self.typingflag <span class="ow">=</span> <span class="k">True</span>
+                    <span class="k">else</span>:
+                        self.score <span class="ow">+=</span> <span class="nb">1</span>
+                    <span class="k">break</span>
+        self.game_objects.cleanup()
+        self.keyhit <span class="ow">=</span> <span class="k">None</span>
+        <span class="k">return</span></pre></div>
+</div></div>
+
+<br>
+
+<div class="flex-container"><div class="box">
+<p>Let's add two more methods, <code>word.typed()</code>:</p>
+</div><div class="boxes">
+    <div class="code">
+<pre><span class="c"># word.py</span>
+    <span class="k">def</span> <span class="f">typed</span>(self):
+        self.typedidx <span class="ow">+=</span> <span class="nb">1</span>
+        <span class="k">if</span> (self.typedidx <span class="ow">>=</span> (self.len<span class="ow">-</span><span class="nb">1</span>)):
+            <span class="c"># completed typing word</span>
+            self.typedidx <span class="ow">=</span> <span class="nb">-2</span>
+            <span class="k">return</span> <span class="k">False</span>
+        <span class="k">return</span> <span class="k">True</span></pre></div>
+</div></div>
+
+<br>
+
+<div class="flex-container"><div class="box">
+<p>and <code>word.typed_reset()</code> to reset the typedidx if player typed wrongly:
+</p>
+</div><div class="boxes">
+    <div class="code">
+<pre>    <span class="k">def</span> <span class="f">typed_reset</span>(self):
+        self.typedidx <span class="ow">=</span> <span class="nb">-1</span>
+        <span class="k">return</span></pre></div>
+</div></div>
+
+<br>
+
+<div class="flex-container"><div class="box">
+<p>and an additional member to keep track fo the number of characters we typed, which can give us the score:</p>
+</div><div class="boxes">
+    <div class="code">
+<pre><span class="k">class</span> <span class="f">GamePlay</span>():
+    <span class="k">def</span> <span class="f">__init__</span>(self, display_surf):
+<div class="diff">        self.score <span class="ow">=</span> <span class="nb">0</span></div></pre></div>
+</div></div>
+
+<br>
+
+<div class="flex-container"><div class="box">
+<p>We need to remember to clear the flag if the word we are typing drops below boundary_y. let's add a return flag to indicate we removed a word we are typing in our move method:
+</p>
+</div><div class="boxes">
+    <div class="code">
+<pre><span class="c"># objects.py</span>
+    <span class="k">def</span> <span class="f">move</span>(self, delta):
+        removed_typing <span class="ow">=</span> <span class="k">False</span>
+        <span class="k">if</span> <span class="k">not</span> self.game_words:
+            <span class="k">return</span>
+        <span class="k">for</span> word <span class="k">in</span> self.game_words:
+            word.move(delta)
+            <span class="k">if</span> word.get_y() <span class="ow">>=</span> self.bound_y:
+<div class="diff">                <span class="k">if</span> word.typedidx <span class="ow">>=</span> <span class="nb">0</span>:
+                    removed_typing <span class="ow">=</span> <span class="k">True</span>
+</div>                word.set_remove()
+        self.cleanup()
+<div class="diff">        <span class="k">return</span> removed_typing</div></pre></div>
+</div></div>
+
+<br>
+
+<div class="flex-container"><div class="box">
+<p>Such that we can check the flag returned in <b>play.py</b>:
+</p>
+</div><div class="boxes">
+    <div class="code">
+<pre><span class="c"># play.py</span>
+    <span class="k">def</span> <span class="f">on_loop</span>(self):
+<div class="diff">        <span class="k">if</span> self.game_objects.move(self.ydelta):
+            self.typingflag <span class="ow">=</span> <span class="k">False</span>
+</div>        self.add_word()</pre></div>
+</div></div>
+
+<h2>Score</h2>
+
+<div class="flex-container"><div class="box">
+<p>Now that we have our score, let's display our score on the top of our screen during play:
+</p>
+</div><div class="boxes">
+    <div class="code">
+<pre>    <span class="k">def</span> <span class="f">draw_score</span>(self):
+        <span class="c"># draw status bar background</span>
+        pygame.draw.rect(self._display_surf, <span class="cn">BLACK</span>, 
+                            (<span class="nb">0</span>,<span class="nb">0</span>,self.width,<span class="nb">20</span>), <span class="nb">0</span>)
+        <span class="c"># draw the score text</span>
+        text <span class="ow">=</span> <span class="s2">'Score: %s'</span> <span class="ow">%</span> self.score
+        self.draw_word(text, <span class="cn">YELLOW</span>, (self.width <span class="nb">-150</span>, <span class="nb">2</span>))    </pre></div>
+</div></div>
+
+<br>
+
+<div class="flex-container"><div class="box">
+<p>Add to our game play's on_render():
+</p>
+</div><div class="boxes">
+    <div class="code">
+<pre>    <span class="k">def</span> <span class="f">on_render</span>(self):
+        self._display_surf.fill(<span class="cn">BLUE</span>)
+<div class="diff">        self.draw_score()</div></pre></div>
+</div></div>
+
+<br>
+
+<div class="flex-container"><div class="box">
+<p>And return the score from GamePlay():
+</p>
+</div><div class="boxes">
+    <div class="code">
+<pre><span class="c"># play.py</span>
+    <span class="k">def</span> <span class="f">on_execute</span>(self):
+        self.on_init()
+        <span class="k">while</span> (self.state <span class="ow">==</span>  <span class="cn">PLAYING</span>):
+            self.on_loop()
+            self.on_render()
+            self.on_check_event()
+            self.fpsclock.tick(self.fps)
+<div class="diff">        pygame.event.clear()
+        <span class="k">return</span> self.score <span class="k">if</span> self.state <span class="k">else</span> <span class="nb">-1</span>
+</div></pre></div>
+<div class="code">
+<pre><span class="c"># game.py</span>
+    <span class="k">def</span> <span class="f">on_loop</span>(self):
+        <span class="k">if</span> (self.state <span class="ow">==</span> <span class="cn">PLAYING</span>):
+            <span class="c"># start game</span>
+<div class="diff">            self.score <span class="ow">=</span> GamePlay(self._display_surf).on_execute()
+            <span class="k">if</span> (self.score <span class="ow">==</span> <span class="k">False</span>):
+                self._running <span class="ow">=</span> <span class="k">False</span>
+            self.state <span class="ow">=</span> <span class="cn">GAMEOVER</span></div></pre></div>
+</div></div>
+
+<br>
+
+<div class="flex-container"><div class="box">
+<p>And display the score on GameOver:
+</p>
+</div><div class="boxes">
+    <div class="code">
+<pre><span class="c"># game.py</span>
+    <span class="k">def</span> <span class="f">on_render</span>(self):
+        self._display_surf.fill(<span class="cn">BLACK</span>)
+<div class="diff">        message <span class="ow">=</span> <span class="s2">''</span>
+</div>        <span class="k">if</span> self.state <span class="ow">==</span>  <span class="cn">START</span>:
+            text <span class="ow">=</span> <span class="s2">'Typing Tutorial Game'</span>
+<div class="diff">            message <span class="ow">=</span> <span class="s2">'Press any key to play.'</span>
+</div>        <span class="k">elif</span> self.state <span class="ow">==</span>  <span class="cn">GAMEOVER</span>:
+            text <span class="ow">=</span> <span class="s2">'Game Over'</span>
+<div class="diff">            message <span class="ow">=</span> <span class="s2">'Score: %s'</span> <span class="ow">%</span> self.score
+</div>        <span class="k">else</span>:
+            text <span class="ow">=</span> <span class="s2">'Playing'</span>
+        
+        self.on_draw_text(text, <span class="cn">GREEN</span>, 
+                (<span class="nb">int</span>(self.width<span class="ow">/</span><span class="nb">2</span>), <span class="nb">int</span>(self.height<span class="ow">/</span><span class="nb">2</span>))
+        
+<div class="diff">        <span class="k">if</span> <span class="nb">len</span>(message):
+            self.on_draw_text(message, <span class="cn">GREEN</span>,  
+                    (<span class="nb">int</span>(self.width<span class="ow">/</span><span class="nb">2</span>), <span class="nb">int</span>(self.height<span class="ow">/</span><span class="nb">2</span>)<span class="ow">+</span><span class="nb">100</span>)))
+</div>        
+        pygame.display.flip()</pre></div>
+</div></div>
+
+<h2>Draw typing characters</h2>
+
+<div class="flex-container"><div class="box">
+<p>To indicate typing, we need to change the characters we typed into a different colour. We shall change it to green colour. 
+</p>
+<p>To have different colour, when we draw, we need to draw two rectangles, one with typed characters in green, and one replacing the typed characters with spaces and the rest of untyped characters in white. Which is why it is important we chose a font type with fixed width characters.
+</p>
+<p>Let's adjust our on_render() method
+</p>
+</div><div class="boxes">
+    <div class="code">
+<pre><span class="c"># play.py</span>
+    <span class="k">def</span> <span class="f">on_render</span>(self):
+        self._display_surf.fill(<span class="cn">BLUE</span>)
+        
+        <span class="k">for</span> word <span class="k">in</span> self.game_objects.game_words:
+<div class="diff">            <span class="k">if</span>(word.typedidx <span class="ow">></span> <span class="nb">-1</span>):
+                typed_text <span class="ow">=</span> word.text[:word.typedidx<span class="ow">+</span><span class="nb">1</span>]
+                untyped_text <span class="ow">=</span> <span class="s2">' '</span><span class="ow">*</span>(word.typedidx<span class="ow">+</span><span class="nb">1</span>) <span class="ow">+ \</span> 
+                                word.text[word.typedidx<span class="ow">+</span><span class="nb">1</span>:]
+                self.draw_word(untyped_text, <span class="cn">WHITE</span>, word.coord())
+                self.draw_word(typed_text, <span class="cn">GREEN</span>, word.coord())
+            <span class="k">else</span>:
+</div>                self.draw_word(word.text, <span class="cn">WHITE</span>, word.coord())
+        
+        pygame.display.flip()
+        <span class="k">return</span></pre></div>
+</div></div>
+
+    </article>
+    </div>
+</body>
+<footer>
+    <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
+</footer>
+</html>

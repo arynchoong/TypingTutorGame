@@ -27,7 +27,7 @@ class TypingTutor():
     def on_init(self):
         pygame.init()
         pygame.display.set_caption('Typing Tutor Game')
-        self._display_surf = pygame.display.set_mode(self.size)
+        self._display_surf = pygame.display.set_mode(self.size, HWSURFACE|DOUBLEBUF)
         self.bigfont = pygame.font.Font(RESFOLDER+'Consolas Bold.ttf', 32)
         return True if self._display_surf else False
         
