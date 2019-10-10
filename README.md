@@ -18,7 +18,10 @@ https://archive.org/details/Typing_Tutor_IV_DOS.
 ![Typing Tutor Screenshot](/docs/images/Screenshot.png)
 
 If you are looking for the web based workshop/tutorial, please go to:
+https://arynchoong.github.io/TypingTutorGame/
+or
 https://arynchoong.github.io/TypingTutorGame/docs/index.html
+depending on the state of GitHub Pages.(there is a turnaround time)
 
 ## Nice to have game components
 * typing tutorial style, first middle row keys, followed by each of index fingers, upper keys, lower keys, then numbers, special characters
