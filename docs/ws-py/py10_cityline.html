@@ -59,7 +59,7 @@
 </div><div class="boxes">
     <div class="code">
 <pre><span class="k">class</span> <span class="f">Block</span>:
-    <span class="k">def</span> <span class="f">__init__</span>(self, flag<span class="ow">=</span>True, height <span class="ow">=</span> <span class="nb">0</span>):
+    <span class="k">def</span> <span class="f">__init__</span>(self, flag<span class="ow">=</span><span class="k">True</span>, height <span class="ow">=</span> <span class="nb">0</span>):
         self.flag <span class="ow">=</span> flag
         self.height <span class="ow">=</span> height</pre></div>
 </div></div>
@@ -76,7 +76,7 @@
         self.len <span class="ow">=</span> <span class="nb">int</span>(screen_width<span class="ow">/</span><span class="nb">10</span>)
         self.cityline <span class="ow">=</span> []
 <div class="diff">        <span class="k">for</span> i <span class="k">in</span> <span class="nb">range</span>(self.len):
-            self.cityline.append(Block(True, random.randint(<span class="nb">1</span>,<span class="nb">20</span>)))
+            self.cityline.append(Block(<span class="k">True</span>, random.randint(<span class="nb">1</span>,<span class="nb">20</span>)))
         self.cityline[<span class="nb">-1</span>].set_flag(<span class="k">False</span>)</div></pre></div>
 </div></div>
 
