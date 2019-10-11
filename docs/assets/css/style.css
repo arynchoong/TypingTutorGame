@@ -82,6 +82,7 @@ article {
     text-align: left;
     background-color: #fff;
     max-width: 100%;
+    word-wrap: break-word;
 }
 @media only screen {
     .page{
