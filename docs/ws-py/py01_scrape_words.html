@@ -2,18 +2,18 @@
 <html>
 <head><meta charset="utf-8" />
     <title>Typing Tutor Game</title>
-    
     <link href="assets/css/notebook.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
+    <script src="assets/js/script.js"></script>
 </head>
 <body>
-    <div class="navbar">
-        <a href="https://arynchoong.github.io/aryn/"><img src="assets/images/aryn-straight.png"></a>
-        <span class="navbar-text">Typing Tutor</span>
+    <div class="navbar" id="topNav">
+        <a href="https://arynchoong.github.io/aryn/" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
+        <a href="../index.html">Typing Tutor</a>
         <div class="dropdown">
-            <button class="dropbtn" onclick="window.location.href='../index.html'">Game &#9662;</a></button>
-            <div class="dropdown-content">
-            <a >Scrape Words</a>
+        <button class="dropbtn" onclick="addResponsive()">Game &#9662;</button>
+        <div class="dropdown-content">
+            <a class="active">Scrape Words</a>
             <a href="py02_pygame.html">PyGame</a>
             <a href="py03_game_loop.html">Game Loop</a>
             <a href="py04_display_text.html">Text</a>
@@ -24,11 +24,10 @@
             <a href="py09_user_typing.html">Typing</a>
             <a href="py10_cityline.html">Cityline</a>
             <a href="py11_level_up.html">Levels</a>
-            <a href="">Sound</a>
-            </div>
+            <a href="py12_sound.html">Sound</a>
         </div>
-        <a href="py02_pygame.html"  class="navbar-right">&#x27A1;</a>
-        <span class="navbar-right">Scrape Words</span>
+        </div>
+        <a href="javascript:void(0);" class="icon" onclick="addResponsive()">&#9776;</a>
     </div>
 
 
@@ -220,8 +219,11 @@
     </div>
     </article>
     </div>
-
-
+    
+    <div class="navbar-bottom">
+    <a href="../index.html" class="nav-left">&#x2B05;</a>
+    <a href="py02_pygame.html" class="nav-right">&#x27A1;</a>
+    </div>
 </body>
 <footer>
     <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>

@@ -2,15 +2,16 @@
 <html>
 <head><meta charset="utf-8" />
     <title>Typing Tutor Game</title>
-        <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <script src="assets/js/script.js"></script>
 </head>
 <body>
-    <div class="navbar">
-        <a href="https://arynchoong.github.io/aryn/"><img src="assets/images/aryn-straight.png"></a>
-        <span class="navbar-text">Typing Tutor</span>
+    <div class="navbar" id="topNav">
+        <a href="https://arynchoong.github.io/aryn/" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
+        <a href="../index.html">Typing Tutor</a>
         <div class="dropdown">
-            <button class="dropbtn" onclick="window.location.href='../index.html'">Game &#9662;</a></button>
-            <div class="dropdown-content">
+        <button class="dropbtn" onclick="addResponsive()">Game &#9662;</button>
+        <div class="dropdown-content">
             <a href="py01_scrape_words.html">Scrape Words</a>
             <a href="py02_pygame.html">PyGame</a>
             <a href="py03_game_loop.html">Game Loop</a>
@@ -22,12 +23,12 @@
             <a href="py09_user_typing.html">Typing</a>
             <a href="py10_cityline.html">Cityline</a>
             <a href="py11_level_up.html">Levels</a>
-            <a >Sound</a>
+            <a class="active">Sound</a>
             </div>
         </div>
-        <span class="navbar-right">Sound</span>
-        <a href="py11_level_up.html" class="navbar-right">&#x2B05;</a>
+        <a href="javascript:void(0);" class="icon" onclick="addResponsive()">&#9776;</a>
     </div>
+
     <div class="page">
     <article>
         <h1>Typing Tutor Game</h1>
@@ -65,6 +66,10 @@
 </div></div>
 
     </article>
+    </div>
+
+    <div class="navbar-bottom">
+        <a href="py11_level_up.html" class="nav-left">&#x2B05;</a>
     </div>
 </body>
 <footer>
