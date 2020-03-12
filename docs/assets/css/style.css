@@ -1,16 +1,16 @@
 body {
     font-family: Verdana, Geneva, sans-serif;
-    background-color: #F8FBE9;
+    background-color: #f9fbfc;
     margin:0;
     padding:0;
 }
 
  /* Add a black background color to the top navigation */
  .navbar {
-    background-color: #C8E26A;
+    background-color: #c6e1eb;
     font-family: Verdana, Geneva, sans-serif;
     overflow: hidden;
-    border-bottom: 2px outset #f0f7d4;
+    border-bottom: 2px outset #f0f8fc;
     width: 100%;
   }
   
@@ -33,7 +33,7 @@ body {
   }
   /* Add an active class to highlight the current page */
   .active {
-    background-color: #F0F7D4;
+    background-color: #f0f8fc;
   }
   
   /* Hide the link that should open and close the topnav on small screens */
@@ -82,13 +82,13 @@ body {
   /* Add a dark background on topnav links and the dropdown button on hover */
   .navbar a:hover, .dropdown:hover .dropbtn {
     background-color: #347B98;
-    color: #f0f7d4;
+    color: #f0f8fc;
   }
   
   /* Add a grey background to dropdown links on hover */
   .dropdown-content a:hover {
     background-color: #347B98;
-    color: #f0f7d4;
+    color: #f0f8fc;
   }
   
   /* Show the dropdown menu when the user moves the mouse over the dropdown button */
@@ -131,7 +131,7 @@ body {
     .navbar.responsive .dropdown-content {
         position: relative;
         display: block;
-        background-color: #C8E26A;
+        background-color: #c6e1eb;
     }
     .navbar.responsive .dropdown .dropbtn {
       display: none;
@@ -142,10 +142,10 @@ body {
 
 /* Prev and Next on the bottom navbar */
 .navbar-bottom {
-    background-color: #C8E26A;
+    background-color: #c6e1eb;
     font-family: Verdana, Geneva, sans-serif;
     overflow: hidden;
-    border-bottom: 2px outset #f0f7d4;
+    border-bottom: 2px outset #f0f8fc;
     width: 100%;
   }
   .nav-left {
@@ -175,7 +175,7 @@ body {
     margin-left: auto;
     margin-right: auto;
     padding: 8px;
-    background-color: #F8FBE9;
+    background-color: #f9fbfc;
 }
 article {
     font-family: Tahoma, Geneva, sans-serif;
@@ -202,12 +202,12 @@ article {
 }
 @media only screen and (min-width: 640px){
     .page{
-        max-width: 620px;
+        max-width: 95%;
     }
 }
 @media only screen and (min-width: 1200px){
     .page{
-        max-width: 90%;
+        max-width: 95%;
     }
     .flex-container{
         display: flex;
@@ -306,7 +306,7 @@ article img{
     line-height: 1.2;
 }
 .diff {
-    background-color: honeydew;
+    background-color: azure;
     border: 1px solid lightgrey;
     padding: 0;
     line-height: 1.4;

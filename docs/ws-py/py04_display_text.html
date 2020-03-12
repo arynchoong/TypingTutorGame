@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="navbar" id="topNav">
-        <a href="https://arynchoong.github.io/aryn/" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
+        <a href="https://arynchoong.com" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
         <a href="../index.html">Typing Tutor</a>
         <div class="dropdown">
         <button class="dropbtn" onclick="addResponsive()">Game &#9662;</button>
@@ -79,7 +79,6 @@
 <h3>font colour</h3>
 <div class="flex-container"><div class="box">
 <p>Let's set our colours for our welcome screen font:</p>
-
 </div><div class="boxes">
         <div class="code">
             <pre><span class="c">#            R    G    B</span>
@@ -109,7 +108,8 @@
         </div></div>
 <br>
 <div class="flex-container"><div class="box">
-<p>We then have to place it into our draw buffer:</p>
+<p>We then have to place it into our draw buffer.</p>
+<p><code>blit</code> stands for  BLock Image Tranfser. It transfers the created image of our text onto our display surface.</p>
 </div><div class="boxes">
         <div class="code">
             <pre>        surf <span class="ow">=</span> self.bigfont.render(<span class="s2">"Typing Tutor Game"</span>, <span class="k">True</span>, <span class="cn">GREEN</span>)

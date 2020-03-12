@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="navbar" id="topNav">
-        <a href="https://arynchoong.github.io/aryn/" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
+        <a href="https://arynchoong.com" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
         <a href="../index.html">Typing Tutor</a>
         <div class="dropdown">
         <button class="dropbtn" onclick="addResponsive()">Game &#9662;</button>
@@ -39,7 +39,6 @@
 <p>So we need to slow down our game refresh rate by using the <code>pygame.time.Clock()</code></p>
 
 <h2>Frame rate</h2>
-
 <div class="flex-container"><div class="box">
 <p>For games, we want to control our fps (frame rate per second), which is how often we update the display:</p>
 </div><div class="boxes">
@@ -51,7 +50,6 @@
 </div></div>
 
 <br>
-
 <div class="flex-container"><div class="box">
 <p>And call the clock tick in our loop, to set delay:
 </p>
@@ -68,16 +66,13 @@
 </div></div>
 
 <h2>Move words downwards</h2>
-
 <div class="flex-container"><div class="box">
 <p>To move the words down, we just need to adjust the y coordinate of the word. So let's add move methods to all game objects:
 </p>
 </div><div class="boxes">
-    <div class="code">
-<pre><span class="c"># word.py</span>
+    <div class="code"><pre><span class="c"># word.py</span>
     <span class="k">def</span> <span class="f">move</span>(self, delta):
         self.y += delta</pre></div>
-
 <div class="code"><pre><span class="c"># objects.py</span>
     <span class="k">def</span> <span class="f">move</span>(self, delta):
         <span class="k">for</span> word <span class="k">in</span> self.game_words:
@@ -85,14 +80,11 @@
 </div></div>
 
 <br>
-
-
 <div class="flex-container"><div class="box">
 <p>And initialise a ydelta at GamePlay() and move it on game loop():
 </p>
 </div><div class="boxes">
-    <div class="code">
-<pre><span class="k">class</span> <span class="f">GamePlay</span>():
+    <div class="code"><pre><span class="k">class</span> <span class="f">GamePlay</span>():
     <span class="k">def</span> <span class="f">__init__</span>(self, display_surf):
 <div class="diff">        self.ydelta <span class="ow">=</span> 1</pre></div>
 <div class="code">
@@ -103,9 +95,7 @@
 
 <h2>Boundary</h2>
 
-<p>Fairly simply, our next step is to move the words down the screen. Once we have fixed the x coordinate of the word, we just need to change the Y coordinate until it hits the bottom of the screen, which we can fixed at 40 pixels from bottom of screen. 
-</p>
-
+<p>Fairly simply, our next step is to move the words down the screen. Once we have fixed the x coordinate of the word, we just need to change the Y coordinate until it hits the bottom of the screen, which we can fixed at 40 pixels from bottom of screen. </p>
 <div class="flex-container"><div class="box">
 <p>Let us set this as bound_y in our objects.py :</p>
 </div><div class="boxes">
@@ -116,7 +106,6 @@
 </div></div>
 
 <br>
-
 <div class="flex-container"><div class="box">
 <p>And to remove the words, once it hits the boundary. We cannot remove the words within the loop, so we have to have a way to set it for removal.</p>
 <p>We will use a flag to indicate this:</p>
@@ -140,7 +129,6 @@
 </div></div>
 
 <br>
-
 <div class="flex-container"><div class="box">
 <p>And a <code>clean_up</code> method to remove words with negative flagged <code>typed_idx</code>, in <b>objects.py</b> :</p>
 </div><div class="boxes">
