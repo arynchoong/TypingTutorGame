@@ -31,64 +31,92 @@
     <div class="page">
     <article>
         <h1>Typing Tutor Game</h1>
-        <h2>PyGame</h2>
 
-        <p>Pygame is a python library that is built on top of the SDL (Simple DirectMedia Layer) library that allows for developers to have low level access to common gaming tools of audio, peripherals and graphics.</p>
-
-        <p>In short it is a cross platform tool to easily develop games in Python.</p>
+        <div class="flex-container"><div class="boxes">
+            <h2>PyGame</h2>
+            <p>Pygame is a cross platform tool to easily develop games in Python.</p>
+            <p>It is a set of python module that is built on top of the SDL (Simple DirectMedia Layer) library that allows for developers to have low level access to common gaming tools of audio, peripherals and graphics.</p>
+            <p>For more information about the Pygame module, please see it's wiki <a href="https://www.pygame.org/wiki/about">page</a>.</p>
+        </div><div class="boxes">
+            <img src="assets/images/pygame.png"/>
+        </div></div>
 
         <h2>Install</h2>
+        <p>PyGame can be installed using pip. However we need the dev version >= 2.0.0dev for our Typing Tutor example, because I used features only introduced in PyGame 2.0 for getting the keys.</p>
+        <p>The PyGame version 2.0 is currently still in dev as at 12th March 2020, and so we need to specify the dev version we want to retrieve when we install.</p>
 
-        <p>The PyGame version 2.0 is currently still in dev as at 1st October 2019, and as such we need to uninstall any older version and build the dev version from source.</p>
+        <div class="flex-container"><div class="box">
+            <h3>Virtual environment</h3>
+            <p>Remember to set up and activate our virtual environment before we start:</p>
+        </div><div class="boxes">
+            <div class="console"><pre>$ python3 -m venv venv</pre></div>
+        </div></div>
+
+        <div class="flex-container"><div class="box">
+            <p>On Windows, run:</p>
+        </div><div class="boxes">
+            <div class="console"><pre>$ venv\Scripts\activate.bat</pre></div>
+        </div></div>
+        <div class="flex-container"><div class="box">
+            <p>On Unix or MacOS, run:</p>
+        </div><div class="boxes">
+            <div class="console"><pre>$ source venv/bin/activate</pre></div>
+        </div></div>
 
         <p>There are crucial updates in version 2.0 that we will need for our Typing Tutor Game. Namely the key reads.</p>
 
-        <p>Please see: <a href="https://www.pygame.org/wiki/GettingStarted#Installing%20From%20Source" target="_blank">https://www.pygame.org/wiki/GettingStarted#Installing%20From%20Source</a></p>
-
-        <p>and install PyGame Dev version 2.0.0.DEV from <a href="https://github.com/pygame/pygame.git" target="_blank">https://github.com/pygame/pygame.git</a></p>
+        <div class="flex-container"><div class="box">
+            <h3>Installation</h3>
+            <p>Please see: <a href="https://github.com/pygame/pygame/releases">https://github.com/pygame/pygame/releases</a> for the available pre-release versions.</p>
+            <p>Loook for the latest the latest PyGame Dev version 2.0.0.dev* and install:</p>
+        </div><div class="boxes">
+            <div class="console"><pre>(venv) $ pip3 install pygame==2.0.0.dev6</pre></div>
+        </div></div>
 
         <div class="flex-container"><div class="box">
-        <p>Test your installation by calling the example that comes with the package:</p>
+            <p>Test your installation by calling the example that comes with the package:</p>
+            <p>The key here is that it brings up a GUI game.</p>
         </div><div class="boxes">
-        <div class="console"><pre>python3 -m pygame.examples.aliens</pre></div>
+            <div class="console"><pre>(venv)$ python3 -m pygame.examples.aliens</pre></div>
         </div></div>
 
         <h2>PyGame Basics</h2>
-
-        <p>PyGame is not compatible with jupyter notebooks. </p>
-
-        <div class="flex-container"><div class="box">
+        <p>NOTE: PyGame, at least the GUI part, is not usable (or testable) within jupyter notebooks.</p>
         <p>So we will use scripts. Let's start with a script and let's name it 'game.py'.</p>
-        <p>To use pygame, lets import the package and it's keywords.</p>
-        </div><div class="boxes">
-        <div class="code">
-        <pre><span class="k">import</span> pygame
-<span class="k">from</span> pygame.locals <span class="k">import</span> <span class="ow">*</span></pre></div>
-        </div></div>
-        <br/>
+
         <div class="flex-container"><div class="box">
-        <p>Now fill in the basics of a python script, and we need to initalise the pygame module to use it:</p>
+            <h3>Load pygame module</h3>
+            <p>To use pygame, lets import the package and it's keywords.</p>
         </div><div class="boxes">
         <div class="code">
-            <pre><span class="k">def</span> <span class="f">main</span>():
+<pre><span class="c"># game.py</span>
+<span class="k">import</span> pygame
+<span class="k">from</span> pygame.locals <span class="k">import</span> <span class="ow">*</span></pre>
+        </div></div></div><br/>
+        
+        <div class="flex-container"><div class="box">
+            <h3>Initialise pygame</h3>
+            <p>Now fill in the basics of a python script, and we need to initalise the pygame module to use it:</p>
+        </div><div class="boxes">
+        <div class="code">
+<pre><span class="k">def</span> <span class="f">main</span>():
     pygame.init()
     
 <span class="k">if</span> __name__<span class="ow">==</span><span class="s2">"__main__"</span>:
-    main()</pre></div>
-        </div></div>
-        <br/>
+    main()</pre>
+        </div></div></div><br/>
+
         <div class="flex-container"><div class="box">
-        <p>At the moment, we haven't done much. </p>
-        <p>So let us create out game screen, and call it our display surface:</p>
+            <h3>Game display surface area</h3>
+            <p>Next we create our game screen, and call it display surface:</p>
         </div><div class="boxes">
         <div class="code">
-            <pre><span class="k">def</span> <span class="f">main</span>():
+<pre><span class="k">def</span> <span class="f">main</span>():
     pygame.init()<div class="diff">    pygame.display.set_caption(<span class="s2">'Typing Tutor Game'</span>)
-    disp_surf <span class="ow">=</span> pygame.display.set_mode((<span class="nb">640</span>, <span class="nb">400</span>))</div></pre></div>
-        </div></div>
+    display_surf <span class="ow">=</span> pygame.display.set_mode((<span class="nb">640</span>, <span class="nb">400</span>))</div></pre>
+        </div></div></div>
 
         <p><code>set_caption()</code> sets the game caption (application title) on the top of the display.</p>
-
         <p>The display surface is our game's screen, or game play surface area, where our game runs.</p>
 
         <h2>Game loop</h2>
@@ -96,20 +124,27 @@
         <p>And any game will require user input in some form or another, let us now add the codes to check for trigger to close the game. (user clicking the red cross icon on top corner of our display surface)</p>
         </div><div class="boxes">
         <div class="code">
-            <pre>    disp_surf <span class="ow">=</span> pygame.display.set_mode((<span class="nb">640</span>, <span class="nb">400</span>))<div class="diff">    running <span class="ow">=</span> <span class="k">True</span>
+<pre>    display_surf <span class="ow">=</span> pygame.display.set_mode((<span class="nb">640</span>, <span class="nb">400</span>))
+<div class="diff">    running <span class="ow">=</span> <span class="k">True</span>
     
     <span class="k">while</span> running:
         <span class="k">for</span> event <span class="k">in</span> pygame.event.get():
             <span class="k">if</span> event.type <span class="ow">==</span> pygame.QUIT:
-                running <span class="ow">=</span> False</div></pre></div>
-        </div></div>
+                running <span class="ow">=</span> False</div></pre>
+        </div></div></div>
+        
         <p>The codes set a flag called <code>running</code> and check all the events for the game, if it gets the event <code>pygame.QUIT</code>, it exits the loop.</p>
+        <h2>Test it</h2>
+
         <div class="flex-container"><div class="box">
-        <p>Test your codes by calling the script:</p>
+            <p>Test your codes by calling the module from console:</p>
+            <p>And hit the red cross button, it should exit our game and quit. Top left for Macs and Unix, top right for Windows.</p>
         </div><div class="boxes">
-        <div class="console"><pre>python3 -m game.py</pre></div>
+            <div class="console"><pre>python3 -m game</pre></div>
         </div></div>
-        <p>And hit the red cross button to quit.</p>
+
+        <p>This is the quick show of what is required to use PyGame.</p>
+        <p>Next we need to figure out how we want our game to work.</p>
 
     </article>
     </div>

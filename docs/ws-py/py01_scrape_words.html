@@ -30,201 +30,266 @@
         <a href="javascript:void(0);" class="icon" onclick="addResponsive()">&#9776;</a>
     </div>
 
-
     <div class="page">
-        <article>
-    
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Scrape-for-Words">Scrape for Words<a class="anchor-link" href="#Scrape-for-Words">¶</a></h1><p>I use python to scrape for words.</p>
-    <p>Scraping is actually misleading, as I didn't need to scrape from online. Just retrieved from a corpus of nltk.</p>
-    <p>A corpus is a large, exhaustive, collection of words and text used in a particular library. For example the Brown Corpus has more than million words created at Brown University, categorised by genre.</p>
-    <p>For this example, we will use the Brown Corpus, which contains words from collected by Brown University.</p>
-    <h2 id="import-packages">import packages<a class="anchor-link" href="#import-packages">¶</a></h2><p>First let's import the nltk package, and then the gutenberg corpus:</p>
-    
-    </div>
-    </div>
-    </div>
-    <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[1]:</div>
-    <div class="inner_cell">
-        <div class="input_area"><div class=" highlight hl-ipython3">
-            <pre><span></span><span class="kn">import</span> <span class="nn">nltk</span></pre></div>
+    <article>
+
+        <div class="cell border-box-sizing text_cell rendered">
+        <div class="inner_cell">
+        <div class="text_cell_render border-box-sizing rendered_html">
+            <h1 id="Scrape-for-Words">Scrape for Words<a class="anchor-link" href="#Scrape-for-Words">&#182;</a></h1>
+            <p>I use python to scrape for words.</p>
+            <p>Scraping is actually misleading, as I didn't need to scrape from online. Just retrieved from a corpus of nltk.</p>
+            <p>A corpus is a large, exhaustive, collection of words and text used in a particular library. For example the Brown Corpus has more than million words created at Brown University, categorised by genre.</p>
+            <p>For this example, we will use the Project Gutenberg's Corpus, which contains words of a sample collection from Project Gutenberg, <a href="http://www.gutenberg.org/">http://www.gutenberg.org/</a>.<br>
+            You may download your favourte classics from Project Gutenberg and load the text document accordingly.</p>
+            <h2 id="import-packages">import packages<a class="anchor-link" href="#import-packages">&#182;</a></h2><p>First let's import the gutenberg corpus from the nltk package:</p>
+        </div></div></div>
+
+        <div class="cell border-box-sizing code_cell rendered">
+        <div class="input">
+        <div class="prompt input_prompt">In&nbsp;[1]:</div>
+        <div class="inner_cell">
+            <div class="input_area">
+                <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="k">import</span> <span class="n">gutenberg</span></pre></div>
+            </div>
+        </div></div></div>
+
+        <div class="cell border-box-sizing text_cell rendered">
+        <div class="inner_cell">
+        <div class="text_cell_render border-box-sizing rendered_html">
+        <h2 id="Project-Gutenberg-Corpus">Project Gutenberg Corpus<a class="anchor-link" href="#Project-Gutenberg-Corpus">&#182;</a></h2>
+        <p>You may download your favourte classics from Project Gutenberg and load the text document :  <a href="http://www.gutenberg.org/">http://www.gutenberg.org/</a></p>
+        </div></div></div>
+
+        <div class="cell border-box-sizing code_cell rendered">
+        <div class="input">
+        <div class="prompt input_prompt">In&nbsp;[2]:</div>
+        <div class="inner_cell">
+            <div class="input_area">
+                <div class=" highlight hl-ipython3"><pre><span></span><span class="n">gutenberg</span><span class="o">.</span><span class="n">fileids</span><span class="p">()</span></pre></div>
+            </div>
         </div>
-    </div>
-    </div>
-    <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Brown-University-Copus">Brown University Copus<a class="anchor-link" href="#Brown-University-Copus">¶</a></h2><p>To get the words, we just need to call the words() method of the brown corpus:</p>
-    </div>
-    </div>
-    </div>
-    <div class="cell border-box-sizing code_cell rendered">
-    <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[2]:</div>
-    <div class="inner_cell">
-        <div class="input_area">
-    <div class=" highlight hl-ipython3">
-        <pre><span></span><span class="n">wordlist</span> <span class="o">=</span> <span class="n">nltk</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">brown</span><span class="o">.</span><span class="n">words</span><span class="p">()</span></pre>
-    </div>
         </div>
-    </div>
-    </div>
-    </div>
-    <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Collect,-sort-and-save">Collect, sort and save<a class="anchor-link" href="#Collect,-sort-and-save">¶</a></h2><p>This list has the exhaustive list of words, so we want the frequency of distinct words:</p>
-    </div>
-    </div>
-    </div>
-    <div class="cell border-box-sizing code_cell rendered">
-    <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[3]:</div>
-    <div class="inner_cell">
-        <div class="input_area">
-    <div class=" highlight hl-ipython3">
-        <pre><span></span><span class="kn">from</span> <span class="nn">nltk</span> <span class="k">import</span> <span class="n">FreqDist</span></pre></div>
+        <div class="output_wrapper">
+        <div class="output">
+        <div class="output_area">
+            <div class="prompt output_prompt">Out[2]:</div>
+        <div class="output_text output_subarea output_execute_result">
+<pre>[&#39;austen-emma.txt&#39;,
+ &#39;austen-persuasion.txt&#39;,
+ &#39;austen-sense.txt&#39;,
+ &#39;bible-kjv.txt&#39;,
+ &#39;blake-poems.txt&#39;,
+ &#39;bryant-stories.txt&#39;,
+ &#39;burgess-busterbrown.txt&#39;,
+ &#39;carroll-alice.txt&#39;,
+ &#39;chesterton-ball.txt&#39;,
+ &#39;chesterton-brown.txt&#39;,
+ &#39;chesterton-thursday.txt&#39;,
+ &#39;edgeworth-parents.txt&#39;,
+ &#39;melville-moby_dick.txt&#39;,
+ &#39;milton-paradise.txt&#39;,
+ &#39;shakespeare-caesar.txt&#39;,
+ &#39;shakespeare-hamlet.txt&#39;,
+ &#39;shakespeare-macbeth.txt&#39;,
+ &#39;whitman-leaves.txt&#39;]</pre>
         </div>
-    </div>
-    </div>
-    
-    </div>
-    <div class="cell border-box-sizing code_cell rendered">
-    <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[4]:</div>
-    <div class="inner_cell">
-        <div class="input_area">
-    <div class=" highlight hl-ipython3">
-        <pre><span></span><span class="n">frequency_list</span> <span class="o">=</span> <span class="n">FreqDist</span><span class="p">(</span><span class="n">wordlist</span><span class="p">)</span></pre></div>
         </div>
-    </div>
-    </div>
-    
-    </div>
-    <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>And sort it by frequency:</p>
-    </div>
-    </div>
-    </div>
-    <div class="cell border-box-sizing code_cell rendered">
-    <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[5]:</div>
-    <div class="inner_cell">
-        <div class="input_area">
-    <div class=" highlight hl-ipython3">
-        <pre><span></span><span class="n">most_common</span> <span class="o">=</span> <span class="n">frequency_list</span><span class="o">.</span><span class="n">most_common</span><span class="p">()</span></pre></div>
         </div>
-    </div>
-    </div>
-    </div>
-    <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Once sorted, we can keep the sorted list and discard the frequency. So we just keep the first item of each tuple in the list using list comprehension method:</p>
-    </div>
-    </div>
-    </div>
-    <div class="cell border-box-sizing code_cell rendered">
-    <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[6]:</div>
-    <div class="inner_cell">
-        <div class="input_area">
-    <div class=" highlight hl-ipython3">
-        <pre><span></span><span class="n">common_words</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">most_common</span><span class="p">]</span></pre></div>
         </div>
-    </div>
-    </div>
-    
-    </div>
-    <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>And save it for use:</p>
-    </div>
-    </div>
-    </div>
-    <div class="cell border-box-sizing code_cell rendered">
-    <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[7]:</div>
-    <div class="inner_cell">
-        <div class="input_area">
-    <div class=" highlight hl-ipython3">
-        <pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"words.txt"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">common_words</span><span class="p">:</span>
-            <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="se">\n</span><span class="s2">"</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span></pre></div>
         </div>
-    </div>
-    </div>
-    </div>
-    <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>And thus we have a list of words ready for used, sorted by its frequency distribution from the most common words to the least.</p>
-    </div>
-    </div>
-    </div>
-    <div class="cell border-box-sizing code_cell rendered">
-    <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[8]:</div>
-    <div class="inner_cell">
-        <div class="input_area">
-    <div class=" highlight hl-ipython3">
-        <pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">common_words</span><span class="p">)</span></pre></div>
+
+        <div class="cell border-box-sizing text_cell rendered">
+        <div class="inner_cell">
+        <div class="text_cell_render border-box-sizing rendered_html">
+        <p>To get the words, we just need to call the words() method of the gutenberg corpus:</p>
         </div>
-    </div>
-    </div>
-    <div class="output_wrapper">
-    <div class="output">
-    <div class="output_area">
-        <div class="prompt output_prompt">Out[8]:</div>
-    <div class="output_text output_subarea output_execute_result">
-    <pre>56057</pre>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    <div class="cell border-box-sizing code_cell rendered">
-    <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[10]:</div>
-    <div class="inner_cell">
-        <div class="input_area">
-    <div class=" highlight hl-ipython3">
-        <pre><span></span><span class="n">most_common</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span></pre></div>
         </div>
-    </div>
-    </div>
-    
-    <div class="output_wrapper">
-    <div class="output">
-    <div class="output_area">
-        <div class="prompt output_prompt">Out[10]:</div>
-    <div class="output_text output_subarea output_execute_result">
-    <pre>[('the', 62713),
- (',', 58334),
- ('.', 49346),
- ('of', 36080),
- ('and', 27915),
- ('to', 25732),
- ('a', 21881),
- ('in', 19536),
- ('that', 10237),
- ('is', 10011)]</pre>
-    </div>
-    
-    </div>
-    
-    </div>
-    </div>
-    
-    </div>
+        </div>
+
+        <div class="cell border-box-sizing code_cell rendered">
+        <div class="input">
+        <div class="prompt input_prompt">In&nbsp;[3]:</div>
+        <div class="inner_cell">
+            <div class="input_area">
+                <div class=" highlight hl-ipython3"><pre><span></span><span class="n">wordlist</span> <span class="o">=</span> <span class="n">gutenberg</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;austen-emma.txt&#39;</span><span class="p">)</span></pre></div>
+            </div>
+        </div>
+        </div>
+        </div>
+
+        <div class="cell border-box-sizing code_cell rendered">
+        <div class="input">
+        <div class="prompt input_prompt">In&nbsp;[4]:</div>
+        <div class="inner_cell">
+            <div class="input_area">
+        <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">wordlist</span><span class="p">)</span></pre></div>
+            </div>
+        </div>
+        </div>
+        <div class="output_wrapper">
+        <div class="output">
+        <div class="output_area">
+            <div class="prompt output_prompt">Out[4]:</div>
+        <div class="output_text output_subarea output_execute_result">
+        <pre>192427</pre>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+
+        <div class="cell border-box-sizing text_cell rendered">
+        <div class="inner_cell">
+        <div class="text_cell_render border-box-sizing rendered_html">
+        <h2 id="Collect,-sort-and-save">Collect, sort and save<a class="anchor-link" href="#Collect,-sort-and-save">&#182;</a></h2>
+        <p>This list has the exhaustive list of words, so we want the frequency of distinct words:</p>
+        </div>
+        </div>
+        </div>
+
+        <div class="cell border-box-sizing code_cell rendered">
+        <div class="input">
+        <div class="prompt input_prompt">In&nbsp;[5]:</div>
+        <div class="inner_cell">
+            <div class="input_area">
+        <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nltk</span> <span class="k">import</span> <span class="n">FreqDist</span></pre></div>
+            </div>
+        </div>
+        </div>
+        </div>
+
+        <div class="cell border-box-sizing code_cell rendered">
+        <div class="input">
+        <div class="prompt input_prompt">In&nbsp;[6]:</div>
+        <div class="inner_cell">
+            <div class="input_area">
+                <div class=" highlight hl-ipython3"><pre><span></span><span class="n">frequency_list</span> <span class="o">=</span> <span class="n">FreqDist</span><span class="p">(</span><span class="n">wordlist</span><span class="p">)</span></pre></div>
+            </div>
+        </div>
+        </div>
+        </div>
+
+        <div class="cell border-box-sizing code_cell rendered">
+        <div class="input">
+        <div class="prompt input_prompt">In&nbsp;[7]:</div>
+        <div class="inner_cell">
+            <div class="input_area">
+                <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">frequency_list</span><span class="p">)</span></pre></div>
+            </div>
+        </div>
+        </div>
+        <div class="output_wrapper">
+        <div class="output">
+        <div class="output_area">
+            <div class="prompt output_prompt">Out[7]:</div>
+        <div class="output_text output_subarea output_execute_result">
+        <pre>7811</pre>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+
+        <div class="cell border-box-sizing text_cell rendered">
+        <div class="inner_cell">
+        <div class="text_cell_render border-box-sizing rendered_html">
+        <p>And sort it by frequency:</p>
+        </div>
+        </div>
+        </div>
+
+        <div class="cell border-box-sizing code_cell rendered">
+        <div class="input">
+        <div class="prompt input_prompt">In&nbsp;[8]:</div>
+        <div class="inner_cell">
+            <div class="input_area">
+                <div class=" highlight hl-ipython3"><pre><span></span><span class="n">most_common</span> <span class="o">=</span> <span class="n">frequency_list</span><span class="o">.</span><span class="n">most_common</span><span class="p">()</span></pre></div>
+            </div>
+        </div>
+        </div>
+        </div>
+
+        <div class="cell border-box-sizing code_cell rendered">
+        <div class="input">
+        <div class="prompt input_prompt">In&nbsp;[9]:</div>
+        <div class="inner_cell">
+            <div class="input_area">
+                <div class=" highlight hl-ipython3"><pre><span></span><span class="n">most_common</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span></pre></div>
+            </div>
+        </div>
+        </div>
+        <div class="output_wrapper">
+        <div class="output">
+        <div class="output_area">
+            <div class="prompt output_prompt">Out[9]:</div>
+        <div class="output_text output_subarea output_execute_result">
+        <pre>[(&#39;,&#39;, 11454), (&#39;.&#39;, 6928), (&#39;to&#39;, 5183), (&#39;the&#39;, 4844), (&#39;and&#39;, 4672)]</pre>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+
+        <div class="cell border-box-sizing text_cell rendered">
+        <div class="inner_cell">
+        <div class="text_cell_render border-box-sizing rendered_html">
+        <p>Once sorted, we can keep the sorted list and discard the frequency. So we just keep the first item of each tuple in the list using list comprehension method:</p>
+        </div>
+        </div>
+        </div>
+
+        <div class="cell border-box-sizing code_cell rendered">
+        <div class="input">
+        <div class="prompt input_prompt">In&nbsp;[10]:</div>
+        <div class="inner_cell">
+            <div class="input_area">
+        <div class=" highlight hl-ipython3"><pre><span></span><span class="n">common_words</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">most_common</span><span class="p">]</span></pre></div>
+            </div>
+        </div>
+        </div>        
+        </div>
+
+        <div class="cell border-box-sizing text_cell rendered">
+        <div class="inner_cell">
+        <div class="text_cell_render border-box-sizing rendered_html">
+        <p>And save it for use:</p>
+        </div>
+        </div>
+        </div>
+
+        <div class="cell border-box-sizing code_cell rendered">
+        <div class="input">
+        <div class="prompt input_prompt">In&nbsp;[11]:</div>
+        <div class="inner_cell">
+            <div class="input_area">
+    <div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;words.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">common_words</span><span class="p">:</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span></pre></div>
+            </div>
+        </div>
+        </div>
+        </div>
+
+        <div class="cell border-box-sizing text_cell rendered">
+        <div class="inner_cell">
+        <div class="text_cell_render border-box-sizing rendered_html">
+        <p>And thus we have a list of words ready for used, sorted by its frequency distribution from the most common words to the least.</p>
+        </div>
+        </div>
+        </div>
+
+
     </article>
     </div>
     
     <div class="navbar-bottom">
-    <a href="../index.html" class="nav-left">&#x2B05;</a>
-    <a href="py02_pygame.html" class="nav-right">&#x27A1;</a>
+        <a href="../index.html" class="nav-left">&#x2B05;</a>
+        <a href="py02_pygame.html" class="nav-right">&#x27A1;</a>
     </div>
+
 </body>
+
 <footer>
     <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
 </footer>

@@ -31,10 +31,10 @@
 
     <div class="page">
     <article>
-        <h1>Typing Tutor Game</h1>
+<h1>Typing Tutor Game</h1>
 <h2>Display text on screen</h2>
 
-<p>To display some words on screen, we create some text objects and add them to the screen. Then upate the screen to show the changes by using either <code>disp_surf.blit()</code> and <code>pygame.display.flip()</code> or <code>update()</code>.</p>
+<p>To display some words on screen, we create some text objects and add them to the screen. Then upate the screen to show the changes by using either <code>display_surf.blit()</code> and <code>pygame.display.flip()</code> or <code>update()</code>.</p>
 
 <p><code>blit()</code>, stands for block transfer, will prepare image for 'transfer' onto the display surface. Or in other words, draw in buffer for transfer to surface. 
 </p>
@@ -43,8 +43,10 @@
 <p><code>update()</code>, will only update a portion of the screen, that is the drawn rect or area without updating the whole display.
 </p>
 <h2>Background</h2>
+
+
 <div class="flex-container"><div class="box">
-<p>Let first set our background colour. Set constant for black:</p>
+<p>Let first set our background's RGB colour. Set it as a constant for black:</p>
 </div><div class="boxes">
         <div class="code">
             <pre><span class="cn">GAMEOVER</span> <span class="ow">=</span> <span class="nb">3</span><div class="diff"><span class="c">#            R    G    B</span>
@@ -58,8 +60,10 @@
         <pre>   <span class="k">def</span> <span class="f">on_render</span>(self):<div class="diff">        self._display_surf.fill(<span class="cn">BLACK</span>)</div>        <span class="k">for</span> event <span class="k">in</span> pygame.event.get():</pre></div>
         </div></div>
 
-<h2>Draw text</h2>
-<h3>font</h3>
+
+<p>You may run the app now to check that the background is now black instead of grey.</p>
+<h2>Draw Text</h2>
+<h3>Font</h3>
 
 <p>To draw text on screen, we need to create the font object. </p>
 <p>As our game will depend on typing text, we should use a font that has fixed width for each character. We will use <b>Consolas Bold</b> font for our game.
@@ -73,12 +77,12 @@
         <pre>    <span class="k">def</span> <span class="f">on_init</span>(self):
         pygame.init()
         pygame.display.set_caption(<span class="s2">'Typing Tutor Game'</span>)
-        self._disp_surf <span class="ow">=</span> pygame.display.set_mode(self.size)<div class="diff">        self.bigfont <span class="ow">=</span> pygame.font.Font(<span class="s2">'Consolas Bold.ttf'</span>, <span class="nb">32</span>)</div>        <span class="k">return</span> <span class="k">True</span> <span class="k">if</span> self._disp_surf <span class="k">else</span> <span class="k">False</span></pre></div>
+        self._display_surf <span class="ow">=</span> pygame.display.set_mode(self.size)<div class="diff">        self.bigfont <span class="ow">=</span> pygame.font.Font(<span class="s2">'Consolas Bold.ttf'</span>, <span class="nb">32</span>)</div>        <span class="k">return</span> <span class="k">True</span> <span class="k">if</span> self._display_surf <span class="k">else</span> <span class="k">False</span></pre></div>
     </div></div>
 
-<h3>font colour</h3>
+<h3>Font Colour</h3>
 <div class="flex-container"><div class="box">
-<p>Let's set our colours for our welcome screen font:</p>
+<p>Let's set our RGB colour for our welcome screen font:</p>
 </div><div class="boxes">
         <div class="code">
             <pre><span class="c">#            R    G    B</span>
@@ -129,27 +133,34 @@
         pygame.display.flip()</div></pre></div>
         </div></div>
 
-<h3>Refactor</h3>
-<div class="flex-container"><div class="box">
-<p>Now lets put them neatly into a function:</p>
+        <h3>Refactor</h3>
 
-</div><div class="boxes">
-        <div class="code">
-            <pre><div class="diff">    <span class="k">def</span> <span class="f">draw_big_text</span>(self, text, colour, center):
+        <div class="flex-container"><div class="box">
+        <p>Now lets put them neatly into a function:</p>
+
+        </div><div class="boxes"><div class="code">
+<pre><div class="diff">    <span class="k">def</span> <span class="f">draw_big_text</span>(self, text, colour, center):
         surf <span class="ow">=</span> self.bigfont.render(text, <span class="k">True</span>, colour)</div>        rect <span class="ow">=</span> surf.get_rect()
         rect.center <span class="ow">=</span> center
-        self._display_surf.blit(surf, rect)<div class="diff">        <span class="k">return</span></div></pre></div>
-        </div></div>
-<br>
-<div class="flex-container"><div class="box">
-<p>Then we just can just call the function:</p>
+        self._display_surf.blit(surf, rect)<div class="diff">        <span class="k">return</span></div></pre>
+        </div></div></div>
 
-</div><div class="boxes">
-        <div class="code">
-            <pre>   <span class="k">def</span> <span class="f">on_render</span>(self):
+        <br>
+        
+        <div class="flex-container"><div class="box">
+            <p>Then we just can just call the function:</p>
+        </div><div class="boxes"><div class="code">
+<pre>   <span class="k">def</span> <span class="f">on_render</span>(self):
         self._display_surf.fill(<span class="cn">BLACK</span>)<div class="diff">        self.draw_big_text(<span class="s2">"Typing Tutor Game"</span>, <span class="k">True</span>, <span class="cn">GREEN</span>, 
-                      (<span class="nb">int</span>(self.width <span class="ow">/</span> <span class="nb">2</span>), <span class="nb">int</span>(self.height <span class="ow">/</span> <span class="nb">2</span>)))</div>        pygame.display.flip()</pre></div>
-        </div></div>
+                      (<span class="nb">int</span>(self.width <span class="ow">/</span> <span class="nb">2</span>), <span class="nb">int</span>(self.height <span class="ow">/</span> <span class="nb">2</span>)))</div>        pygame.display.flip()</pre>
+        </div></div></div>
+
+        <div class="flex-container"><div class="boxes">
+            <p>Give it a try, you should end up with green text on black background, something like this:</p>
+        </div><div class="boxes">
+            <img src="assets/images/ws-py04.png"/>
+        </div>
+    
 
     </article>
     </div>

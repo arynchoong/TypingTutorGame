@@ -31,18 +31,23 @@
     <div class="page">
     <article>
         <h1>Typing Tutor Game</h1>
-        <h2>Game states and loops</h2>
 
+        <h2>Game states and loops</h2>
         <p>All games work similarly in that it has states and loops. </p>
         <p>Typical game states are <i>playing</i> and <i>game over</i> states.</p>
-        <p>And the game loops will be determined by the game's complexity such as levels and user game play.</p>
+        <p>And the game loop is where we sert up the levels and user game play (when is the 'game over'). It is where we determine how complex the game is.</p>
 
         <h2>Object Oriented</h2>
+        <p>Our game will become very messy code very quickly if we do not structure it.</p>
+        <p>For our Typing Tutor game, we have the typical arcade set up of hit start button and play until game over.</p>
+        <p>Then reset.</p>
+
         <div class="flex-container"><div class="box">
-        <p>Our game will become very messy code very quickly if we do not structure it. So let's refactor it to be object oriented:</p>
+            <p>Good way to organise it by object oriented.</p>
+            <p>Here, we create our main object, TypingTutor, which has initialising of our game, executing our game loop and quit.</p>
         </div><div class="boxes">
         <div class="code">
-        <pre><span class="k">import</span> pygame
+<pre><span class="k">import</span> pygame
 <span class="k">from</span> pygame.locals <span class="k">import</span> <span class="ow">*</span>
 <div class="diff"><span class="cn">WIDTH</span> <span class="ow">=</span> <span class="nb">640</span>
 <span class="cn">HEIGHT</span> <span class="ow">=</span> <span class="nb">480</span>
@@ -50,12 +55,12 @@
 <span class="k">class</span> <span class="f">TypingTutor</span>():
     <span class="k">def</span> <span class="f">__init__</span>(self):
         self._running <span class="ow">=</span> <span class="k">True</span>
-        self._disp_surf <span class="ow">=</span> <span class="k">None</span>
+        self._display_surf <span class="ow">=</span> <span class="k">None</span>
         self.size <span class="ow">=</span> self.width, self.height <span class="ow">=</span> <span class="cn">WIDTH</span>, <span class="cn">HEIGHT</span>
         
     <span class="k">def</span> <span class="f">on_init</span>(self):</div>        pygame.init()
-        pygame.display.set_caption(<span class="s2">'Typing Tutor Game'</span>)<div class="diff">        self._disp_surf <span class="ow">=</span> pygame.display.set_mode(self.size)
-        <span class="k">return</span> <span class="k">True</span> <span class="k">if</span> self._disp_surf <span class="k">else</span> <span class="k">False</span>
+        pygame.display.set_caption(<span class="s2">'Typing Tutor Game'</span>)<div class="diff">        self._display_surf <span class="ow">=</span> pygame.display.set_mode(self.size)
+        <span class="k">return</span> <span class="k">True</span> <span class="k">if</span> self._display_surf <span class="k">else</span> <span class="k">False</span>
 
     <span class="k">def</span> <span class="f">on_execute</span>(self):
         <span class="k">if</span> <span class="k">not</span> self.on_init():
@@ -68,31 +73,32 @@
         pygame.quit()
 </div>
 <span class="k">if</span> __name__<span class="ow">==</span><span class="s2">"__main__"</span>:<div class="diff">    game <span class="ow">=</span> TypingTutor()
-    game.on_execute()</div></pre></div>
-        </div></div>
+    game.on_execute()</div></pre>
+        </div></div></div>
 
         <h2>Game states</h2>
+
         <div class="flex-container"><div class="box">
-        <p>Now that we have our object oriented game object. Let's add our game states, <code>START</code> <code>PLAYING</code> <code>GAMEOVER</code>. </p>
+            <p>Now that we have our object oriented game object. Let's add our game states: <code>START</code>, <code>PLAYING</code> and <code>GAMEOVER</code>. </p>
         </div><div class="boxes">
         <div class="code">
-        <pre><span class="cn">START</span> <span class="ow">=</span> <span class="nb">1</span>
+<pre><span class="cn">START</span> <span class="ow">=</span> <span class="nb">1</span>
 <span class="cn">PLAYING</span> <span class="ow">=</span> <span class="nb">2</span>
-<span class="cn">GAMEOVER</span> <span class="ow">=</span> <span class="nb">3</span></pre></div>
-        </div></div>
+<span class="cn">GAMEOVER</span> <span class="ow">=</span> <span class="nb">3</span></pre>
+        </div></div></div>
 
         <h2>Game loop</h2>
-        <div class="flex-container"><div class="box">
-        <p>With our game states, we can now set up our main game loop:</p>
-
+        <p>With our game states, we can now set up our main game loop.</p>
         <p>We will have two loops in our game, the main game loop with the game states, and our inner play loop that we go into for each level that we will add in later.</p>
 
-        <p>Let's add a simple main loop that does nothing for now:</p>
-
+        <div class="flex-container"><div class="box">
+            <p>Let's add a simple main loop that does nothing for now.</p>
+            <p>Our main game loop consist of two functions <code>on_loop()</code> and <code>on_render()</code>.</p>
+            <p>The first function will check for the states and call on_play which will have our inner game play loop later on.</p>
+            <p>We also make sure to check our events queue at the start of the second function, and will later display which main screen to display.</p>
         </div><div class="boxes">
         <div class="code">
-        <pre>
-    <span class="k">def</span> <span class="f">on_execute</span>(self):
+<pre><span class="k">def</span> <span class="f">on_execute</span>(self):
         <span class="k">if</span> <span class="k">not</span> self.on_init():
             self._running <span class="ow">=</span> <span class="k">False</span>
         <span class="c"># main game loop</span>
@@ -113,15 +119,20 @@
         <span class="k">return</span>
         
     <span class="k">def</span> <span class="f">on_play</span>(self):
-        pass</div></pre></div>
-        </div></div>
+        pass</div></pre>
+        </div></div></div>
 
-<div class="flex-container"><div class="box">
-    <p>And don't forget to initialise our <code>state</code> flag.</p>
-</div><div class="boxes">
-        <div class="code"><pre><span class="k">class</span> <span class="f">TypingTutor</span>():
-    <span class="k">def</span> <span class="f">__init__</span>(self):<div class="diff">        self.state <span class="ow">=</span> <span class="cn">START</span></div></pre></div>
-        </div></div>
+        <p>The <code>on_render()</code> function will only render the START screen and the GAMEOVER screen.</p>
+        <p>The inner loop that will be inside <code>on_play()</code> will be taking care of rendering when the game is playing.</p>
+
+        <div class="flex-container"><div class="box">
+            <p>And don't forget to initialise our <code>state</code> flag.</p>
+        </div><div class="boxes"><div class="code">
+<pre><span class="k">class</span> <span class="f">TypingTutor</span>():
+    <span class="k">def</span> <span class="f">__init__</span>(self):<div class="diff">        self.state <span class="ow">=</span> <span class="cn">START</span></div></pre>
+        </div></div></div>
+
+        <p>I would do a quick test and run the script now, to check that nothing is broken. There is nothing new to observe when the screen comes up.</p>
 
     </article>
     </div>

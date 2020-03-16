@@ -32,13 +32,15 @@
     <div class="page">
     <article>
         <h1>Typing Tutor Game</h1>
-<h2>Detecting keypress event</h2>
+        <h2>Detecting keypress event</h2>
+        <p>To progress from one game state to another, we need to get user input.</p>
+        <p>We check for the <code>KEYUP</code> event. We use the <code>KEYUP</code> event instead of <code>KEYPRESS</code> event, such that we don't register more than one event for when users long press of a key.</p>
 
-<div class="flex-container"><div class="box">
-<p>To progress from one game state to another, we need to get user input:</p>
-<p>We check for the <code>KEYUP</code> event. We use the <code>KEYUP</code> event instead of <code>KEYPRESS</code> event, such that we don't register more than one event for when users long press of a key.</p>
-</div><div class="boxes">
-    <div class="code">
+        <div class="flex-container"><div class="box">
+            <p>Let's wrap our event checking loop in a function:</p>
+            <p>And in addition to our checking of <code>QUIT</code> event, we check for <code>KEYUP</code> event and increment the state or reset it if it is <code>GAMEOVER</code>.</p>
+        </div><div class="boxes">
+            <div class="code">
 <pre><div class="diff">    <span class="k">def</span> <span class="f">on_check_event</span>(self):
 </div>        <span class="k">for</span> event <span class="k">in</span> pygame.event.get():
             <span class="k">if</span> event.type <span class="ow">==</span> <span class="cn">QUIT</span>:
@@ -46,7 +48,7 @@
                 self.state <span class="ow">=</span> <span class="cn">GAMEOVER</span>
 <div class="diff">            <span class="k">elif</span> event.type <span class="ow">==</span> <span class="cn">KEYUP</span>:
                 <span class="k">if</span> (self.state <span class="ow">==</span> <span class="cn">GAMEOVER</span>):
-                    self.state <span class="ow">=</span> <span class="nb">1</span>
+                    self.state <span class="ow">=</span> <span class="cn">START</span>
                 <span class="k">else</span>:
                     self.state <span class="ow">+=</span> <span class="nb">1</span>
         <span class="k">return</span></div></pre></div>
@@ -60,13 +62,12 @@
         self._display_surf.fill(<span class="cn">BLACK</span>)
 <div class="diff">        <span class="k">if</span> self.state <span class="ow">==</span> <span class="cn">START</span>:
             text <span class="ow">=</span> <span class="s2">'Typing Tutorial Game'</span>
-        <span class="k">elif</span> self.state <span class="ow">==</span> <span class="cn">GAMEOVER</span>:
-            text <span class="ow">=</span> <span class="s2">'Game Over'</span>
+        <span class="k">elif</span> self.state <span class="ow">==</span> <span class="cn">PLAYING</span>:
+            text <span class="ow">=</span> <span class="s2">'PLAYING'</span>
         <span class="k">else</span>:
-            text <span class="ow">=</span> <span class="s2">'Playing'</span>
-</div>
-        self.draw_big_text(<span class="s2">"Typing Tutor Game"</span>, <span class="k">True</span>, <span class="cn">GREEN</span>, 
-                      (<span class="nb">int</span>(self.width/<span class="nb">2</span>), <span class="nb">int</span>(self.height/<span class="nb">2</span>)))
+            text <span class="ow">=</span> <span class="s2">'Game Over'</span>
+        self.draw_big_text(text, <span class="k">True</span>, <span class="cn">GREEN</span>, 
+</div>                           (<span class="nb">int</span>(self.width/<span class="nb">2</span>), <span class="nb">int</span>(self.height/<span class="nb">2</span>)))
         pygame.display.flip()
         <span class="k">return</span></pre></div>
 </div></div>
