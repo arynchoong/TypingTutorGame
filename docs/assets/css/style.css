@@ -178,7 +178,7 @@ body {
     background-color: #f9fbfc;
 }
 article {
-    font-family: Tahoma, Geneva, sans-serif;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: left;
     background-color: #fff;
     word-wrap: break-word;
@@ -194,8 +194,6 @@ article {
     }
     article {
         padding: 15px;
-        font-size: 14px;
-        line-height: 20px;
         box-shadow: 0px 0px 12px 1px  rgba(09,28,34, 0.2);
         box-sizing: border-box;
     }
@@ -229,7 +227,7 @@ article {
 
 h1, h2, h3, h4, h5, h6 {
     color: #092834;
-    font-family: "Georgia","Times New Roman",serif;
+    font-family: Palatino, Georgia, 'Times New Roman', Times, serif;
 }
 article img{
     display: block;
