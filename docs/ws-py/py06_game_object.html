@@ -50,7 +50,7 @@
     <span class="k">def</span> <span class="f">init_words</span>(self):
         words_list <span class="ow">=</span> <span class="k">None</span>
         <span class="k">try</span>:
-            <span class="k">with</span> open(<span class="s2">"gutenberg.txt"</span>,<span class="s2">"r"</span>, newline=<span class="s2">''</span>) <span class="k">as</span> file:
+            <span class="k">with</span> open(<span class="s2">"words.txt"</span>,<span class="s2">"r"</span>, newline=<span class="s2">''</span>) <span class="k">as</span> file:
               words_list <span class="ow">=</span> [line.strip() <span class="k">for</span> line <span class="k">in</span> file.readlines()]
         <span class="k">except</span>:
             <span class="c"># Error handling, provide default:</span>

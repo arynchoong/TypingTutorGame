@@ -146,8 +146,8 @@ first characters of game words, for just check for the next character in the wor
     <div class="code">
 <pre><span class="c"># objects.py</span>
     <span class="k">def</span> <span class="f">move</span>(self, delta):
-        removed_typing <span class="ow">=</span> <span class="k">False</span>
-        <span class="k">if</span> <span class="k">not</span> self.game_words:
+<div class="diff">        removed_typing <span class="ow">=</span> <span class="k">False</span>
+</div>        <span class="k">if</span> <span class="k">not</span> self.game_words:
             <span class="k">return</span>
         <span class="k">for</span> word <span class="k">in</span> self.game_words:
             word.move(delta)
@@ -168,7 +168,8 @@ first characters of game words, for just check for the next character in the wor
     <div class="code">
 <pre><span class="c"># play.py</span>
     <span class="k">def</span> <span class="f">on_loop</span>(self):
-<div class="diff">        <span class="k">if</span> self.game_objects.move(self.ydelta):
+<div class="diff">        self.check_keyhit()
+        <span class="k">if</span> self.game_objects.move(self.ydelta):
             self.typingflag <span class="ow">=</span> <span class="k">False</span>
 </div>        self.add_word()</pre></div>
 </div></div>

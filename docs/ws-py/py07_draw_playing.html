@@ -84,7 +84,7 @@
 <pre>    <span class="k">def</span> <span class="f">draw_word</span>(self, text, colour, coord):
         surf <span class="ow">=</span> self.font.render(text, <span class="k">True</span>, colour)
         rect <span class="ow">=</span> surf.get_rect()
-        rect.topleft <span class="ow">=</span> (x, y)
+        rect.topleft <span class="ow">=</span> coord
         self._display_surf.blit(surf, rect)
         <span class="k">return</span></pre></div>
 </div></div>

@@ -152,24 +152,14 @@
 </div><div class="boxes">
     <div class="code">
 <pre><span class="c"># objects.py</span>
-<span class="k">from</span> city <span class="k">import</span> Cityline
-
+<div class="diff"><span class="k">from</span> city <span class="k">import</span> Cityline
+</div>
 <span class="k">class</span> <span class="f">Objects</span>:
 <div class="diff">    <span class="k">def</span> <span class="f">__init__</span>(self, screen_width, screen_height):
         self.cityline <span class="ow">=</span> Cityline(screen_width)</div></pre></div>
 </div></div>
 
 <br>
-
-<div class="flex-container"><div class="box">
-<p>And remember to add screen width to objects instantiation:</p>
-</div><div class="boxes">
-    <div class="code">
-<pre><span class="c"># play.py</span>
-    <span class="k">def</span> <span class="f">on_init</span>(self):
-<div class="diff">        self.game_objects = Objects(self.width, self._display_surf.get_height())
-</div></pre></div>
-</div></div>
 
 <div class="flex-container"><div class="box">
 <p>And add to our draw method:
