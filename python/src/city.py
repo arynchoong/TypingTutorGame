@@ -1,61 +1,39 @@
-# City line 
-
+# city.py
 import random
-
-MARGINX = 6
+# Dimensions
+MARGINX = 5
 FONTWIDTH = 9 # based on Consolas Bold 16 pt font size
 
-class Block:
-    def __init__(self, flag=True, height = 0):
-        self.flag = flag
-        self.height = height
-        return
-    def set_flag(self, flag):
-        self.flag = flag
-        return
-    def get_flag(self):
-        return self.flag
-    def set_height(self, height):
-        self.height = height
-        return
-    def get_height(self):
-        return self.height
-    
 class Cityline:
     def __init__(self, screen_width):
-        self.len = int(screen_width/10)
+        self._len = int(screen_width / 10)
         self.cityline = []
-        # with 10 px blocks, randomize building height
-        for i in range(self.len):
-            # each block is (flag,height) 
-            self.cityline.append(Block(True, random.randint(1,20)))
-        # n blocks require n+1 coordinates. last block redundant
-        self.cityline[-1].set_flag(False) 
+        for i in range(self._len):
+            self.cityline.append(Block(height = random.randint(1,20)))
+        self.cityline[-1].del_block()
         return
     
     def __iter__(self):
         return CityIterator(self.cityline)
     
     def __len__(self):
-        return self.len
+        return self._len
+    
+    def del_blocks(self, start_x, str_len):
+        startidx = int((start_x - MARGINX) / 10)
+        endidx = startidx + int((FONTWIDTH * str_len) / 10)
+        if endidx >= self._len:
+            endidx = self.len - 1
+        for i in range(startidx, endidx+1):
+            self.cityline[i].del_block()
+        return
     
     def check_gameover(self):
         if all(block.get_flag() == False for block in self.cityline):
             return True
         return False
     
-    def del_blocks(self, startx, strlen):
-        startidx = int((startx) / 10)
-        endidx = (startidx + int((FONTWIDTH * strlen) / 10))
-        if endidx >= self.len:
-            endidx = self.len-1
-        for i in range(startidx, endidx+1):
-            self.cityline[i].set_flag(False)
-        return
-    
-    def get_block(self, index):
-        return self.cityline[index]
-    
+
 class CityIterator:
     def __init__(self, city):
         self.city = city
@@ -71,3 +49,21 @@ class CityIterator:
     
     def __iter__(self):
         return self
+    
+    
+class Block:
+    def __init__(self, flag = True, height = 0):
+        self.flag = flag
+        self.height = height
+        return
+    
+    def del_block(self):
+        self.flag = False
+        return
+    
+    def get_flag(self):
+        return self.flag
+    
+    def get_height(self):
+        return self.height
+
