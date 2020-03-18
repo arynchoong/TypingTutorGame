@@ -1,9 +1,8 @@
 # Typing Tutor Game for Python
-## Versions developed on
-Python : 3.7.4.  
-PyGame : 2.0.0.dev3  
-SDL : 2.0.9  
-OSX : macOS Mojave Version 10.14.6  
+## Latest developed on
+Python : 3.7.6
+PyGame : 2.0.0.dev6
+OSX : macOS Catalina Version 10.15.3
 
 ## To run game
 ### Install pygame
@@ -14,22 +13,19 @@ since the codes developed is dependent on new features in version 2 that is not 
 #### Virtual Environment
 Run on terminal (or command line):
 ````console
-$ python3 -m virtualenv venv
+$ python3 -m venv venv
 ````
 
 Activate the virtual environment.
 
+For Windows:
+````console
+$ venv\Scripts\activate.bat
+````
+
 For MacOS:
 ````console
 $ source venv/bin/activate
-````
-#### MacOS only
-Pre-install step for MacOS:
-
-(The following is for MacOS only). 
-venvdotapp helps the python be a mac 'app'. So that the pygame window can get focus.
-````console
-(venv)$ pip3 install venvdotapp
 ````
 
 #### pip install
@@ -42,5 +38,5 @@ Install pygame:
 ### Play!
 Run from src folder:
 ````console
-(venv)$ python game.py
+(venv)$ python -m game
 ````
