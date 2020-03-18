@@ -1,4 +1,5 @@
 import pygame
+from play import GamePlay
 
 # Dimensions
 WIDTH = 640
@@ -21,7 +22,8 @@ class TypingTutor():
         self.size = WIDTH, HEIGHT
         self.running = True if self.disp_surf else False
         self.state = START
-        self.bigfont = pygame.font.Font(RESFOLDER+'Consolas Bold.ttf', 36)
+        self.bigfont = pygame.font.Font(RESFOLDER + 'Consolas Bold.ttf', 36)
+        self.game = None
         return
     
     def init_display(self):
@@ -34,7 +36,12 @@ class TypingTutor():
         # Event loop
         while self.running:
             self.check_event()
-            self.render()
+            if self.state == PLAYING:
+                self.game = GamePlay(self.screen)
+                self.game.execute()
+                self.state += 1
+            else:
+                self.render()
         return
         
     def check_event(self):
@@ -61,7 +68,7 @@ class TypingTutor():
             message = 'Press space to play.'
         else:
             text = 'Game Over'
-            message = 'State: %s' % self.state
+            message = 'Score: %s' % self.game.score
 
         # draw the messages
         self.draw_text(text, GREEN, (WIDTH / 2, HEIGHT / 2 - 50))
