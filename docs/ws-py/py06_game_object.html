@@ -40,25 +40,32 @@
 
 </div><div class="boxes">
     <div class="code">
-<pre><span class="c"># objects.py</span>
-<span class="k">import</span> random
+<pre># game objects.py
+import string
+import random
 
-<span class="k">class</span> <span class="f">Objects</span>:
-    <span class="k">def</span> <span class="f">__init__</span>(self):
-        self.wordlist <span class="ow">=</span> self.init_words()
-        
-    <span class="k">def</span> <span class="f">init_words</span>(self):
-        words_list <span class="ow">=</span> <span class="k">None</span>
-        <span class="k">try</span>:
-            <span class="k">with</span> open(<span class="s2">"words.txt"</span>,<span class="s2">"r"</span>, newline=<span class="s2">''</span>) <span class="k">as</span> file:
-              words_list <span class="ow">=</span> [line.strip() <span class="k">for</span> line <span class="k">in</span> file.readlines()]
-        <span class="k">except</span>:
-            <span class="c"># Error handling, provide default:</span>
-            words_list<span class="ow">=</span>[<span class="s2">'a'</span>,<span class="s2">'b'</span>,<span class="s2">'c'</span>,<span class="s2">'d'</span>,<span class="s2">'e'</span>,<span class="s2">'f'</span>,<span class="s2">'g'</span>,<span class="s2">'h'</span>,<span class="s2">'i'</span>,<span class="s2">'j'</span>,<span class="s2">'k'</span>,
-                        <span class="s2">'l'</span>,<span class="s2">'m'</span>,<span class="s2">'n'</span>,<span class="s2">'o'</span>,<span class="s2">'p'</span>,<span class="s2">'q'</span>,<span class="s2">'r'</span>,<span class="s2">'s'</span>,<span class="s2">'t'</span>,<span class="s2">'u'</span>,<span class="s2">'v'</span>,
-                        <span class="s2">'x'</span>,<span class="s2">'y'</span>,<span class="s2">'z'</span>]
+# Dimensions
+MARGINX = 5
+FONTWIDTH = 9 # based on Consolas Bold 16 pt font size
+
+class GameObjects:
+    def __init__(self, screen_width, screen_height):
+        self.screen_width = screen_width
+        self.screen_height = screen_height
+        self.wordlist = self.init_words()
+        self.game_words = []
+        self.bound_y = screen_height - 40
+
+    def init_words(self):
+        words_list = None
+        try:
+            with open("words.txt", 'r', newline='') as file:
+                words_list = [line.strip() for line in file.readlines()]
+        except:
+            # Error handling, provide default:
+            words_list = list(string.ascii_letters)
             random.shuffle(words_list)
-        <span class="k">return</span> words_list</pre></div>
+        return words_list</pre></div>
 </div></div>
 
 <h2>Initialise words</h2>
@@ -68,17 +75,16 @@
 </p>
 </div><div class="boxes">
     <div class="code">
-<pre><span class="c"># play.py</span>
-<span class="k">from</span> pygame.locals <span class="k">import</span> <span class="ow">*</span>
-<div class="diff"><span class="k">from</span> objects <span class="k">import</span> <span class="ow">*</span></div>
-
-<span class="k">class</span> <span class="f">GamePlay</span>():
-    <span class="k">def</span> <span class="f">__init__</span>(self, display_surf):
-        self._display_surf <span class="ow">=</span> display_surf
-<div class="diff">        self.game_objects <span class="ow">=</span> <span class="k">None</span></div>
-        
-    <span class="k">def</span> <span class="f">on_init</span>(self):
-<div class="diff">        self.game_objects <span class="ow">=</span> Objects()</div></pre></div>
+<pre>
+# play.py
+import pygame
+<div class="diff">from objects import GameObjects</div>
+ . 
+ . 
+ . 
+        self.font =  pygame.font.Font('Consolas Bold.ttf', 16)
+        self.playing = True
+<div class="diff">        self.game_objects = GameObjects(self.width, self.height)</div></pre></div>
 </div></div>
 
 
@@ -90,14 +96,24 @@
 <p>First, let's create our game play loop, <b>play.py</b>:</p>
 </div><div class="boxes">
     <div class="code">
-<pre>    <span class="k">def</span> <span class="f">on_execute</span>(self):
-        self.on_init()
-<div class="diff">        <span class="k">while</span> (self.state <span class="ow">==</span> <span class="cn">PLAYING</span>):
-            self.on_loop()
-        <span class="k">return</span> self.state
-    
-    <span class="k">def</span> <span class="f">on_loop</span>(self):
-        <span class="k">pass</span></div></pre></div>
+<pre>    def check_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+<div class="diff">            elif event.type == pygame.TEXTINPUT:
+                self.keyhit = event.text
+</div>            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_ESCAPE:
+                    self.playing = False
+        return
+
+    def loop(self):
+<div class="diff">        self.check_keyhit()
+        return
+
+    def check_keyhit(self):
+        # TODO: check our keyhit here
+</div>        return</pre></div>
 </div></div>
 
 <br>
@@ -175,15 +191,15 @@
 <p>To set the text of the word, we want to randomly select one from our wordlist. So, we want to create a method to do so in our <b>ojects.py</b>, to add a word to our game word list, and additionally check that there is no duplicate first character in current word list.</p>
 </div><div class="boxes">
     <div class="code">
-<pre><span class="c"># objects.py</span>
+<pre># objects.py
 
-    <span class="k">def</span> <span class="f">add_word</span>(self):
-        <span class="c"># check that word doesn't duplicate first character in list</span>
-        word <span class="ow">=</span> random.choice(self.wordlist)
-        firstchar <span class="ow">=</span> [word.text[<span class="nb">0</span>] <span class="k">for</span> word <span class="k">in</span> self.game_words]
-        <span class="k">while</span> (word[<span class="nb">0</span>] <span class="k">in</span> firstchar):
-            word <span class="ow">=</span> random.choice(self.wordlist)
-</pre></div>
+    def add_word(self):
+        '''Add word to game play'''
+        # Check that word doesn't duplicate first character in list
+        word = random.choice(self.wordlist)
+        firstchar = [word.text[0] for word in self.game_words]
+        while word[0] in firstchar:
+        word = random.choice(self.wordlist)</pre></div>
 </div></div>
 
 <br>
@@ -194,18 +210,23 @@
     <div class="code">
 <pre><span class="c"># objects.py</span>
 
-<div class="diff"><span class="cn">MARGINX</span> <span class="ow">=</span> <span class="nb">6</span>
-<span class="cn">FONTWIDTH</span> <span class="ow">=</span> <span class="nb">9</span> <span class="c"># based on Consolas Bold 16 pt font size</span></div></pre></div><div class="code"><pre>    <span class="k">def</span> <span class="f">add_word</span>(self):
-        <span class="c"># check that word doesn't duplicate first character in list</span>
-        word <span class="ow">=</span> random.choice(self.wordlist)
-        firstchar <span class="ow">=</span> [word.text[<span class="nb">0</span>] <span class="k">for</span> word <span class="k">in</span> self.game_words]
-        <span class="k">while</span> (word[<span class="nb">0</span>] <span class="k">in</span> firstchar):
-            word <span class="ow">=</span> random.choice(self.wordlist)
-<div class="diff">        <span class="c"># calculate max x of word</span>
-        max_x <span class="ow">=</span> (self.width <span class="ow">-</span> <span class="cn">MARGINX</span>) <span class="ow">-</span> (<span class="cn">FONTWIDTH</span> <span class="ow">*</span> <span class="nb">len</span>(word))
-        x <span class="ow">=</span> random.randint(<span class="cn">MARGINX</span>,max_x)
+<div class="diff"><span class="cn">MARGINX</span> <span class="ow">=</span> <span class="nb">5</span>
+<span class="cn">FONTWIDTH</span> <span class="ow">=</span> <span class="nb">9</span> <span class="c"># based on Consolas Bold 16 pt font size</span></div></pre></div><div class="code">
+<pre>    def add_word(self):
+        '''Add word to game play'''
+        # Check that word doesn't duplicate first character in list
+        word = random.choice(self.wordlist)
+        firstchar = [word.text[0] for word in self.game_words]
+        while word[0] in firstchar:
+        word = random.choice(self.wordlist)
+        
+<div class="diff">        # Calculate the max of x position of word
+        max_x = (self.screen_width - MARGINX) - (FONTWIDTH * len(word))
+
+        # Some randomised fun
+        x = random.randint(MARGINX,max_x)
         self.game_words.append(Word(word, x))
-        <span class="k">return</span> <span class="k">True</span></div></pre></div>
+        return True</div></pre></div>
 </div></div>
 
 <br>
@@ -218,8 +239,18 @@
 <pre>
 <span class="k">class</span> <span class="f">GamePlay</span>():
     <span class="k">def</span> <span class="f">__init__</span>(self, display_surf):
-<div class="diff">        self.last_add <span class="ow">=</span> <span class="nb">0</span> <span class="c"># time of adding word</span>
-        self.add_timeout <span class="ow">=</span> <span class="nb">2000</span> <span class="c"># start with 2 seconds</span></div></pre></div>
+        self.width, self.height = screen.get_size()
+        self.font =  pygame.font.Font(RESFOLDER + 'Consolas Bold.ttf', 16)
+        self.playing = True
+        self.game_objects = GameObjects(self.width, self.height)
+<div class="diff">        self.last_add = 0 # time of adding word
+        self.add_timeout = 2000 # 2 seconds
+        self.fps = 25
+        self.fpsclock = pygame.time.Clock()
+        self.ydelta = 1
+        self.typing_flag = False
+        self.score = 0
+        self.keyhit = None</div></pre></div>
 </div></div>
 
 <br>
@@ -228,67 +259,50 @@
 <p>And we can create a wrapper method to check for the timeout before calling Objects.add_word()</p>
 </div><div class="boxes">
     <div class="code">
-<pre><span class="c"># play.py</span>
-    <span class="k">def</span> <span class="f">add_word</span>(self):
-        <span class="k">if</span> <span class="k">not</span> self.game_objects.game_words or <span class="ow">\</span>
-            ((pygame.time.get_ticks() <span class="ow">-</span> self.last_add) 
-                <span class="ow">></span> self.add_timeout):
-            <span class="k">if</span> self.game_objects.add_word():
-                self.last_add <span class="ow">=</span> pygame.time.get_ticks()
-        <span class="k">return</span></pre></div>
+<pre># play.py
+    def add_word(self):
+        # Check if valid to add
+        if not self.game_objects.game_words or (
+            (pygame.time.get_ticks() - self.last_add) > self.add_timeout):
+            if self.game_objects.add_word():
+                self.last_add = pygame.time.get_ticks()
+        return</pre></div>
 </div></div>
 <br><div class="flex-container"><div class="box">
 <p>We can now add our game loop, with checking of events same as our main loop for now.</p>
 </div><div class="boxes">
     <div class="code">
 <pre><span class="c"># play.py</span>
-    <span class="k">def</span> <span class="f">on_execute</span>(self):
-        self.on_init()
-        <span class="k">while</span> (self.state <span class="ow">==</span> <span class="cn">PLAYING</span>):
-            self.on_loop()
-<div class="diff">            self.on_render()
-            self.on_check_event()</div>
-    
-    <span class="k">def</span> <span class="f">on_loop</span>(self):
+ . 
+ . 
+ .  
+    def loop(self):
+<div class="diff">        self.check_keyhit()
+        if self.game_objects.move(self.ydelta): # If moved beyond boundary Y
+            self.typing_flag = False
         self.add_word()
-    
-<div class="diff">    <span class="k">def</span> <span class="f">on_check_event</span>(self):
-        <span class="k">for</span> event <span class="k">in</span> pygame.event.get():
-            <span class="k">if</span> event.type <span class="ow">==</span> <span class="cn">QUIT</span>:
-                self._running <span class="ow">=</span> <span class="k">False</span>
-                self.state <span class="ow">=</span> <span class="cn">GAMEOVER</span>
-            <span class="k">elif</span> event.type <span class="ow">==</span> <span class="cn">KEYUP</span>:
-                <span class="k">if</span> (self.state <span class="ow">==</span> <span class="cn">GAMEOVER</span>):
-                    self.state <span class="ow">=</span> <span class="nb">1</span>
-                <span class="k">else</span>:
-                    self.state <span class="ow">+=</span> <span class="nb">1</span>
-        <span class="k">return</span></div></pre></div>
+        return</div></pre></div>
 </div></div>
 
 <br>
 
 <div class="flex-container"><div class="box">
-<p>We now need to take care to return our game state.</p>
-</div><div class="boxes">
-    <div class="code">
-<pre><span class="c"># play.py</span>
-    <span class="k">def</span> <span class="f">on_execute</span>(self):
-        self.on_init()
-        <span class="k">while</span> (self.state <span class="ow">==</span> <span class="cn">PLAYING</span>):
-            self.on_loop()
-            self.on_render()
-            self.on_check_event()
-<div class="diff">        <span class="k">return</span> self.state</div></pre></div>
-</div></div>
-<br><div class="flex-container"><div class="box">
 <p>And read and update the main loop:</p>
 </div><div class="boxes">
     <div class="code">
 <pre><pre><span class="c"># game.py</span>
-    <span class="k">def</span> <span class="f">on_loop</span>(self):
-        <span class="k">if</span> (self.state <span class="ow">==</span> <span class="cn">PLAYING</span>):
-            <span class="c"># start game</span>
-<div class="diff">            self.state <span class="ow">=</span> GamePlay(self._display_surf).on_execute()</div></pre></div>
+    def execute(self):
+        # Event loop
+        while self.running:
+            self.check_event()
+            self.render()
+            if self.state == PLAYING:
+<div class="diff">                self.game = GamePlay(self.screen)
+                self.game.execute()
+</div>                self.state += 1
+            else:
+                self.render()
+        return</pre></div>
 </div></div>
     </article>
     </div>
@@ -297,6 +311,7 @@
         <a href="py05_keypress.html" class="nav-left">&#x2B05;</a>
         <a href="py07_draw_playing.html" class="nav-right">&#x27A1;</a>
     </div>
+    <script src="assets/js/py_syntax_highlight.js"></script>
 </body>
 <footer>
     <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>

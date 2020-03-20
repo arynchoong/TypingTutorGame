@@ -59,67 +59,118 @@
 </div><div class="boxes">
     <div class="code">
         <pre>    <span class="k">def</span> <span class="f">on_render</span>(self):
+        '''Render surface'''
         self._display_surf.fill(<span class="cn">BLACK</span>)
-<div class="diff">        <span class="k">if</span> self.state <span class="ow">==</span> <span class="cn">START</span>:
-            text <span class="ow">=</span> <span class="s2">'Typing Tutorial Game'</span>
-        <span class="k">elif</span> self.state <span class="ow">==</span> <span class="cn">PLAYING</span>:
-            text <span class="ow">=</span> <span class="s2">'PLAYING'</span>
-        <span class="k">else</span>:
-            text <span class="ow">=</span> <span class="s2">'Game Over'</span>
-        self.draw_big_text(text, <span class="k">True</span>, <span class="cn">GREEN</span>, 
-</div>                           (<span class="nb">int</span>(self.width/<span class="nb">2</span>), <span class="nb">int</span>(self.height/<span class="nb">2</span>)))
-        pygame.display.flip()
-        <span class="k">return</span></pre></div>
-</div></div>
-<br>
-<div class="flex-container"><div class="box">
-<p>Now our main game loop looks like this:</p>
-</div><div class="boxes">
-    <div class="code">
-<pre>       <span class="c"># main game loop</span>
-        <span class="k">while</span> (self._running):
-            self.on_loop()
-            self.on_render()
-<div class="diff">            self.on_check_event()</div></pre></div>
+<div class="diff">        
+        # set the text for display
+        if self.state == START:
+            text = 'Typing Tutorial Game'
+            message = 'Press space to play.'
+        else:
+            text = 'Game Over'
+            message = 'State: %s' % self.state
+
+        # draw the messages
+        self.draw_text(text, GREEN, (WIDTH / 2, HEIGHT / 2 - 50))
+        self.draw_text(message, GREEN, (WIDTH / 2, HEIGHT / 2 + 50))</div></pre></div>
 </div></div>
 
 <h2>Game Play</h2>
+<div class="flex-container"><div class="box">
+    <p>Now that we have our main loop, let us create our inner game play loop, where the playing of levels happen:</p>
+</div><div class="boxes">
+    <div class="code">
+<pre># game.py
+import pygame
+<div class="diff">from play import GamePlay
+</div> . 
+ . 
+ . 
+class TypingTutor():
+    def __init__(self):
+        pygame.init() # initialises Pygame libraries
+        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.disp_surf = self.init_display()
+        self.size = WIDTH, HEIGHT
+        self.running = True if self.disp_surf else False
+        self.state = START
+        self.bigfont = pygame.font.Font('Consolas Bold.ttf', 36)
+<div class="diff">        self.game = None
+</div>        return
+ . 
+ . 
+ . 
+    def execute(self):
+        # Event loop
+        while self.running:
+            self.check_event()
+<div class="diff">            if self.state == PLAYING:
+                self.game = GamePlay(self.screen)
+                self.game.execute()
+                self.state += 1
+            else:
+                self.render()
+</div>        return
+</pre></div></div></div>
 
 <div class="flex-container"><div class="box">
-<p>Now that we have our main loop, let us create our inner game play loop, where the playing of levels happen:</p>
 <p>Let's create a new script, <b>play.py</b>.</p>
 <p>So that we have a class to store our game play settings and status.</p>
 </div><div class="boxes">
     <div class="code">
-<pre><span class="c"># game play.py</span>
-<span class="k">from</span> pygame.locals <span class="k">import</span> <span class="ow">*</span>
+<pre><div class="diff"># play.py
+</div>import pygame
 
-<span class="k">class</span> <span class="f">GamePlay</span>():
-    def <span class="f">__init__</span>(self, display_surf):
-        self._display_surf <span class="ow">=</span> display_surf
+# Colours        R    G    B
+<div class="diff">BLUE        = (  0,   0, 128)
+WHITE       = (255, 255, 255)
+
+class GamePlay():
+    def __init__(self, screen):
+        self.screen = screen
+</div>        pygame.init()
+        self.disp_surf = pygame.Surface(self.screen.get_size()).convert()
+        self.width, self.height = screen.get_size()
+<div class="diff">        self.font =  pygame.font.Font('Consolas Bold.ttf', 16)
+</div>        self.playing = True
         
-    def <span class="f">on_init</span>(self):
-        <span class="k">pass</span>
+    def execute(self):
+        while self.playing:
+            self.check_events()
+<div class="diff">            self.loop()
+</div>            self.render()
+        return
     
-    def <span class="f">on_execute</span>(self):
-        self.on_init()</pre></div>
-</div></div>
-<br>
-<div class="flex-container"><div class="box">
-    <p>And so we can start a game by instantiating our game object.</p>
-</div><div class="boxes">
-    <div class="code">
-<pre><span class="c"># game.py</span>
-<span class="k">import</span> pygame
-<span class="k">from</span> pygame.locals <span class="k">import</span> <span class="ow">*</span>
-<div class="diff"><span class="k">from</span> play <span class="k">import</span> GamePlay</div></pre>
-    </div>
-    <div class="code">
-        <pre>    <span class="k">def</span> <span class="f">on_loop</span>(self):
-        <span class="k">if</span> (self.state <span class="ow">==</span> <span class="cn">PLAYING</span>):
-            <span class="c"># start game</span>
-<div class="diff">            GamePlay(self._display_surf).on_execute()
-</div>        <span class="k">return</span></pre></div>
+    def check_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            elif event.type == pygame.KEYUP:
+<div class="diff">                if event.key == pygame.K_ESCAPE:
+                    self.playing = False
+</div>        return
+    
+    def loop(self):
+        pass
+        
+    def render(self):
+        '''Render surface'''
+<div class="diff">        self.disp_surf.fill(BLUE) # Fill background
+
+        self.draw_text('Playing...', WHITE, (320, 240))
+</div>        
+        # Blit everything to screen
+        self.screen.blit(self.disp_surf, (0,0))
+        pygame.display.flip()
+        return
+
+    def draw_text(self, text, colour, center):
+        # Display some text
+        textsurf = self.font.render(text, True, colour)
+        textrect = textsurf.get_rect()
+        textrect.center = center
+        self.disp_surf.blit(textsurf, textrect)
+        return</pre></div>
 </div></div>
 
     </article>
@@ -129,6 +180,7 @@
         <a href="py04_display_text.html" class="nav-left">&#x2B05;</a>
         <a href="py06_game_object.html" class="nav-right">&#x27A1;</a>
     </div>
+    <script src="assets/js/py_syntax_highlight.js"></script>
 </body>
 <footer>
     <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
