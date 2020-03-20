@@ -85,25 +85,25 @@
         <p>So we will use scripts. Let's start with a script and let's name it 'game.py'.</p>
 
         <div class="flex-container"><div class="box">
-            <h3>Load pygame module</h3>
-            <p>To use pygame, lets import the package and it's keywords.</p>
+            <h3>Load pygame and initialise</h3>
+            <p>To use pygame, lets import the package.</p>
         </div><div class="boxes">
         <div class="code">
-<pre><span class="c"># game.py</span>
-<span class="k">import</span> pygame
-<span class="k">from</span> pygame.locals <span class="k">import</span> <span class="ow">*</span></pre>
+<pre># game.py
+import pygame</pre>
         </div></div></div><br/>
         
         <div class="flex-container"><div class="box">
-            <h3>Initialise pygame</h3>
-            <p>Now fill in the basics of a python script, and we need to initalise the pygame module to use it:</p>
+            <p>and we need to initalise pygame to use the library.</p>
+            <p>We do this in our class, TypingTutor:</p>
         </div><div class="boxes">
         <div class="code">
-<pre><span class="k">def</span> <span class="f">main</span>():
-    pygame.init()
+<pre>class TypingTutor():
+    def __init__(self):
+        pygame.init()
     
-<span class="k">if</span> __name__<span class="ow">==</span><span class="s2">"__main__"</span>:
-    main()</pre>
+if __name__ == "__main__":
+    game = TypingTutor()</pre>
         </div></div></div><br/>
 
         <div class="flex-container"><div class="box">
@@ -111,27 +111,57 @@
             <p>Next we create our game screen, and call it display surface:</p>
         </div><div class="boxes">
         <div class="code">
-<pre><span class="k">def</span> <span class="f">main</span>():
-    pygame.init()<div class="diff">    pygame.display.set_caption(<span class="s2">'Typing Tutor Game'</span>)
-    display_surf <span class="ow">=</span> pygame.display.set_mode((<span class="nb">640</span>, <span class="nb">400</span>))</div></pre>
+<pre><div class="diff"># Dimensions
+WIDTH = 640
+HEIGHT = 480
+</div>
+class TypingTutor():
+    def __init__(self):
+        pygame.init()
+<div class="diff">        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.disp_surf = self.init_display()
+        self.size = WIDTH, HEIGHT
+    
+    def init_display(self):
+        pygame.display.set_caption('Typing Tutor Game')
+        # Create surface
+        disp_surf = pygame.Surface(self.screen.get_size())
+        return disp_surf.convert()</div></pre>
         </div></div></div>
 
         <p><code>set_caption()</code> sets the game caption (application title) on the top of the display.</p>
-        <p>The display surface is our game's screen, or game play surface area, where our game runs.</p>
+        <p>The display surface is our game play surface area, where we load onto the screen where the game runs.</p>
 
         <h2>Game loop</h2>
         <div class="flex-container"><div class="box">
         <p>And any game will require user input in some form or another, let us now add the codes to check for trigger to close the game. (user clicking the red cross icon on top corner of our display surface)</p>
         </div><div class="boxes">
         <div class="code">
-<pre>    display_surf <span class="ow">=</span> pygame.display.set_mode((<span class="nb">640</span>, <span class="nb">400</span>))
-<div class="diff">    running <span class="ow">=</span> <span class="k">True</span>
+<pre>        self.size = WIDTH, HEIGHT
+<div class="diff">        self.running = True if self.disp_surf else False
     
-    <span class="k">while</span> running:
-        <span class="k">for</span> event <span class="k">in</span> pygame.event.get():
-            <span class="k">if</span> event.type <span class="ow">==</span> pygame.QUIT:
-                running <span class="ow">=</span> False</div></pre>
+    def execute(self):
+        # Event loop
+        while self.running:
+            self.check_event()
+            self.render()
+        return
+        
+    def check_event(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+                return
+        return</div></pre>
         </div></div></div>
+
+        <div class="flex-container"><div class="box">
+        <p>Now we just need to execute the codes.</p>
+    </div><div class="boxes">
+        <div class="code">
+<pre>if __name__ == "__main__":
+    game = TypingTutor()
+<div class="diff">    game.execute()</div></pre></div></div></div>
         
         <p>The codes set a flag called <code>running</code> and check all the events for the game, if it gets the event <code>pygame.QUIT</code>, it exits the loop.</p>
         <h2>Test it</h2>
@@ -153,6 +183,7 @@
         <a href="py01_scrape_words.html" class="nav-left">&#x2B05;</a>
         <a href="py03_game_loop.html" class="nav-right">&#x27A1;</a>
     </div>
+    <script src="assets/js/py_syntax_highlight.js"></script>
 </body>
 <footer>
     <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>

@@ -37,54 +37,16 @@
         <p>Typical game states are <i>playing</i> and <i>game over</i> states.</p>
         <p>And the game loop is where we sert up the levels and user game play (when is the 'game over'). It is where we determine how complex the game is.</p>
 
-        <h2>Object Oriented</h2>
-        <p>Our game will become very messy code very quickly if we do not structure it.</p>
-        <p>For our Typing Tutor game, we have the typical arcade set up of hit start button and play until game over.</p>
-        <p>Then reset.</p>
-
-        <div class="flex-container"><div class="box">
-            <p>Good way to organise it by object oriented.</p>
-            <p>Here, we create our main object, TypingTutor, which has initialising of our game, executing our game loop and quit.</p>
-        </div><div class="boxes">
-        <div class="code">
-<pre><span class="k">import</span> pygame
-<span class="k">from</span> pygame.locals <span class="k">import</span> <span class="ow">*</span>
-<div class="diff"><span class="cn">WIDTH</span> <span class="ow">=</span> <span class="nb">640</span>
-<span class="cn">HEIGHT</span> <span class="ow">=</span> <span class="nb">480</span>
-
-<span class="k">class</span> <span class="f">TypingTutor</span>():
-    <span class="k">def</span> <span class="f">__init__</span>(self):
-        self._running <span class="ow">=</span> <span class="k">True</span>
-        self._display_surf <span class="ow">=</span> <span class="k">None</span>
-        self.size <span class="ow">=</span> self.width, self.height <span class="ow">=</span> <span class="cn">WIDTH</span>, <span class="cn">HEIGHT</span>
-        
-    <span class="k">def</span> <span class="f">on_init</span>(self):</div>        pygame.init()
-        pygame.display.set_caption(<span class="s2">'Typing Tutor Game'</span>)<div class="diff">        self._display_surf <span class="ow">=</span> pygame.display.set_mode(self.size)
-        <span class="k">return</span> <span class="k">True</span> <span class="k">if</span> self._display_surf <span class="k">else</span> <span class="k">False</span>
-
-    <span class="k">def</span> <span class="f">on_execute</span>(self):
-        <span class="k">if</span> <span class="k">not</span> self.on_init():
-            self._running <span class="ow">=</span> <span class="k">False</span>
-        <span class="k">while</span > (self._running):</div>            <span class="k">for</span> event <span class="k">in</span> pygame.event.get():
-                <span class="k">if</span> event.type <span class="ow">==</span> <span class="cn">QUIT</span>:<div class="diff">                    self._running <span class="ow">=</span> <span class="k">False</span>
-        self.on_cleanup()
-    
-    <span class="k">def</span> <span class="f">on_cleanup</span>(self):
-        pygame.quit()
-</div>
-<span class="k">if</span> __name__<span class="ow">==</span><span class="s2">"__main__"</span>:<div class="diff">    game <span class="ow">=</span> TypingTutor()
-    game.on_execute()</div></pre>
-        </div></div></div>
-
         <h2>Game states</h2>
 
         <div class="flex-container"><div class="box">
             <p>Now that we have our object oriented game object. Let's add our game states: <code>START</code>, <code>PLAYING</code> and <code>GAMEOVER</code>. </p>
         </div><div class="boxes">
         <div class="code">
-<pre><span class="cn">START</span> <span class="ow">=</span> <span class="nb">1</span>
-<span class="cn">PLAYING</span> <span class="ow">=</span> <span class="nb">2</span>
-<span class="cn">GAMEOVER</span> <span class="ow">=</span> <span class="nb">3</span></pre>
+<pre># States
+START = 1
+PLAYING = 2
+GAMEOVER = 3</pre>
         </div></div></div>
 
         <h2>Game loop</h2>
@@ -92,47 +54,61 @@
         <p>We will have two loops in our game, the main game loop with the game states, and our inner play loop that we go into for each level that we will add in later.</p>
 
         <div class="flex-container"><div class="box">
-            <p>Let's add a simple main loop that does nothing for now.</p>
-            <p>Our main game loop consist of two functions <code>on_loop()</code> and <code>on_render()</code>.</p>
-            <p>The first function will check for the states and call on_play which will have our inner game play loop later on.</p>
-            <p>We also make sure to check our events queue at the start of the second function, and will later display which main screen to display.</p>
+            <p>No we can use the state flag</p>
         </div><div class="boxes">
         <div class="code">
-<pre><span class="k">def</span> <span class="f">on_execute</span>(self):
-        <span class="k">if</span> <span class="k">not</span> self.on_init():
-            self._running <span class="ow">=</span> <span class="k">False</span>
-        <span class="c"># main game loop</span>
-        <span class="k">while</span> (self._running):<div class="diff">            self.on_loop()
-            self.on_render()
-</div>        self.on_cleanup()
-        <span class="k">return</span>
-
-<div class="diff">    <span class="k">def</span> <span class="f">on_loop</span>(self):
-        <span class="k">if</span> (self.state <span class="ow">==</span> <span class="cn">PLAYING</span>):
-            <span class="c"># start game</span>
-            self.on_play()
-        <span class="k">return</span>
-
-    <span class="k">def</span> <span class="f">on_render</span>(self):</div>        <span class="k">for</span> event <span class="k">in</span> pygame.event.get():
-            <span class="k">if</span> event.type <span class="ow">==</span> <span class="cn">QUIT</span>:
-                self._running <span class="ow">=</span> <span class="k">False</span><div class="diff">                self.state <span class="ow">=</span> <span class="cn">GAMEOVER</span>
-        <span class="k">return</span>
-        
-    <span class="k">def</span> <span class="f">on_play</span>(self):
-        pass</div></pre>
+<pre>
+        self.running = True if self.disp_surf else False
+<div class=diff>        self.state = START</div>
+    def check_event(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+<div class=diff>                self.state = GAMEOVER
+                return
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_SPACE:
+                    if self.state == GAMEOVER:
+                        self.state = START
+                    else:
+                        self.state +=1</div>        return
+</pre>
         </div></div></div>
 
-        <p>The <code>on_render()</code> function will only render the START screen and the GAMEOVER screen.</p>
-        <p>The inner loop that will be inside <code>on_play()</code> will be taking care of rendering when the game is playing.</p>
+        <p>It's hard to tell which state we are at, so let's add some drawings to our screen.</p>
+        <p>The inner loop will be taking care of rendering when the game is playing. So we only need to bother with <code>START</code> and <code>GAMEOVER</code>.</p>
 
         <div class="flex-container"><div class="box">
-            <p>And don't forget to initialise our <code>state</code> flag.</p>
+            <p>So we add our <code>render</code> function.</p>
+            <p>Fill the surface with black:</p>
         </div><div class="boxes"><div class="code">
-<pre><span class="k">class</span> <span class="f">TypingTutor</span>():
-    <span class="k">def</span> <span class="f">__init__</span>(self):<div class="diff">        self.state <span class="ow">=</span> <span class="cn">START</span></div></pre>
+<pre><div class=diff>#            R    G    B
+BLACK   = (  0,   0,   0)
+</div> .
+ .
+ .
+    def execute(self):
+        # Event loop
+        while self.running:
+            self.check_event()
+<div class=diff>            self.render()
+        return
+
+    def render(self):
+        '''Render surface'''
+        self.disp_surf.fill(BLACK)
+
+        # Blit everything to screen
+        self.screen.blit(self.disp_surf, (0,0))
+        pygame.display.flip()
+        return</div></pre>
         </div></div></div>
 
-        <p>I would do a quick test and run the script now, to check that nothing is broken. There is nothing new to observe when the screen comes up.</p>
+        <p><code>blit()</code>, stands for block transfer, will prepare image for 'transfer' onto the display surface. Or in other words, draw in buffer for transfer to surface.</p>
+        <p><code>flip()</code>, will flip and update the whole display and show the changes to the game display.</p>
+        <p><code>update()</code>, will only update a portion of the screen, that is the drawn rect or area without updating the whole display.</p>
+        
+        <p>I would do a quick test and run the script now, to check that nothing is broken. There is nothing new to observe when the screen comes up, except that our screen is black instead of grey.</p>
 
     </article>
     </div>
@@ -141,6 +117,7 @@
         <a href="py02_pygame.html" class="nav-left">&#x2B05;</a>
         <a href="py04_display_text.html" class="nav-right">&#x27A1;</a>
     </div>
+    <script src="assets/js/py_syntax_highlight.js"></script>
 </body>
 <footer>
     <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
