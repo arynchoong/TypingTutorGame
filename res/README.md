@@ -6,9 +6,10 @@
    * Taken from Project Gutenberg Corpus from nltk.gutenberg
 
 ## Sound files
- * typewriter-snippet-02.wav [https://freesound.org/people/cabled_mess/sounds/360602/]
+ * typewriter-snippet.wav [https://freesound.org/people/cabled_mess/sounds/360602/]
  * glitch-noise.wav [https://freesound.org/people/TechGeekMusic/sounds/353402/]
- * typewriter-ding-near-mono.wav [https://freesound.org/people/_stubb/sounds/406243/]
+ * typewriter-ding.wav [https://freesound.org/people/_stubb/sounds/406243/]
+ * concrete-hit.wav [https://freesound.org/people/dslrguide/sounds/321477/]
 
 ## Fixed width fonts
  * Consolas Bold.ttf

@@ -13,9 +13,14 @@ LIGHTBLUE   = (135, 206, 235)
 MARGINX = 5
 # Resources
 RESFOLDER = '../../res/'
+# Sound types
+SOUND_KEYHIT = 1
+SOUND_ERROR = 2
+SOUND_SUCCESS = 3
+SOUND_CRASH = 4
 
 class GamePlay():
-    def __init__(self, screen):
+    def __init__(self, screen, sound=False):
         pygame.init()
         self.screen = screen
         self.disp_surf = pygame.Surface(self.screen.get_size()).convert()
@@ -34,8 +39,12 @@ class GamePlay():
         self.level = 1
         self.typed_count = 0
         self.error_count = 0
+        self.sound = True if sound else False
+        if sound:
+            self.init_sound()
         
     def execute(self):
+        '''Start a game'''
         while self.playing:
             self.check_events()
             self.loop()
@@ -55,13 +64,20 @@ class GamePlay():
         return
     
     def loop(self):
+        '''Game loop'''
         self.check_keyhit()
+        
         if self.game_objects.is_gameover():
             self.playing = False
             return
+        
+        # If moved beyond boundary Y
+        removed, removed_typing = self.game_objects.move(self.ydelta)
+        if removed:
+            self.play_sound(SOUND_CRASH)
+            if removed_typing:
+                self.typing_flag = False
 
-        if self.game_objects.move(self.ydelta): # If moved beyond boundary Y
-            self.typing_flag = False
         self.add_word()
         return
         
@@ -99,7 +115,7 @@ class GamePlay():
         return
 
     def draw_word(self, text, colour, coord):
-        # Display some text
+        '''Display some text'''
         textsurf = self.font.render(text, True, colour)
         textrect = textsurf.get_rect()
         textrect.topleft = coord
@@ -107,6 +123,7 @@ class GamePlay():
         return
         
     def add_word(self):
+        '''Add new word to drop from top'''
         if self.game_objects.is_gameover():
             return
         # Check if valid to add
@@ -117,8 +134,10 @@ class GamePlay():
         return
     
     def check_keyhit(self):
+        '''Check user's typed key'''
         if not self.keyhit:
             return
+        
         if self.typing_flag:
             for word in self.game_objects.game_words:
                 if word.typedidx != -1:
@@ -126,18 +145,25 @@ class GamePlay():
                         if word.typed():
                             self.typing_flag = False
                             self.add_score(len(word))
+                            self.play_sound(SOUND_SUCCESS)
+                        else:
+                            self.play_sound(SOUND_KEYHIT)
                     else:
                         word.typed_reset()
                         self.typing_flag = False
                         self.error_count += 1
+                        self.play_sound(SOUND_ERROR)
         else:
             for word in self.game_objects.game_words:
                 if word.text[0] == self.keyhit:
                     if word.typed():
                         self.add_score(1)
+                        self.play_sound(SOUND_SUCCESS)
                     else:
                         self.typing_flag = True
+                        self.play_sound(SOUND_KEYHIT)
                     break
+        # Remove words set for removal
         self.game_objects.clean_up()
         self.keyhit = None
         return
@@ -151,12 +177,12 @@ class GamePlay():
             self.level += 1
             self.typed_count = 0
             # Increase difficulty when leveling up
-            if self.fps < 70:
+            if self.level % 5 == 0 and self.ydelta < 3:
+                self.ydelta += 1
+            elif self.level % 2 == 0 and  self.add_timeout > 1000:
+                self.add_timeout -= 100
+            elif self.fps < 60:
                 self.fps += 3
-            elif self.ydelta < 5:
-                self.ydelta +=1
-            elif self.add_timeout > 900:
-                self.add_timeout -= 150
         return
 
     def draw_score(self):
@@ -169,4 +195,24 @@ class GamePlay():
         text = 'Level: %s' % self.level
         self.draw_word(text, YELLOW, (MARGINX, 2))
         return
+    
+    def init_sound(self):
+        self.type_sound = pygame.mixer.Sound(RESFOLDER + "typewriter-snippet.wav")
+        self.err_sound = pygame.mixer.Sound(RESFOLDER + "glitch-noise.wav")
+        self.success_sound = pygame.mixer.Sound(RESFOLDER + "typewriter-ding.wav")
+        self.crash_sound = pygame.mixer.Sound(RESFOLDER + "concrete-hit.wav")
+        return
+    
+    def play_sound(self, type):
+        if not self.sound:
+            return
+        if type == SOUND_KEYHIT:
+            self.type_sound.play()
+        elif type == SOUND_ERROR:
+            self.err_sound.play()
+        elif type == SOUND_SUCCESS:
+            self.success_sound.play()
+        elif type == SOUND_CRASH:
+            self.crash_sound.play()
+            
         

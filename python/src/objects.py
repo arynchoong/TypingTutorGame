@@ -20,6 +20,7 @@ class GameObjects:
         self.cityline = Cityline(screen_width)
 
     def init_words(self):
+        '''Prepare list of words for the game'''
         words_list = None
         try:
             with open(RESFOLDER + "brown.txt", 'r', newline='') as file:
@@ -57,24 +58,30 @@ class GameObjects:
         return True
     
     def get_word(self, level):
-        return random.choice(self.wordlist[:min(len(self.wordlist), 500 * level)])
+        '''Randomly select word from word list for game play'''
+        return random.choice(self.wordlist[:min(len(self.wordlist), 50 * level)])
 
     def move(self, delta):
-        '''Returns true if word is in the middle of typing, and has moved beyond boundary Y'''
+        '''Returns Flags if word is removed and if it is in the middle of typing,
+        when it has moved beyond boundary Y
+        '''
+        removed = False
         removed_typing = False 
         
         for word in self.game_words:
             word.move(delta)
             if word.get_y() >= self.bound_y:
+                removed = True
                 if word.typedidx >= 0:
                     removed_typing = True
                 word.set_remove()
                 self.cityline.del_blocks(word.get_x(), len(word))
 
         self.clean_up()
-        return removed_typing
+        return removed, removed_typing
     
     def clean_up (self):
+        '''Check and remove any word in game that is flagged to be removed.'''
         if not self.game_words:
             return
         # Remove words from game_words with word.typedidx == -2

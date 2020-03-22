@@ -9,10 +9,10 @@ https://archive.org/details/Typing_Tutor_IV_DOS.
 * library of words and frequency
 * dropping of words and characters from top of screen
 * cityline
-* change word colour from green when typing
+* change word colour from white to green when typing
 * variable game time : 3 minutes
 * level up when complete
-* process words
+* sound effect
 
 ## Python variant
 ![Typing Tutor Screenshot](/docs/images/Screenshot.png)
