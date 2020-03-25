@@ -34,7 +34,7 @@ body {
   }
   /* Add an active class to highlight the current page */
   .active {
-    background-color: #f0f8fc;
+    background-color: #c6e1eb;
   }
   
   /* Hide the link that should open and close the topnav on small screens */
@@ -94,7 +94,7 @@ body {
   
   /* Diff background colour for current page */
   .navbar a.active:hover, .dropdown:hover .dropbtn {
-    background-color: #f0f8fc;
+    background-color: #c6e1eb;
     color: #092834;
   }
   
