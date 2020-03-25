@@ -48,7 +48,7 @@
         </div>
         <div class="boxes">
           <code class="python">
-            <pre># city.py
+            <pre><div class="diff"># city.py
 import random
 
 # Dimensions
@@ -59,7 +59,7 @@ class CityLine():
     def __init__(self, screen_width):
         self._len = int(screen_width / 10)
          # Initialise city blocks
-        self.city_line = []</pre>
+        self.city_line = []</div></pre>
           </code>
         </div>
       </div>
@@ -70,7 +70,7 @@ class CityLine():
         </div>
         <div class="boxes">
           <code class="python">
-            <pre>class Block:
+            <pre><div class="diff">class Block:
     def __init__(self, flag = True, height = 0):
         self.flag = flag
         self.height = height
@@ -80,7 +80,7 @@ class CityLine():
         return self.flag
     
     def get_height(self):
-        return self.height</pre>
+        return self.height</div></pre>
           </code>
         </div>
       </div>
@@ -138,7 +138,7 @@ class CityLine():
           </code>
 
           <code class="python">
-            <pre>class CityIterator:
+            <pre><div class="diff">class CityIterator:
     def __init__(self, city):
         self.city = city
         self.index = 0
@@ -152,7 +152,7 @@ class CityLine():
         return block
     
     def __iter__(self):
-        return self</pre>
+        return self</div></pre>
           </code>
         </div>
       </div>
@@ -190,11 +190,11 @@ class CityLine():
         </div>
         <div class="boxes">
           <code class="python">
-            <pre>    def check_gameover(self):
+            <pre><div class="diff">    def check_gameover(self):
         '''Returns true if all blocks are destroyed'''
         if all(block.get_flag() == False for block in self.city_line):
             return True
-        return False</pre>
+        return False</div></pre>
           </code>
         </div>
       </div>
@@ -401,9 +401,9 @@ MARGINX = 5
         </div>
         <div class="boxes">
           <code class="python">
-            <pre>    def get_word(self):
+            <pre><div class="diff">    def get_word(self):
           '''Randomly select word from word list for game play'''
-          return random.choice(self.word_list)</pre>
+          return random.choice(self.word_list)</div></pre>
           </code>
         </div>
       </div>

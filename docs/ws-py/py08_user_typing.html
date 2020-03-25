@@ -146,14 +146,14 @@
         <div class="boxes">
           <code class="python">
             <pre># word.py
-    def typed(self):
+<div class="diff">    def typed(self):
         '''Returns True if completed typing word, False otherwise.'''
         self.typed_idx += 1
         if self.typed_idx >= self._len - 1:
             # completed typing word
             self.typed_idx = -2
             return True
-        return False</pre>
+        return False</div></pre>
           </code>
         </div>
       </div>
@@ -164,10 +164,10 @@
         </div>
         <div class="boxes">
           <code class="python">
-            <pre>    def typed_reset(self):
+            <pre><div class="diff">    def typed_reset(self):
         '''User typed incorrectly, reset flag'''
         self.typed_idx = -1
-        return</pre>
+        return</div></pre>
           </code>
         </div>
       </div>

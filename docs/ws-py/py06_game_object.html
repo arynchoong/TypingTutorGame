@@ -44,7 +44,7 @@
         </div>
         <div class="boxes">
           <code class="python">
-            <pre># game objects.py
+            <pre><div class="diff"># game objects.py
 import string
 import random
 
@@ -63,7 +63,7 @@ class GameObjects:
             # Error handling, provide default:
             words_list = list(string.ascii_letters)
             random.shuffle(words_list)
-        return words_list</pre>
+        return words_list</div></pre>
           </code>
         </div>
       </div>
@@ -125,11 +125,11 @@ class GamePlay():
         </div>
         <div class="boxes">
           <code class="python">
-            <pre># word.py
+            <pre><div class="diff"># word.py
 
 class Word:
     def __init__(self, word):
-        self.text = word</pre>
+        self.text = word</div></pre>
           </code>
         </div>
       </div>
@@ -194,13 +194,13 @@ class Word:
           <code class="python">
             <pre># objects.py
 
-    def add_word(self):
+<div class="diff">    def add_word(self):
         '''Add word to game play'''
         # Check that word doesn't duplicate first character in list
         word = random.choice(self.word_list)
         firstchar = [word.text[0] for word in self.game_words]
         while word[0] in firstchar:
-        word = random.choice(self.word_list)</pre>
+        word = random.choice(self.word_list)</div></pre>
           </code>
         </div>
       </div>

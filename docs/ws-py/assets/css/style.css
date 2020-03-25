@@ -145,6 +145,9 @@ body {
       width: 100%;
       text-align: left;
     }
+    .active {
+      background-color: #f0f8fc;
+    }
   } 
 /* Prev and Next on the bottom navbar */
 .navbar-bottom {

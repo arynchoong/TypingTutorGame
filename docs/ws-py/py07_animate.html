@@ -189,10 +189,10 @@ class Word:
         <div class="boxes">
           <code class="python">
             <pre># word.py
-    def set_remove(self):
+<div class="diff">    def set_remove(self):
         '''Set flag to be removed'''
         self.typed_idx = -2
-        return</pre>
+        return</div></pre>
           </code>
         </div>
       </div>
@@ -206,13 +206,13 @@ class Word:
         <div class="boxes">
           <code class="python">
             <pre># objects.py
-    def clean_up (self):
+<div class="diff">    def clean_up (self):
         '''Check and remove any word in game that is flagged to be removed.'''
         if not self.game_words:
             return
         # Remove words from game_words with word.typed_idx == -2
         self.game_words = [w for w in self.game_words if w.typed_idx != -2]
-        return</pre>
+        return</div></pre>
           </code>
         </div>
       </div>
