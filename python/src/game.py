@@ -37,7 +37,7 @@ class TypingTutor():
     def execute(self):
         '''Executes main event loop'''
         while self.running:
-            self.check_event()
+            self.check_events()
             if self.state == PLAYING:
                 self.game = GamePlay(self.screen, self.sound)
                 self.game.execute()
@@ -46,7 +46,7 @@ class TypingTutor():
                 self.render()
         return
         
-    def check_event(self):
+    def check_events(self):
         '''Process events'''
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

@@ -16,9 +16,9 @@
     <div class="dropdown-content">
       <a href="py01_scrape_words.html">Scrape Words</a>
       <a class="active">PyGame</a>
-      <a href="py03_game_loop.html">Game Loop</a>
+      <a href="py03_events.html">Events</a>
       <a href="py04_display_text.html">Text</a>
-      <a href="py05_keypress.html">Keypress</a>
+      <a href="py05_game_play.html">Game Play</a>
       <a href="py06_game_object.html">Objects</a>
       <a href="py07_draw_playing.html">Play</a>
       <a href="py08_animate.html">Animate</a>
@@ -188,10 +188,10 @@ class TypingTutor():
     def execute(self):
         # Event loop
         while self.running:
-            self.check_event()
+            self.check_events()
         return
       
-    def check_event(self):
+    def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -237,7 +237,7 @@ class TypingTutor():
 
   <div class="navbar-bottom">
       <a href="py01_scrape_words.html" class="nav-left">&#x2B05;</a>
-      <a href="py03_game_loop.html" class="nav-right">&#x27A1;</a>
+      <a href="py03_events.html" class="nav-right">&#x27A1;</a>
   </div>
   <script src="assets/js/highlight.js"></script>
 </body>

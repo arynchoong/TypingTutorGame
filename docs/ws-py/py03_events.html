@@ -16,9 +16,9 @@
         <div class="dropdown-content">
             <a href="py01_scrape_words.html">Scrape Words</a>
             <a href="py02_pygame.html">PyGame</a>
-            <a class="active">Game Loop</a>
+            <a class="active">Events</a>
             <a href="py04_display_text.html">Text</a>
-            <a href="py05_keypress.html">Keypress</a>
+            <a href="py05_game_play.html">Game Play</a>
             <a href="py06_game_object.html">Objects</a>
             <a href="py07_draw_playing.html">Play</a>
             <a href="py08_animate.html">Animate</a>
@@ -51,9 +51,11 @@ PLAYING = 2
 GAMEOVER = 3</pre>
         </code></div></div>
 
-        <h2>Game loop</h2>
+        <h2>Game loop and events</h2>
         <p>With our game states, we can now set up our main game loop.</p>
         <p>We will have two loops in our game, the main game loop with the game states, and our inner play loop that we go into for each level that we will add in later.</p>
+        <p>And in addition to our checking of <code>QUIT</code> event, we check for <code>KEYUP</code> event and increment the state or reset it if it is <code>GAMEOVER</code>.</p>
+        <p>But only for the spacebar. Since this is a typing game, we want to prevent accidentally switching state with our typing keys.</p>
 
         <div class="flex-container"><div class="box">
             <p>No we can use the state flag</p>
@@ -62,7 +64,7 @@ GAMEOVER = 3</pre>
 <pre>
         self.running = True if self.disp_surf else False
 <div class=diff>        self.state = START</div>
-    def check_event(self):
+    def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -77,11 +79,11 @@ GAMEOVER = 3</pre>
 </pre>
         </code></div></div>
 
-        <p>It's hard to tell which state we are at, so let's add some drawings to our screen.</p>
+        <p>It's hard to tell which state we are at for now, we'll take care of that when we draw text.</p>
         <p>The inner loop will be taking care of rendering when the game is playing. So we only need to bother with <code>START</code> and <code>GAMEOVER</code>.</p>
 
         <div class="flex-container"><div class="box">
-            <p>So we add our <code>render</code> function.</p>
+            <p>So let's add a <code>render</code> function.</p>
             <p>Fill the surface with black:</p>
         </div><div class="boxes"><code class="python">
 <pre><div class=diff>#            R    G    B
@@ -92,7 +94,7 @@ BLACK   = (  0,   0,   0)
     def execute(self):
         # Event loop
         while self.running:
-            self.check_event()
+            self.check_events()
 <div class=diff>            self.render()
         return
 
