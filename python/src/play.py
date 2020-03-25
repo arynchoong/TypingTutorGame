@@ -31,11 +31,11 @@ class GamePlay():
         self.last_add = 0 # time of adding word
         self.add_timeout = 2000 # 2 seconds
         self.fps = 25
-        self.fpsclock = pygame.time.Clock()
-        self.ydelta = 1
+        self.fps_clock = pygame.time.Clock()
+        self.y_delta = 1
         self.typing_flag = False
         self.score = 0
-        self.keyhit = None
+        self.key_hit = None
         self.level = 1
         self.typed_count = 0
         self.error_count = 0
@@ -49,7 +49,7 @@ class GamePlay():
             self.check_events()
             self.loop()
             self.render()
-            self.fpsclock.tick(self.fps)
+            self.fps_clock.tick(self.fps)
         return
     
     def check_events(self):
@@ -57,7 +57,7 @@ class GamePlay():
             if event.type == pygame.QUIT:
                 pygame.quit()
             elif event.type == pygame.TEXTINPUT:
-                self.keyhit = event.text
+                self.key_hit = event.text
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_ESCAPE:
                     self.playing = False
@@ -65,14 +65,14 @@ class GamePlay():
     
     def loop(self):
         '''Game loop'''
-        self.check_keyhit()
+        self.check_key_hit()
         
         if self.game_objects.is_gameover():
             self.playing = False
             return
         
         # If moved beyond boundary Y
-        removed, removed_typing = self.game_objects.move(self.ydelta)
+        removed, removed_typing = self.game_objects.move(self.y_delta)
         if removed:
             self.play_sound(SOUND_CRASH)
             if removed_typing:
@@ -88,9 +88,9 @@ class GamePlay():
         
         # set the words for display
         for word in self.game_objects.game_words:
-            if word.typedidx > -1:
-                typed_text = word.text[:word.typedidx+1]
-                untyped_text = ' '*(word.typedidx+1) + word.text[word.typedidx+1:]
+            if word.typed_idx > -1:
+                typed_text = word.text[:word.typed_idx+1]
+                untyped_text = ' '*(word.typed_idx+1) + word.text[word.typed_idx+1:]
                 self.draw_word(untyped_text, WHITE, word.coord())
                 self.draw_word(typed_text, GREEN, word.coord())
             else:
@@ -100,7 +100,7 @@ class GamePlay():
         base_y = self.height - 30
         start_x = MARGINX
         start_y = base_y
-        for block in self.game_objects.cityline:
+        for block in self.game_objects.city_line:
             end_x = start_x + 10
             end_y = base_y + block.get_height()
             if block.get_flag():
@@ -116,10 +116,10 @@ class GamePlay():
 
     def draw_word(self, text, colour, coord):
         '''Display some text'''
-        textsurf = self.font.render(text, True, colour)
-        textrect = textsurf.get_rect()
-        textrect.topleft = coord
-        self.disp_surf.blit(textsurf, textrect)
+        text_surf = self.font.render(text, True, colour)
+        text_rect = text_surf.get_rect()
+        text_rect.topleft = coord
+        self.disp_surf.blit(text_surf, text_rect)
         return
         
     def add_word(self):
@@ -133,15 +133,15 @@ class GamePlay():
                 self.last_add = pygame.time.get_ticks()
         return
     
-    def check_keyhit(self):
+    def check_key_hit(self):
         '''Check user's typed key'''
-        if not self.keyhit:
+        if not self.key_hit:
             return
         
         if self.typing_flag:
             for word in self.game_objects.game_words:
-                if word.typedidx != -1:
-                    if word.text[word.typedidx+1] == self.keyhit:
+                if word.typed_idx != -1:
+                    if word.text[word.typed_idx+1] == self.key_hit:
                         if word.typed():
                             self.typing_flag = False
                             self.add_score(len(word))
@@ -155,7 +155,7 @@ class GamePlay():
                         self.play_sound(SOUND_ERROR)
         else:
             for word in self.game_objects.game_words:
-                if word.text[0] == self.keyhit:
+                if word.text[0] == self.key_hit:
                     if word.typed():
                         self.add_score(1)
                         self.play_sound(SOUND_SUCCESS)
@@ -165,7 +165,7 @@ class GamePlay():
                     break
         # Remove words set for removal
         self.game_objects.clean_up()
-        self.keyhit = None
+        self.key_hit = None
         return
     
     def add_score(self, score):
@@ -177,8 +177,8 @@ class GamePlay():
             self.level += 1
             self.typed_count = 0
             # Increase difficulty when leveling up
-            if self.level % 5 == 0 and self.ydelta < 3:
-                self.ydelta += 1
+            if self.level % 5 == 0 and self.y_delta < 3:
+                self.y_delta += 1
             elif self.level % 2 == 0 and  self.add_timeout > 1000:
                 self.add_timeout -= 100
             elif self.fps < 60:

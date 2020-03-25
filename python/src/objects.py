@@ -2,7 +2,7 @@
 import string
 import random
 from word import Word
-from city import Cityline
+from city import CityLine
 
 # Dimensions
 MARGINX = 5
@@ -14,10 +14,10 @@ class GameObjects:
     def __init__(self, screen_width, screen_height):
         self.screen_width = screen_width
         self.screen_height = screen_height
-        self.wordlist = self.init_words()
+        self.word_list = self.init_words()
         self.game_words = []
         self.bound_y = screen_height - 40
-        self.cityline = Cityline(screen_width)
+        self.city_line = CityLine(screen_width)
 
     def init_words(self):
         '''Prepare list of words for the game'''
@@ -41,7 +41,7 @@ class GameObjects:
         
         # Get the list of city blocks still standing
         avail_blocks = []
-        for idx, block in enumerate(self.cityline):
+        for idx, block in enumerate(self.city_line):
             if block.get_flag() == True:
                 avail_blocks.append(idx)
         x_avail = random.choice(avail_blocks) * 10 + MARGINX
@@ -59,7 +59,7 @@ class GameObjects:
     
     def get_word(self, level):
         '''Randomly select word from word list for game play'''
-        return random.choice(self.wordlist[:min(len(self.wordlist), 50 * level)])
+        return random.choice(self.word_list[:min(len(self.word_list), 50 * level)])
 
     def move(self, delta):
         '''Returns Flags if word is removed and if it is in the middle of typing,
@@ -72,10 +72,10 @@ class GameObjects:
             word.move(delta)
             if word.get_y() >= self.bound_y:
                 removed = True
-                if word.typedidx >= 0:
+                if word.typed_idx >= 0:
                     removed_typing = True
                 word.set_remove()
-                self.cityline.del_blocks(word.get_x(), len(word))
+                self.city_line.del_blocks(word.get_x(), len(word))
 
         self.clean_up()
         return removed, removed_typing
@@ -84,9 +84,9 @@ class GameObjects:
         '''Check and remove any word in game that is flagged to be removed.'''
         if not self.game_words:
             return
-        # Remove words from game_words with word.typedidx == -2
-        self.game_words = [w for w in self.game_words if w.typedidx != -2]
+        # Remove words from game_words with word.typed_idx == -2
+        self.game_words = [w for w in self.game_words if w.typed_idx != -2]
         return
     
     def is_gameover(self):
-        return self.cityline.check_gameover()
+        return self.city_line.check_gameover()

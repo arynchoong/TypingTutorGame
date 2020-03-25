@@ -84,10 +84,10 @@ class TypingTutor():
     
     def draw_text(self, text, colour, center):
         '''Draws text onto diplay surface'''
-        textsurf = self.font.render(text, True, colour)
-        textrect = textsurf.get_rect()
-        textrect.center = center
-        self.disp_surf.blit(textsurf, textrect)
+        text_surf = self.font.render(text, True, colour)
+        text_rect = text_surf.get_rect()
+        text_rect.center = center
+        self.disp_surf.blit(text_surf, text_rect)
         return
 
 if __name__ == '__main__':
