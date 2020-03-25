@@ -122,12 +122,13 @@ function getPos(txt, start, end, func) {
 }
 
 function pythonMode(txt) {
-  var rest = txt, done = "", sfnuttpos, dfnuttpos, comlinepos, keywordpos, numpos, mypos, tagpos, classpos, defpos, oppos;
+  var rest = txt, done = "", compos, sfnuttpos, dfnuttpos, comlinepos, keywordpos, numpos, mypos, tagpos, classpos, defpos, oppos;
 
   while (true) {
+    compos =  getPos(rest, "'''", "'''", commentMode);
     sfnuttpos = getPos(rest, "'", "'", stringMode);
     dfnuttpos = getPos(rest, '"', '"', stringMode);
-    comlinepos = getPos(rest, '#', "\n", commentMode);      
+    comlinepos = getPos(rest, '#', "\n", commentMode);
     numpos = getNumPos(rest, numberMode);
     keywordpos = getKeywordPos(rest, keywordMode);
     tagpos = getPos(rest, "<", ">", skipMode);
@@ -135,9 +136,9 @@ function pythonMode(txt) {
     defpos = getPos(rest, "def ", "(", defMode);
     oppos = getOperatorPos(rest, operatorMode)
     
-    if (Math.max(numpos[0], sfnuttpos[0], dfnuttpos[0], comlinepos[0], keywordpos[0], tagpos[0], classpos[0], defpos[0], oppos[0]) == -1) {break;}
+    if (Math.max(numpos[0], compos[0], sfnuttpos[0], dfnuttpos[0], comlinepos[0], keywordpos[0], tagpos[0], classpos[0], defpos[0], oppos[0]) == -1) {break;}
   
-    mypos = getMinPos(numpos, sfnuttpos, dfnuttpos, comlinepos, keywordpos, tagpos, classpos, defpos, oppos);
+    mypos = getMinPos(numpos, compos, sfnuttpos, dfnuttpos, comlinepos, keywordpos, tagpos, classpos, defpos, oppos);
     if (mypos[0] == -1) {break;}
     if (mypos[0] > -1) {
       done += rest.substring(0, mypos[0]);
