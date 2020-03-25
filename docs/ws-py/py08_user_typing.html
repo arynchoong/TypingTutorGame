@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>Typing Tutor Game</title>
+  <link href="assets/css/style.css" rel="stylesheet">
+  <script src="assets/js/script.js"></script>
+</head>
+
+<body>
+  <div class="navbar" id="topNav">
+    <a href="https://arynchoong.com" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
+    <a href="../index.html">Typing Tutor</a>
+    <div class="dropdown">
+      <button class="dropbtn" onclick="addResponsive()">Game &#9662;</button>
+      <div class="dropdown-content">
+        <a href="py01_scrape_words.html">Scrape Words</a>
+        <a href="py02_pygame.html">PyGame</a>
+        <a href="py03_events.html">Events</a>
+        <a href="py04_display_text.html">Text</a>
+        <a href="py05_game_play.html">Game Play</a>
+        <a href="py06_game_object.html">Objects</a>
+        <a href="py07_animate.html">Animate</a>
+        <a class="active">Typing</a>
+        <a href="py09_cityline.html">CityLine</a>
+        <a href="py10_level_up.html">Levels</a>
+        <a href="py11_sound.html">Sound</a>
+      </div>
+    </div>
+    <a href="javascript:void(0);" class="icon" onclick="addResponsive()">&#9776;</a>
+  </div>
+    
+  <div class="page">
+    <article>
+      <h1>Typing Tutor Game</h1>
+      <h2>Typing ...</h2>
+
+      <p>Now that we have our words dropping from screen, let's add the capability to read user inputs.</p>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>Just need to adjust our check event method from <b>game.py</b> into <b>play.py</b> to read <code>TEXTINPUT</code>:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre># play.py
+    def check_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+<div class="diff">            elif event.type == pygame.TEXTINPUT:
+                self.key_hit = event.text
+</div>            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_ESCAPE:
+                    self.playing = False
+        return</pre>
+          </code>
+        </div>
+      </div>
+
+      <h2>Check words</h2>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>We also need a flag to indicate that we need to check for either all first characters of game words, for just check for the next character in the word we are typing:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>class GamePlay():
+    def __init__(self, screen):
+        self.screen = screen
+        pygame.init()
+        self.disp_surf = pygame.Surface(self.screen.get_size()).convert()
+        self.width, self.height = screen.get_size()
+        self.font =  pygame.font.Font('Consolas Bold.ttf', 16)
+        self.playing = True
+        self.game_objects = GameObjects(self.width, self.height)
+        self.key_hit = None
+        self.last_add = 0 # time of adding word
+        self.add_timeout = 2000 # 2 seconds
+        self.fps = 25
+        self.fps_clock = pygame.time.Clock()
+        self.y_delta = 1
+<div class="diff">        self.typing_flag = False
+        self.key_hit = None
+        self.score = 0</div></pre>
+          </code>
+        </div>
+      </div>
+      
+      <div class="flex-container">
+        <div class="box">
+          <p>We use the typed_idx flag to indicate the word we are typing. Let's create a method to check our key_hit:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>    def check_key_hit(self):
+        '''Check user's typed key'''
+<div class="diff">        if not self.key_hit:
+            return
+        
+        if self.typing_flag:
+            for word in self.game_objects.game_words:
+                if word.typed_idx != -1:
+                    if word.text[word.typed_idx+1] == self.key_hit:
+                        if word.typed():
+                            self.typing_flag = False
+                            self.add_score(len(word))
+                    else:
+                        word.typed_reset()
+                        self.typing_flag = False
+        else:
+            for word in self.game_objects.game_words:
+                if word.text[0] == self.key_hit:
+                    if word.typed():
+                        self.add_score(1)
+                    else:
+                        self.typing_flag = True
+                    break
+        # Remove words set for removal
+        self.game_objects.clean_up()
+        self.key_hit = None
+        return</div></pre>
+          </code>
+        </div>
+      </div>
+      <div class="flex-container">
+        <div class="box">
+          <p>and an additional member to keep track fo the number of characters we typed, which can give us the score:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre><div class="diff">    def add_score(self, score):
+        self.score += score</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <br/>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>Let's add two more methods to our <code>Word()</code> object, <code>word.typed()</code>:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre># word.py
+    def typed(self):
+        '''Returns True if completed typing word, False otherwise.'''
+        self.typed_idx += 1
+        if self.typed_idx >= self._len - 1:
+            # completed typing word
+            self.typed_idx = -2
+            return True
+        return False</pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>and <code>word.typed_reset()</code> to reset the typed_idx if player typed wrongly:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>    def typed_reset(self):
+        '''User typed incorrectly, reset flag'''
+        self.typed_idx = -1
+        return</pre>
+          </code>
+        </div>
+      </div>
+
+      <br/>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>We need to remember to clear the flag if the word we are typing drops below boundary_y. let's add a return flag to indicate we removed a word we are typing in our move method:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre># objects.py
+    def move(self, delta):
+        '''Returns Flags if word is removed and if it is in the middle of typing,
+        when it has moved beyond boundary Y
+        '''
+        removed = False
+<div class="diff">        removed_typing = False
+</div>        
+        for word in self.game_words:
+            word.move(delta)
+            if word.get_y() >= self.bound_y:
+                removed = True
+<div class="diff">                if word.typed_idx >= 0:
+                    removed_typing = True
+</div>                word.set_remove()
+        self.clean_up()
+<div class="diff">        return removed, removed_typing</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <br/>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>Such that we can check the flag returned in <b>play.py</b>:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre># play.py
+    def loop(self):
+        '''Game loop'''
+<div class="diff">        self.check_key_hit()
+</div>
+        # If moved beyond boundary Y
+<div class="diff">        removed, removed_typing = self.game_objects.move(self.y_delta)
+        if removed_typing:
+            self.typing_flag = False
+</div>
+        self.add_word()
+        return</pre>
+          </code>
+        </div>
+      </div>
+
+      <h2>Score</h2>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>Now that we have our score, let's display our score on the top of our screen during play:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre># play.py
+import pygame
+from objects import GameObjects
+
+# Colours        R    G    B
+BLUE        = (  0,   0, 128)
+WHITE       = (255, 255, 255)
+GREEN       = (  0, 200,   0)
+<div class="diff">BLACK       = (  0,   0,   0)
+YELLOW      = (255, 255,   0)</div>
+ . 
+ . 
+ . 
+<div class="diff">    def draw_score(self):
+        # draw status bar background
+        pygame.draw.rect(self.disp_surf, BLACK, (0,0,self.width,20), 0)
+        # draw score text
+        text = 'Score: %s' % self.score
+        self.draw_word(text, YELLOW, (self.width - 150, 2))
+        return</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>Add to our game play's render():</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>    def render(self):
+        '''Render surface'''
+        self.disp_surf.fill(BLUE) # Fill background
+<div class="diff">        self.draw_score()</div>
+ . 
+ . 
+ . </pre>
+          </code>
+        </div>
+      </div>
+
+      <br/>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>And display the score on GameOver:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre># game.py
+    def render(self):
+        '''Render surface'''
+        self.disp_surf.fill(BLACK)
+        
+        # set the text for display
+        if self.state == START:
+            text = 'Typing Tutorial Game'
+            message = 'Press space to play.'
+        else:
+            text = 'Game Over'
+<div class="diff">            message = 'Score: %s' % self.game.score
+</div>
+        # draw the messages
+        self.draw_text(text, GREEN, (int(WIDTH / 2), int(HEIGHT / 2) - 50))
+        self.draw_text(message, GREEN, (int(WIDTH / 2), int(HEIGHT / 2) + 50))
+        
+        # Blit everything to screen
+        self.screen.blit(self.disp_surf, (0,0))
+        pygame.display.flip()
+        return</pre>
+          </code>
+        </div>
+      </div>
+
+      <h2>Draw typing characters</h2>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>To indicate typing, we need to change the characters we typed into a different colour. We shall change it to green colour. </p>
+          <p>To have different colour, when we draw, we need to draw two rectangles, one with typed characters in green, and one replacing the typed characters with spaces and the rest of untyped characters in white. Which is why it is important we chose a font type with fixed width characters.</p>
+          <p>Let's adjust our on_render() method</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre># play.py
+    def render(self):
+        '''Render surface'''
+        self.disp_surf.fill(BLUE) # Fill background
+        self.draw_score()
+        
+        # set the words for display
+        for word in self.game_objects.game_words:
+<div class="diff">            if word.typed_idx > -1:
+                typed_text = word.text[:word.typed_idx+1]
+                untyped_text = ' '*(word.typed_idx+1) + word.text[word.typed_idx+1:]
+                self.draw_word(untyped_text, WHITE, word.coord())
+                self.draw_word(typed_text, GREEN, word.coord())
+            else:
+</div>                self.draw_word(word.text, WHITE, word.coord())
+
+        # Blit everything to screen
+        self.screen.blit(self.disp_surf, (0,0))
+        pygame.display.flip()
+        return</pre>
+          </code>
+        </div>
+      </div>
+
+    </article>
+  </div>
+  
+  <div class="navbar-bottom">
+      <a href="py07_animate.html" class="nav-left">&#x2B05;</a>
+      <a href="py09_cityline.html" class="nav-right">&#x27A1;</a>
+  </div>
+  <script src="assets/js/highlight.js"></script>
+</body>
+<footer>
+    <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
+</footer>
+</html>

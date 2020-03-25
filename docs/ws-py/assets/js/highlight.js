@@ -21,10 +21,19 @@ function skipMode(txt) {
   return txt;
 }
 function classMode(txt) {
-  var name;
-  name = txt.substr(6, txt.length - 7);
+  var name, endpos, rest;
+  
+  endpos = txt.indexOf('(',6);
+  if (endpos == -1) {
+    endpos = txt.indexOf(':',6);
+  }
+  console.log(txt)
+  console.log(endpos)
+  console.log(txt.length)
+  name = txt.substr(6, txt.length - 6 - (txt.length - endpos));
+  rest = txt.substr(endpos, txt.length - endpos);
 
-  return "<span class='k'>class</span> <span class='nn'>" + name + "</span>("
+  return "<span class='k'>class</span> <span class='nn'>" + name + "</span>" + rest
 }
 function defMode(txt) {
   var name;
@@ -132,7 +141,7 @@ function pythonMode(txt) {
     numpos = getNumPos(rest, numberMode);
     keywordpos = getKeywordPos(rest, keywordMode);
     tagpos = getPos(rest, "<", ">", skipMode);
-    classpos = getPos(rest, "class ", "(", classMode);
+    classpos = getPos(rest, "class ", ":", classMode);
     defpos = getPos(rest, "def ", "(", defMode);
     oppos = getOperatorPos(rest, operatorMode)
     

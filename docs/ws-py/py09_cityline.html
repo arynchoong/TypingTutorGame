@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>Typing Tutor Game</title>
+  <link href="assets/css/style.css" rel="stylesheet">
+  <script src="assets/js/script.js"></script>
+</head>
+
+<body>
+  <div class="navbar" id="topNav">
+    <a href="https://arynchoong.com" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
+    <a href="../index.html">Typing Tutor</a>
+    <div class="dropdown">
+      <button class="dropbtn" onclick="addResponsive()">Game &#9662;</button>
+      <div class="dropdown-content">
+        <a href="py01_scrape_words.html">Scrape Words</a>
+        <a href="py02_pygame.html">PyGame</a>
+        <a href="py03_events.html">Events</a>
+        <a href="py04_display_text.html">Text</a>
+        <a href="py05_game_play.html">Game Play</a>
+        <a href="py06_game_object.html">Objects</a>
+        <a href="py07_animate.html">Animate</a>
+        <a href="py08_user_typing.html">Typing</a>
+        <a class="active">CityLine</a>
+        <a href="py10_level_up.html">Levels</a>
+        <a href="py11_sound.html">Sound</a>
+      </div>
+    </div>
+    <a href="javascript:void(0);" class="icon" onclick="addResponsive()">&#9776;</a>
+  </div>
+
+  <div class="page">
+    <article>
+      <h1>Typing Tutor Game</h1>
+      <h2>City Line</h2>
+
+      <p>The last object is our city blocks at the bottom of the screen.</p>
+      <p>I like to call it the cityline because we can draw it it as a contiguous line at the bottom of the screen.</p>
+
+      <p>And it is not neccesaary to keep track of every pixel of the line, we can just consider every 10 pixel block.</p>
+
+
+      <div class="flex-container">
+        <div class="box">
+          <p>Let us create our blocks and city iterator and put it in a new script <b>city.py</b>. First our city line that will hold our city blocks in a list:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre># city.py
+import random
+
+# Dimensions
+MARGINX = 5
+FONTWIDTH = 9 # based on Consolas Bold 16 pt font size
+
+class CityLine():
+    def __init__(self, screen_width):
+        self._len = int(screen_width / 10)
+         # Initialise city blocks
+        self.city_line = []</pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+        <p>And our blocks will have randomly assigned building height, and a flag to indicate its presence or destroyed:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>class Block:
+    def __init__(self, flag = True, height = 0):
+        self.flag = flag
+        self.height = height
+        return
+    
+    def get_flag(self):
+        return self.flag
+    
+    def get_height(self):
+        return self.height</pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>We can then randomise the height of each block on initialise of CityLine:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>class CityLine:
+    def __init__(self, screen_width):
+        self._len = int(screen_width / 10)
+         # Initialise city blocks
+        self.city_line = []
+<div class="diff">        for i in range(self._len):
+            self.city_line.append(Block(height = random.randint(1,20)))
+        self.city_line[-1].del_block()
+        return</div></pre>
+          </code>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>class Block:
+    def __init__(self, flag = True, height = 0):
+        self.flag = flag
+        self.height = height
+        return
+    
+<div class="diff">    def del_block(self):
+        self.flag = False
+        return</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <p>We set the last block to be false, so that we do not draw indifinitely, as each block we require start x and end x, which gives us n-1 blocks with cityline of n size.</p>
+      <h2>Iterator</h2>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>Because our cityline consists of a list of objects, we need to build in our object an iterator to access each block.</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>class CityLine:
+ .
+ .
+ .
+<div class="diff">    def __iter__(self):
+        return CityIterator(self.city_line)
+    
+    def __len__(self):
+        return self._len</div></pre>
+          </code>
+
+          <code class="python">
+            <pre>class CityIterator:
+    def __init__(self, city):
+        self.city = city
+        self.index = 0
+    
+    def __next__(self):
+        try:
+            block = self.city[self.index]
+        except IndexError:
+            raise StopIteration()
+        self.index += 1
+        return block
+    
+    def __iter__(self):
+        return self</pre>
+          </code>
+        </div>
+      </div>
+
+      <h2>Collision</h2>
+
+      <p>Remember our y boundary is 40 pixels from screen bottom. So we just need to create method for our game play to call whenever a word goes below the height of our city block.</p>
+      
+      <div class="flex-container">
+        <div class="box">
+          <p>So we need a method to remove the block/blocks that are hit :</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>class CityLine():
+ . 
+ . 
+ . 
+<div class="diff">    def del_blocks(self, start_x, str_len):
+        '''Delete associalted block that is hit by untyped words.'''
+        startidx = int((start_x - MARGINX) / 10)
+        endidx = startidx + int((FONTWIDTH * str_len) / 10)
+        if endidx >= self._len:
+            endidx = self.len - 1
+        for i in range(startidx, endidx+1):
+            self.city_line[i].del_block()
+        return</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>And we need a method to check if all city blocks are destroyed:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>    def check_gameover(self):
+        '''Returns true if all blocks are destroyed'''
+        if all(block.get_flag() == False for block in self.city_line):
+            return True
+        return False</pre>
+          </code>
+        </div>
+      </div>
+
+      <h2>Render cityline</h2>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>Now that we have our cityline object ready, we just need to add to our game objects:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre># game objects.py
+import string
+import random
+from word import Word
+<div class="diff">from city import CityLine
+</div>
+class GameObjects:
+    def __init__(self, screen_width, screen_height):
+        self.screen_width = screen_width
+        self.screen_height = screen_height
+        self.word_list = self.init_words()
+        self.game_words = []
+        self.bound_y = screen_height - 40
+<div class="diff">        self.city_line = CityLine(screen_width)</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>And add to our draw method inside <code>render()</code> in <b>play.py</b>:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre># play.py
+import pygame
+from objects import GameObjects
+
+# Colours        R    G    B
+BLUE        = (  0,   0, 128)
+WHITE       = (255, 255, 255)
+GREEN       = (  0, 200,   0)
+BLACK       = (  0,   0,   0)
+YELLOW      = (255, 255,   0)
+<div class="diff">LIGHTBLUE   = (135, 206, 235)
+
+# Dimensions
+MARGINX = 5
+</div> . 
+ . 
+ . 
+    def render(self):
+        '''Render surface'''
+        self.disp_surf.fill(BLUE) # Fill background
+        self.draw_score()
+        
+        # set the words for display
+        for word in self.game_objects.game_words:
+            if word.typed_idx > -1:
+                typed_text = word.text[:word.typed_idx+1]
+                untyped_text = ' '*(word.typed_idx+1) + word.text[word.typed_idx+1:]
+                self.draw_word(untyped_text, WHITE, word.coord())
+                self.draw_word(typed_text, GREEN, word.coord())
+            else:
+                self.draw_word(word.text, WHITE, word.coord())
+        
+<div class="diff">        # cityline
+        base_y = self.height - 30
+        start_x = MARGINX
+        start_y = base_y
+        for block in self.game_objects.city_line:
+            end_x = start_x + 10
+            end_y = base_y + block.get_height()
+            if block.get_flag():
+                pygame.draw.lines(self.disp_surf, LIGHTBLUE, False,
+                    [(start_x,start_y), (start_x,end_y), (end_x,end_y)], 3)
+            start_y = end_y
+            start_x = end_x
+</div>
+        # Blit everything to screen
+        self.screen.blit(self.disp_surf, (0,0))
+        pygame.display.flip()
+        return</pre>
+          </code>
+        </div>
+      </div>
+
+      <h2>Check collision</h2>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>Where we check for words falling below the y boundary, we need to remove the corresponding city block, in <b>objects.py</b></p>
+          <p>And add a check for gameover while we are editing <b>objects.py</b>.</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre># objects.py
+    def move(self, delta):
+        '''Returns Flags if word is removed and if it is in the middle of typing,
+        when it has moved beyond boundary Y
+        '''
+        removed = False
+        removed_typing = False 
+        
+        for word in self.game_words:
+            word.move(delta)
+            if word.get_y() >= self.bound_y:
+                removed = True
+                if word.typed_idx >= 0:
+                    removed_typing = True
+                word.set_remove()
+<div class="diff">                self.city_line.del_blocks(word.get_x(), len(word))
+</div>
+        self.clean_up()
+        return removed, removed_typing</pre>
+          </code>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre><div class="diff">    def is_gameover(self):
+        return self.city_line.check_gameover()</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <br/>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>And to link it up, we check for game over in <b>play.py</b></p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre># play.py
+    def loop(self):
+        '''Game play loop'''
+        self.check_key_hit()
+        
+<div class="diff">        if self.game_objects.is_gameover():
+            self.playing = False
+            return
+</div>
+        # If moved beyond boundary Y
+        removed, removed_typing = self.game_objects.move(self.y_delta)
+        if removed_typing:
+            self.typing_flag = False
+            
+        self.add_word()
+        return</pre>
+          </code>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>    def add_word(self):
+        '''Add new word to drop from top'''
+<div class="diff">        if self.game_objects.is_gameover():
+            return
+</div>        # Check if valid to add
+        if not self.game_objects.game_words or (
+            (pygame.time.get_ticks() - self.last_add) > self.add_timeout):
+            if self.game_objects.add_word():
+                self.last_add = pygame.time.get_ticks()
+        return</pre>
+          </code>
+        </div>
+      </div>
+
+    <h2>Less Randomised Fun</h2>
+
+    <div class="flex-container">
+      <div class="box">
+        <p>In order to have a good game progression, we want to increase the chance of words dropping on available city blocks more often than empty blocks.</p>
+      </div>
+      <div class="boxes">
+        <code class="python">
+          <pre>    def add_word(self):
+        '''Add word to game play'''
+        # Check that word doesn't duplicate first character in list
+        word = self.get_word()
+        firstchar = [word.text[0] for word in self.game_words]
+        while word[0] in firstchar:
+<div class="diff">            word = self.get_word()
+        
+        # Get the list of city blocks still standing
+        avail_blocks = []
+        for idx, block in enumerate(self.city_line):
+            if block.get_flag() == True:
+                avail_blocks.append(idx)
+        x_avail = random.choice(avail_blocks) * 10 + MARGINX
+</div>
+        # Calculate the max of x position of word
+        max_x = (self.screen_width - MARGINX) - (FONTWIDTH * len(word))
+        
+        # Some randomised fun
+        x = random.randint(MARGINX,max_x)
+<div class="diff">        x = random.choice([x_avail, x])
+        x = min(x, max_x)
+</div>
+        self.game_words.append(Word(word, x))
+        return True</pre>
+          </code>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>    def get_word(self):
+          '''Randomly select word from word list for game play'''
+          return random.choice(self.word_list)</pre>
+          </code>
+        </div>
+      </div>
+
+    </article>
+  </div>
+    <div class="navbar-bottom">
+        <a href="py08_user_typing.html" class="nav-left">&#x2B05;</a>
+        <a href="py10_level_up.html" class="nav-right">&#x27A1;</a>
+    </div>
+  <script src="assets/js/highlight.js"></script>
+</body>
+<footer>
+    <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
+</footer>
+</html>
+
+AttributeError: 'Block' object has no attribute 'get_height'

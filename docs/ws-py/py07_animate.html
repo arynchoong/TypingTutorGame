@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>Typing Tutor Game</title>
+  <link href="assets/css/style.css" rel="stylesheet">
+  <script src="assets/js/script.js"></script>
+</head>
+
+<body>
+  <div class="navbar" id="topNav">
+    <a href="https://arynchoong.com" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
+    <a href="../index.html">Typing Tutor</a>
+    <div class="dropdown">
+      <button class="dropbtn" onclick="addResponsive()">Game &#9662;</button>
+      <div class="dropdown-content">
+        <a href="py01_scrape_words.html">Scrape Words</a>
+        <a href="py02_pygame.html">PyGame</a>
+        <a href="py03_events.html">Events</a>
+        <a href="py04_display_text.html">Text</a>
+        <a href="py05_game_play.html">Game Play</a>
+        <a href="py06_game_object.html">Objects</a>
+        <a class="active">Animate</a>
+        <a href="py08_user_typing.html">Typing</a>
+        <a href="py09_cityline.html">CityLine</a>
+        <a href="py10_level_up.html">Levels</a>
+        <a href="py11_sound.html">Sound</a>
+      </div>
+    </div>
+    <a href="javascript:void(0);" class="icon" onclick="addResponsive()">&#9776;</a>
+  </div>
+
+  <div class="page">
+    <article>
+      <h1>Typing Tutor Game</h1>
+      <h2>Animation</h2>
+
+    <p>The typical computer screen is constantly refreshing at about 60 hertz. And for an object that moves that, quickly, our human eye can't catch the image to recognise it.
+    </p>
+    <p>So we need to slow down our game refresh rate by using the <code>pygame.time.Clock()</code></p>
+
+    <h2>Frame rate</h2>
+    <div class="flex-container">
+      <div class="box">
+        <p>For games, we want to control our fps (frame rate per second), which is how often we update the display:</p>
+      </div>
+      <div class="boxes">
+        <code class="python">
+          <pre>class GamePlay():
+    def __init__(self, screen):
+        self.screen = screen
+        pygame.init()
+        self.disp_surf = pygame.Surface(self.screen.get_size()).convert()
+        self.width, self.height = screen.get_size()
+        self.font =  pygame.font.Font('Consolas Bold.ttf', 16)
+        self.playing = True
+        self.game_objects = GameObjects(self.width, self.height)
+        self.key_hit = None
+        self.last_add = 0 # time of adding word
+        self.add_timeout = 2000 # 2 seconds
+<div class="diff">        self.fps = 25
+        self.fps_clock = pygame.time.Clock()</div></pre>
+          </code>
+        </div>
+      </div>
+      
+      <div class="flex-container">
+        <div class="box">
+          <p>And call the clock tick in our loop, to set delay:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>    def execute(self):
+        while self.playing:
+            self.check_events()
+            self.loop()
+            self.render()
+<div class="diff">            self.fps_clock.tick(self.fps)
+</div>        return</pre>
+          </code>
+        </div>
+      </div>
+
+      <h2>Move words downwards</h2>
+      
+      <div class="flex-container">
+        <div class="box">
+          <p>To move the words down, we just need to adjust the y coordinate of the word. So let's add move methods to all game objects:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre># word.py
+<div class="diff">    def move(self, delta):
+        self._y += delta
+        return</div></pre>
+          </code>
+          <code class="python">
+            <pre># objects.py
+<div class="diff">    def move(self, delta):
+        for word in self.game_words:
+            word.move(delta)</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>And initialise a y_delta at GamePlay() and move it on game loop():</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+          <pre>class GamePlay():
+    def __init__(self, screen):
+        self.screen = screen
+        pygame.init()
+        self.disp_surf = pygame.Surface(self.screen.get_size()).convert()
+        self.width, self.height = screen.get_size()
+        self.font =  pygame.font.Font('Consolas Bold.ttf', 16)
+        self.playing = True
+        self.game_objects = GameObjects(self.width, self.height)
+        self.key_hit = None
+        self.last_add = 0 # time of adding word
+        self.add_timeout = 2000 # 2 seconds
+        self.fps = 25
+        self.fps_clock = pygame.time.Clock()
+<div class="diff">        self.y_delta = 1</div>
+ . 
+ . 
+ . 
+    def loop(self):
+        '''Game play loop'''
+        self.check_key_hit()
+<div class="diff">        self.game_objects.move(self.y_delta)
+</div>        self.add_word()
+        return</pre>
+          </code>
+        </div>
+      </div>
+
+      <h2>Boundary</h2>
+      <p>Fairly simply, our next step is to move the words down the screen. Once we have fixed the x coordinate of the word, we just need to change the Y coordinate until it hits the bottom of the screen, which we can fixed at 40 pixels from bottom of screen. </p>
+      
+      <div class="flex-container">
+        <div class="box">
+          <p>Let us set this as bound_y in our objects.py :</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>class GameObjects:
+    def __init__(self, screen_width, screen_height):
+        self.screen_width = screen_width
+        self.screen_height = screen_height
+        self.word_list = self.init_words()
+        self.game_words = []
+<div class="diff">        self.bound_y = screen_height - 40</div></pre>
+          </code>
+        </div>
+      </div>
+      
+      <br/>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>And to remove the words, once it hits the boundary. We cannot remove the words within the loop, so we have to have a way to set it for removal.</p>
+          <p>We will use a flag to indicate this:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre># word.py
+# Dimensions
+STARTY = 20
+
+class Word:
+    def __init__(self, word, x):
+        self.text = word
+        self._len = len(self.text)
+        self._x = x
+        self._y = STARTY
+<div class="diff">        self.typed_idx = -1 # index of typed characters '-2' to remove</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>And a <code>set_remove()</code> method to set the flag:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre># word.py
+    def set_remove(self):
+        '''Set flag to be removed'''
+        self.typed_idx = -2
+        return</pre>
+          </code>
+        </div>
+      </div>
+
+      <br/>
+      
+      <div class="flex-container">
+        <div class="box">
+          <p>And a <code>clean_up</code> method to remove words with negative flagged <code>typed_idx</code>, in <b>objects.py</b> :</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre># objects.py
+    def clean_up (self):
+        '''Check and remove any word in game that is flagged to be removed.'''
+        if not self.game_words:
+            return
+        # Remove words from game_words with word.typed_idx == -2
+        self.game_words = [w for w in self.game_words if w.typed_idx != -2]
+        return</pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container"><div class="box">
+      <p>And now we just need to add a check of the y coordinate for each word:
+      </p>
+      </div><div class="boxes">
+          <code class="python">
+      <pre># objects
+    def move(self, delta):
+<div class="diff">        removed = False
+</div>
+        for word in self.game_words:
+            word.move(delta)
+<div class="diff">            if word.get_y() >= self.bound_y:
+                word.set_remove()
+                removed = True
+        self.clean_up()
+        return removed</div></pre>
+                </code>
+      </div></div>
+
+    </article>
+    </div>
+
+    <div class="navbar-bottom">
+        <a href="py06_game_object.html" class="nav-left">&#x2B05;</a>
+        <a href="py08_user_typing.html" class="nav-right">&#x27A1;</a>
+    </div>
+    <script src="assets/js/highlight.js"></script>
+</body>
+<footer>
+    <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
+</footer>
+</html>
