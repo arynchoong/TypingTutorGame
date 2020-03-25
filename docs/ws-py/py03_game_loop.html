@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8" />
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>Typing Tutor Game</title>
         <link href="assets/css/style.css" rel="stylesheet">
         <script src="assets/js/script.js"></script>
@@ -21,7 +23,7 @@
             <a href="py07_draw_playing.html">Play</a>
             <a href="py08_animate.html">Animate</a>
             <a href="py09_user_typing.html">Typing</a>
-            <a href="py10_cityline.html">Cityline</a>
+            <a href="py10_cityline.html">CityLine</a>
             <a href="py11_level_up.html">Levels</a>
             <a href="py12_sound.html">Sound</a>
         </div>
@@ -42,12 +44,12 @@
         <div class="flex-container"><div class="box">
             <p>Now that we have our object oriented game object. Let's add our game states: <code>START</code>, <code>PLAYING</code> and <code>GAMEOVER</code>. </p>
         </div><div class="boxes">
-        <div class="code">
+        <code class="python">
 <pre># States
 START = 1
 PLAYING = 2
 GAMEOVER = 3</pre>
-        </div></div></div>
+        </code></div></div>
 
         <h2>Game loop</h2>
         <p>With our game states, we can now set up our main game loop.</p>
@@ -56,7 +58,7 @@ GAMEOVER = 3</pre>
         <div class="flex-container"><div class="box">
             <p>No we can use the state flag</p>
         </div><div class="boxes">
-        <div class="code">
+        <code class="python">
 <pre>
         self.running = True if self.disp_surf else False
 <div class=diff>        self.state = START</div>
@@ -73,7 +75,7 @@ GAMEOVER = 3</pre>
                     else:
                         self.state +=1</div>        return
 </pre>
-        </div></div></div>
+        </code></div></div>
 
         <p>It's hard to tell which state we are at, so let's add some drawings to our screen.</p>
         <p>The inner loop will be taking care of rendering when the game is playing. So we only need to bother with <code>START</code> and <code>GAMEOVER</code>.</p>
@@ -81,7 +83,7 @@ GAMEOVER = 3</pre>
         <div class="flex-container"><div class="box">
             <p>So we add our <code>render</code> function.</p>
             <p>Fill the surface with black:</p>
-        </div><div class="boxes"><div class="code">
+        </div><div class="boxes"><code class="python">
 <pre><div class=diff>#            R    G    B
 BLACK   = (  0,   0,   0)
 </div> .
@@ -102,7 +104,7 @@ BLACK   = (  0,   0,   0)
         self.screen.blit(self.disp_surf, (0,0))
         pygame.display.flip()
         return</div></pre>
-        </div></div></div>
+        </code></div></div>
 
         <p><code>blit()</code>, stands for block transfer, will prepare image for 'transfer' onto the display surface. Or in other words, draw in buffer for transfer to surface.</p>
         <p><code>flip()</code>, will flip and update the whole display and show the changes to the game display.</p>
@@ -117,7 +119,7 @@ BLACK   = (  0,   0,   0)
         <a href="py02_pygame.html" class="nav-left">&#x2B05;</a>
         <a href="py04_display_text.html" class="nav-right">&#x27A1;</a>
     </div>
-    <script src="assets/js/py_syntax_highlight.js"></script>
+    <script src="assets/js/highlight.js"></script>
 </body>
 <footer>
     <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>

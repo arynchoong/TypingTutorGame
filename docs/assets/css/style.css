@@ -90,6 +90,12 @@ body {
     background-color: #347B98;
     color: #f0f8fc;
   }
+
+  /* Diff background colour for current page */
+  .navbar a.active:hover, .dropdown:hover .dropbtn {
+    background-color: #f0f8fc;
+    color: #092834;
+  }
   
   /* Show the dropdown menu when the user moves the mouse over the dropdown button */
   .dropdown:hover .dropdown-content {

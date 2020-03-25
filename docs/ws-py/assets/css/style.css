@@ -253,12 +253,6 @@ article img{
         width: 95%;
     }
 }
-.code {
-    font-family: "Lucida Console","Monaco",monospace;
-}
-.code-bg{
-    font-family: "Courier New", Courier, monospace;
-}
 
 .footer {
     border-top: 1px outset #0B3241;
@@ -269,58 +263,64 @@ article img{
     font-size: 12px;
 }
 
+code {
+  font-family: "Courier New", "Lucida Console", Monaco, Courier, monospace;
+}
 /*Code formatting*/
-.code .nn {
+code pre .nn {
 	color: #0000FF;
 	font-weight: bold;
 }
-.code .f {
+code pre .f {
     color: #00f;
 }
-.code .nf {
+code pre .nf {
     color: #00f;
 }
-.code .o {
-	color: #666666;
+code pre .ow {
+	color: #AA22FF;
+  font-weight: bold;
 }
-.code .k {
+code pre .k {
 	color: #008000;
 	font-weight: bold;
 }
-.code .ow {
+code pre .ow {
 	color: #AA22FF;
 	font-weight: bold;
 }
-.code .s2 { /* string */
+code pre .s2 { /* string */
 	color: #BA2121;
 }
-.code .si {
+code pre .si {
 	color: #BB6688;
 	font-weight: bold;
 }
-.code .se {
+code pre .se {
 	color: #BB6622;
 	font-weight: bold;
 }
-.code .nb { /* numeric */
+code pre .nb { /* numeric */
 	color: #008000;
 }
-.code .c {/* comments */
+code pre .c {/* comments */
     color: #408080;
     font-style: italic;
 }
-.code .c1 {/* comments */
+code pre .c1 {/* comments */
     color: #408080;
     font-style: italic;
 }
-.code .cn {/* constants */
+code pre .cn {/* constants */
     color: maroon;
 }
-.code {
+code pre {
     background-color: #eee;
     border: 1px solid lightgrey;
-    padding: 0 8px 0 8px;
-    line-height: 1.2;
+}
+pre {
+  padding: 8px;
+  line-height: 1.2;
 }
 .diff {
     background-color: azure;
