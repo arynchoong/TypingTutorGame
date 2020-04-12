@@ -27,9 +27,6 @@ function classMode(txt) {
   if (endpos == -1) {
     endpos = txt.indexOf(':',6);
   }
-  console.log(txt)
-  console.log(endpos)
-  console.log(txt.length)
   name = txt.substr(6, txt.length - 6 - (txt.length - endpos));
   rest = txt.substr(endpos, txt.length - endpos);
 

@@ -13,6 +13,7 @@ body {
     overflow: hidden;
     border-bottom: 2px outset #f0f8fc;
     width: 100%;
+    z-index: 20;
   }
   
   /* Style the links inside the navigation bar */
@@ -63,11 +64,11 @@ body {
   /* Style the dropdown content (hidden by default) */
   .dropdown-content {
     display: none;
-    position: absolute;
+    position: fixed;
     background-color: #f9f9f9;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
+    z-index: 10;
   }
   
   /* Style the links inside the dropdown */
@@ -79,7 +80,10 @@ body {
     display: block;
     text-align: left;
   }
-  
+  /* On drop down */
+  .navbar.drop .dropdown-content {
+    display: block;
+  }
   /* Add a dark background on topnav links and the dropdown button on hover */
   .navbar a:hover, .dropdown:hover .dropbtn {
     background-color: #347B98;
@@ -102,53 +106,13 @@ body {
   .dropdown:hover .dropdown-content {
     display: block;
   }
- 
-  /* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. for touch screens */
-  @media only screen and (max-width: 1280px) {
-      .navbar.responsive .dropdown-content {
-          display: block;
-        }
-  }
-  
-  /* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
-  @media screen and (max-width: 600px) {
-    .navbar a:not(:first-child), .dropdown .dropbtn {
-      display: none;
-    }
-    .navbar a.icon {
-      float: right;
-      display: block;
-    }
-  }
-  
-  /* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
-  @media screen and (max-width: 600px) {
-    .navbar.responsive {position: relative;}
-    .navbar.responsive a.icon {
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
-    .navbar.responsive a {
-      float: none;
-      display: block;
-      text-align: left;
-    }
-    .navbar.responsive .dropdown {float: none;}
-    .navbar.responsive .dropdown-content {
-        position: relative;
-        display: block;
-        background-color: #c6e1eb;
-    }
-    .navbar.responsive .dropdown .dropbtn {
-      display: none;
-      width: 100%;
-      text-align: left;
-    }
-    .active {
-      background-color: #f0f8fc;
-    }
-  } 
+ /* The sticky class is added to the navbar with JS when it reaches its scroll position */
+.sticky {
+  position: fixed;
+  top: 0;
+  margin-bottom: 4px;
+}
+
 /* Prev and Next on the bottom navbar */
 .navbar-bottom {
     background-color: #c6e1eb;
@@ -156,7 +120,10 @@ body {
     overflow: hidden;
     border-bottom: 2px outset #f0f8fc;
     width: 100%;
-  }
+    background-image: url(./../images/bg-bottom.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
 .nav-left {
     float: left;
     display: block;
@@ -177,19 +144,12 @@ body {
     font-size: 20px;
     background-color: powderblue;
 } 
-@media only screen {
-  .navbar-bottom {
-    background-image: url(./../images/bg-bottom.png);
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-}
+
 
 .page{
     text-align: center;
     max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto;
     padding: 8px;
     background-color: #f9fbfc;
 }
@@ -198,46 +158,6 @@ article {
     text-align: left;
     background-color: #fff;
     word-wrap: break-word;
-}
-@media only screen and (min-width: 600px) {
-    .page{
-        text-align: center;
-        max-width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 15px;
-    }
-    article {
-        padding: 15px;
-        box-shadow: 0px 0px 12px 1px  rgba(09,28,34, 0.2);
-        box-sizing: border-box;
-    }
-}
-@media only screen and (min-width: 640px){
-    .page{
-        max-width: 95%;
-    }
-}
-@media only screen and (min-width: 1140px){
-    .page{
-        max-width: 95%;
-    }
-    .flex-container{
-        display: flex;
-        flex-wrap: nowrap;
-    }
-    .flex-container .box{
-        width: 45%;
-        vertical-align: text-top;
-        padding: 0 8px 2px 8px;
-        box-shadow: 0px 0px 2px  rgba(09,28,34, 0.2);
-    }
-    .flex-container .boxes{
-        width: 55%;
-        vertical-align: text-top;
-        padding: 0;
-        
-    }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -250,11 +170,6 @@ article img{
     margin-right: auto;
     padding: 8px;
     width: 480px;
-}
-@media screen and (max-width: 480px){
-    article img {
-        width: 95%;
-    }
 }
 
 .footer {
