@@ -56,7 +56,6 @@
         self.font =  pygame.font.Font('Consolas Bold.ttf', 16)
         self.playing = True
         self.game_objects = GameObjects(self.width, self.height)
-        self.key_hit = None
         self.last_add = 0 # time of adding word
         self.add_timeout = 2000 # 2 seconds
 <div class="diff">        self.fps = 25
@@ -119,7 +118,6 @@
         self.font =  pygame.font.Font('Consolas Bold.ttf', 16)
         self.playing = True
         self.game_objects = GameObjects(self.width, self.height)
-        self.key_hit = None
         self.last_add = 0 # time of adding word
         self.add_timeout = 2000 # 2 seconds
         self.fps = 25
@@ -130,7 +128,6 @@
  . 
     def loop(self):
         '''Game play loop'''
-        self.check_key_hit()
 <div class="diff">        self.game_objects.move(self.y_delta)
 </div>        self.add_word()
         return</pre>

@@ -1,3 +1,4 @@
+# game.py
 import pygame
 from play import GamePlay
 import sys
@@ -32,7 +33,7 @@ class TypingTutor():
         pass
     
     def init_display(self):
-        '''Helper funcgion to initialise and return display surface'''
+        '''Helper function to initialise and return display surface'''
         pass
 
     def execute(self):

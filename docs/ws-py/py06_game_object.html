@@ -200,7 +200,7 @@ class Word:
         word = random.choice(self.word_list)
         firstchar = [word.text[0] for word in self.game_words]
         while word[0] in firstchar:
-        word = random.choice(self.word_list)</div></pre>
+            word = random.choice(self.word_list)</div></pre>
           </code>
         </div>
       </div>
@@ -259,7 +259,6 @@ FONTWIDTH = 9 # based on Consolas Bold 16 pt font size</div></pre>
         self.font =  pygame.font.Font('Consolas Bold.ttf', 16)
         self.playing = True
         self.game_objects = GameObjects(self.width, self.height)
-        self.key_hit = None
 <div class="diff">        self.last_add = 0 # time of adding word
         self.add_timeout = 2000 # 2 seconds</div></pre>
           </code>
@@ -297,7 +296,6 @@ FONTWIDTH = 9 # based on Consolas Bold 16 pt font size</div></pre>
             <pre><span class="c"># play.py</span>
     def loop(self):
         '''Game play loop'''
-        self.check_key_hit()
 <div class="diff">        self.add_word()
 </div>        return</pre>
           </code>

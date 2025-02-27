@@ -102,22 +102,24 @@ class CityLine():
         return</div></pre>
           </code>
         </div>
-        <div class="boxes">
-          <code class="python">
-            <pre>class Block:
-    def __init__(self, flag = True, height = 0):
-        self.flag = flag
-        self.height = height
-        return
-    
-<div class="diff">    def del_block(self):
-        self.flag = False
-        return</div></pre>
-          </code>
+        <div class="box">
+          <p>And we set the last block to be false, so that we do not draw indifinitely, as each block we require start x and end x, which gives us n-1 blocks with cityline of n size.</p>
+          <div class="boxes">
+            <code class="python">
+              <pre>class Block:
+      def __init__(self, flag = True, height = 0):
+          self.flag = flag
+          self.height = height
+          return
+      
+  <div class="diff">    def del_block(self):
+          self.flag = False
+          return</div></pre>
+            </code>
+          </div>
         </div>
       </div>
 
-      <p>We set the last block to be false, so that we do not draw indifinitely, as each block we require start x and end x, which gives us n-1 blocks with cityline of n size.</p>
       <h2>Iterator</h2>
 
       <div class="flex-container">
@@ -314,12 +316,10 @@ MARGINX = 5
         return removed, removed_typing</pre>
           </code>
         </div>
-        <div class="boxes">
           <code class="python">
             <pre><div class="diff">    def is_gameover(self):
         return self.city_line.check_gameover()</div></pre>
           </code>
-        </div>
       </div>
 
       <br/>
@@ -348,7 +348,6 @@ MARGINX = 5
         return</pre>
           </code>
         </div>
-        <div class="boxes">
           <code class="python">
             <pre>    def add_word(self):
         '''Add new word to drop from top'''
@@ -361,7 +360,6 @@ MARGINX = 5
                 self.last_add = pygame.time.get_ticks()
         return</pre>
           </code>
-        </div>
       </div>
 
     <h2>Less Randomised Fun</h2>
@@ -399,13 +397,11 @@ MARGINX = 5
         return True</pre>
           </code>
         </div>
-        <div class="boxes">
           <code class="python">
             <pre><div class="diff">    def get_word(self):
           '''Randomly select word from word list for game play'''
           return random.choice(self.word_list)</div></pre>
           </code>
-        </div>
       </div>
 
     </article>

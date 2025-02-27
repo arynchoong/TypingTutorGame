@@ -32,7 +32,7 @@ $ source venv/bin/activate
 
 Install pygame:
 ````console
-(venv)$ pip3 install pygame==2.0.0.dev6
+(venv)$ pip3 install pygame==2.6.1
 ````
 
 ### Play!
